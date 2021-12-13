@@ -1,0 +1,10 @@
+{
+  "LANGS": {
+    "FR": "french",
+    "EN": "english"
+  },
+  "GLOBAL": {
+    "HOME": "home",
+    "RECORD": "record | records"
+  }
+}
