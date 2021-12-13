@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>{{ demo }}</h1>
+  <div id="test">
+    <h1 class="test__title">{{ demo }}</h1>
     {{ $t('GLOBAL.HOME') }}
     <hr/>
     <NuxtLink :to="switchLocalePath('en')">
@@ -22,6 +22,19 @@ export default class Test extends Vue {
 </script>
 
 <style lang="scss">
+
+#test {
+  @apply bg-blue-800 bg-opacity-20;
+
+  $testPadding: 4.125rem;
+
+  padding: $testPadding;
+
+  .test-title {
+    @apply bg-red-900;
+  }
+}
+
 .btn {
   @apply font-bold py-2 px-4 rounded;
 }
