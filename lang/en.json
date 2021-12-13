@@ -1,7 +1,7 @@
 {
   "LANGS": {
-    "fr": "french",
-    "en": "english"
+    "FR": "french",
+    "EN": "english"
   },
   "GLOBAL": {
     "HOME": "accueil",
