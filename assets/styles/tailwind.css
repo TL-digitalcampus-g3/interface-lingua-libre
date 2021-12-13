@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #3366cc;
+  --color-primary-lighten: #3366cc;
+  --color-primary-darken: #3366cc;
+  --color-secondary: #191919;
+  --color-secondary-lighten: #191919;
+  --color-secondary-darken: #191919;
+}

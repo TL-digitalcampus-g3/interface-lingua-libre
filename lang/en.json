@@ -1,0 +1,10 @@
+{
+  "LANGS": {
+    "fr": "french",
+    "en": "english"
+  },
+  "GLOBAL": {
+    "HOME": "accueil",
+    "RECORD": "enregistrement | enregistrements"
+  }
+}
