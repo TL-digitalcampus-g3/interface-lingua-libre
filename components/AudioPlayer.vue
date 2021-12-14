@@ -1,10 +1,17 @@
 <template>
   <div>
-    <audio ref="audio" :src="audioUrl" controls @ended="endedHandler"></audio>
+    <audio
+      ref="audio"
+      :src="audioUrl"
+      controls
+      @ended="endedHandler"
+      @timeupdate="setTime"
+    ></audio>
     <button @click="togglePlay">
       <PlayIcon v-if="!isPlaying" />
       <PauseIcon v-else />
     </button>
+    {{ currentTime }}
   </div>
 </template>
 
@@ -19,9 +26,19 @@ export default class AudioPlayer extends Vue {
   @Ref() readonly audio!: HTMLAudioElement
 
   isPlaying: boolean = false
+  currentSeconds: number = 0
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
+  }
+
+  get currentTime(): string {
+    const minutes = Math.round(this.currentSeconds / 60)
+    const seconds = Math.round(this.currentSeconds - minutes * 60)
+    const minuteValue = minutes < 10 ? `0${minutes}` : minutes
+    const secondValue = seconds < 10 ? `0${seconds}` : seconds
+
+    return `${minuteValue}:${secondValue}`
   }
 
   play(): void {
@@ -45,6 +62,10 @@ export default class AudioPlayer extends Vue {
 
   endedHandler(): void {
     this.isPlaying = false
+  }
+
+  setTime(): void {
+    this.currentSeconds = this.audio.currentTime
   }
 }
 </script>
