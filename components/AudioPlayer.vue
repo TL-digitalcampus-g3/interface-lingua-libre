@@ -1,25 +1,43 @@
 <template>
   <div>
-    <audio ref="audio" :src="audioUrl" controls @play="play" @pause="pause" @ended="handleEnded"></audio>
+    <audio
+      ref="audio"
+      :src="audioUrl"
+      controls
+      @play="play"
+      @pause="pause"
+      @ended="handleEnded"
+      @timeupdate="setTime"
+    ></audio>
     <button @click="togglePlay">
       <PlayIcon v-if="!isPlaying"/>
       <PauseIcon v-else/>
     </button>
-    <button class="btn bg-green-300" @click="pause">pause</button>
+    {{ currentTime }}
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, Ref} from 'nuxt-property-decorator'
+import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
 import PlayIcon from '~/components/icons/Play.vue'
 import PauseIcon from '~/components/icons/Pause.vue'
 
-@Component({components: {PlayIcon, PauseIcon}})
+function formatTimeToMMSS(timeInseconds: number): string {
+  const minutes = Math.round(timeInseconds / 60)
+  const seconds = Math.round(timeInseconds - minutes * 60)
+  const minuteValue = minutes < 10 ? `0${minutes}` : minutes
+  const secondValue = seconds < 10 ? `0${seconds}` : seconds
+
+  return `${minuteValue}:${secondValue}`
+}
+
+@Component({ components: { PlayIcon, PauseIcon } })
 export default class AudioPlayer extends Vue {
   @Prop({required: true}) readonly fileName!: string
   @Ref() readonly audio!: HTMLAudioElement
 
   isPlaying: boolean = false
+  currentSeconds: number = 0
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
@@ -28,6 +46,10 @@ export default class AudioPlayer extends Vue {
   handleEnded(): void {
     this.$emit('recordPlayed')
     this.isPlaying = false
+  }
+
+  get currentTime(): string {
+    return formatTimeToMMSS(this.currentSeconds)
   }
 
   play(): void {
@@ -47,6 +69,10 @@ export default class AudioPlayer extends Vue {
     } else {
       this.pause()
     }
+  }
+
+  setTime(): void {
+    this.currentSeconds = this.audio.currentTime
   }
 }
 </script>
