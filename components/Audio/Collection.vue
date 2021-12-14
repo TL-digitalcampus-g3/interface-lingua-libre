@@ -40,7 +40,7 @@ export default class Collection extends Vue {
   }
 
   pauseOtherPlayers(currentPlayerIndex: number): void {
-    this.players.forEach((player, index) => {
+    this.players.forEach((player, index): void => {
       if (currentPlayerIndex !== index) {
         player.pause()
       }
