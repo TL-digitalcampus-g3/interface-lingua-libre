@@ -1,39 +1,53 @@
 <template>
   <div>
     <div v-if="isLoading">
-      <TheLoader/>
+      <TheLoader />
     </div>
     <div v-else>
-      <div v-for="record in records" :key="record.fileName">
+      <div v-for="(record, index) in records" :key="record.fileName">
         {{ record }}
+        <AudioPlayer
+          ref="players"
+          :file-name="record.fileName"
+          @played="pauseOtherPlayers(index)"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component} from 'nuxt-property-decorator'
-import TheLoader from "~/components/TheLoader.vue";
+import { Vue, Component, Ref } from 'nuxt-property-decorator'
+import TheLoader from '~/components/TheLoader.vue'
+import AudioPlayer from '~/components/AudioPlayer.vue'
 
 @Component({
-  components: {TheLoader}
+  components: { TheLoader, AudioPlayer },
 })
 export default class Collection extends Vue {
-  records: any = [];
-  isLoading: boolean = true;
+  @Ref() readonly players!: AudioPlayer[]
 
-  mounted() {
-    this.$axios
-      .$get(`datas/millars.json`)
-      .then(response => {
-        this.isLoading = false;
-        return this.records = response.records;
-      })
-      .catch(error => console.log(error))
+  records: any = []
+  isLoading: boolean = true
+
+  async mounted() {
+    try {
+      const res = await this.$axios.$get(`datas/millars.json`)
+      this.records = res.records
+    } finally {
+      this.isLoading = false
+    }
+  }
+
+  pauseOtherPlayers(currentPlayerIndex: number): void {
+    this.players.forEach((player, index) => {
+      if (currentPlayerIndex !== index) {
+        player.pause()
+      }
+    })
   }
 }
 </script>
 
 <style scoped>
-
 </style>
