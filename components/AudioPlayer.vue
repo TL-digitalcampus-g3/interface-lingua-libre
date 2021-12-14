@@ -5,7 +5,6 @@
       <PlayIcon v-if="!isPlaying" />
       <PauseIcon v-else />
     </button>
-    <button class="btn bg-green-300" @click="pause">pause</button>
   </div>
 </template>
 
