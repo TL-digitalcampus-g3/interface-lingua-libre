@@ -26,6 +26,8 @@
           Current audio player : {{ currentRecordPlaying + 1 }} / {{ countRecords }}
         </div>
         Audio(s) verified : {{ checkedRecords }} / {{ countRecords }}
+        <hr/>
+        {{ recordsPlayed }}
       </div>
     </div>
   </div>
@@ -62,12 +64,18 @@ export default class Collection extends Vue {
   isLoading: boolean = true
   isAutoplayMode: boolean = false
   currentRecordPlaying: number | null = null
+  recordsPlayed: [] = []
   countRecords: number = 0
   checkedRecords: number = 0
 
   @Watch('records', {immediate: true})
   onRecordsChanged() {
     this.countRecords = this.records.length;
+  }
+
+  @Watch('recordsPlayed')
+  onRecordsPlayed() {
+    this.checkedRecords = this.recordsPlayed.length;
   }
 
   async mounted() {
@@ -84,7 +92,9 @@ export default class Collection extends Vue {
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
+    this.currentRecordPlaying = null
     this.pauseOtherPlayers(currentPlayerIndex)
+    this.recordsPlayed.push(this.records[currentPlayerIndex]);
   }
 
   handleRecordIsPlaying(currentPlayerIndex: number): void {

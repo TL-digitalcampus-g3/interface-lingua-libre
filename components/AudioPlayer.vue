@@ -8,7 +8,7 @@
       @pause="pause"
       @ended="handleEnded"
       @timeupdate="setTime"
-    ></audio>
+    />
     <button @click="togglePlay">
       <PlayIcon v-if="!isPlaying"/>
       <PauseIcon v-else/>
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
+import {Vue, Component, Prop, Ref} from 'nuxt-property-decorator'
 import PlayIcon from '~/components/icons/Play.vue'
 import PauseIcon from '~/components/icons/Pause.vue'
 
@@ -31,7 +31,7 @@ function formatTimeToMMSS(timeInseconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({ components: { PlayIcon, PauseIcon } })
+@Component({components: {PlayIcon, PauseIcon}})
 export default class AudioPlayer extends Vue {
   @Prop({required: true}) readonly fileName!: string
   @Ref() readonly audio!: HTMLAudioElement
