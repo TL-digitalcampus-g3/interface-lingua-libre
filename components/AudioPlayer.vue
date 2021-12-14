@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, Ref} from 'vue-property-decorator'
+import {Vue, Component, Prop, Ref} from 'nuxt-property-decorator'
 import PlayIcon from '~/components/icons/Play.vue'
 import PauseIcon from '~/components/icons/Pause.vue'
 
