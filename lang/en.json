@@ -1,11 +1,12 @@
 {
   "LANGS": {
-    "FR": "french",
+    "FR": "français",
     "EN": "english"
   },
   "GLOBAL": {
-    "HOME": "accueil",
-    "RECORD": "enregistrement | enregistrements",
-    "PLAYER_AUTO": "Autoplay"
+    "HOME": "home",
+    "LOADING" : "loading",
+    "PLAYER_AUTO": "autoplay",
+    "RECORD": "record | records"
   }
 }

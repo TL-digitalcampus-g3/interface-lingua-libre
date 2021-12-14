@@ -1,7 +1,7 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <TheLoader/>
+      <Loader/>
     </div>
     <div v-else>
       <button class="btn" @click="handleClickPlayAuto">
@@ -33,11 +33,11 @@
 
 <script lang="ts">
 import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
-import TheLoader from '~/components/TheLoader.vue'
+import Loader from '~/components/Loader.vue'
 import AudioPlayer from '~/components/AudioPlayer.vue'
 
 @Component({
-  components: {TheLoader, AudioPlayer},
+  components: {Loader, AudioPlayer},
   async asyncData({$axios}): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)

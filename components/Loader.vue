@@ -1,6 +1,6 @@
 <template>
   <div>
-    Loading ...
+    {{ $t('GLOBAL.LOADING') }}
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import {Vue, Component} from 'nuxt-property-decorator'
 
 @Component
-export default class TheLoader extends Vue {
+export default class Loader extends Vue {
 }
 </script>
 
