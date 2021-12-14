@@ -21,7 +21,7 @@ const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
 export default class IconWrapper extends Vue {
   @Prop({ required: true }) readonly name!: AvailableIcons
   @Prop({ default: 3 }) readonly size!: number
-  @Prop({ default: 'black' }) readonly color!: string
+  @Prop({ default: 'var(--color-primary)' }) readonly color!: string
 
   get componentName(): AvailableIcons {
     if (!availableIcons.includes(this.name)) {
