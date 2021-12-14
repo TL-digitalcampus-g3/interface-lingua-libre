@@ -8,7 +8,7 @@
       @pause="pause"
       @ended="handleEnded"
       @timeupdate="setTime"
-    ></audio>
+    />
     <button @click="togglePlay">
       <PlayIcon v-if="!isPlaying" />
       <PauseIcon v-else />
