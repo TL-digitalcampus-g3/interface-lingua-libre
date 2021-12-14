@@ -1,13 +1,16 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader />
+      <Loader/>
     </div>
     <div v-else>
       <button class="btn" @click="handleClickPlayAuto">
-        <input id="autoplay" type="checkbox" :checked="isAutoplayMode"/>
-        {{ $t('GLOBAL.PLAYER_AUTO') }}
+        <PauseIcon v-if="isAutoplayMode"/>
+        <PlayIcon v-else @click="pauseOtherPlayers"/>
       </button>
+      <div>
+        <input id="autoplay" type="checkbox" :checked="isAutoplayMode"/> {{ $t('GLOBAL.PLAYER_AUTO') }}
+      </div>
       <div v-for="(record, index) in records" :key="record.fileName">
         {{ record }}
         <AudioPlayer
@@ -34,9 +37,11 @@
 import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
+import PlayIcon from '~/components/icons/Play.vue'
+import PauseIcon from '~/components/icons/Pause.vue'
 
 @Component({
-  components: {Loader, AudioPlayer},
+  components: {Loader, AudioPlayer, PlayIcon, PauseIcon},
   async asyncData({$axios}): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
@@ -55,6 +60,10 @@ import AudioPlayer from '~/components/Audio/Player/index.vue'
   },
 })
 export default class Collection extends Vue {
+  $refs!: {
+    players: any
+  }
+
   @Ref() readonly players!: AudioPlayer[]
 
   records: [] = []
@@ -92,7 +101,15 @@ export default class Collection extends Vue {
   handleRecordPlayed(currentPlayerIndex: number): void {
     this.currentRecordPlaying = null
     this.pauseOtherPlayers(currentPlayerIndex)
-    this.recordsPlayed.push(this.records[currentPlayerIndex])
+    let recordFound: boolean = false;
+    this.recordsPlayed.forEach(record => {
+      if (record.fileName === this.records[currentPlayerIndex].fileName) {
+        recordFound = true;
+      }
+    })
+    if (!recordFound) {
+      this.recordsPlayed.push(this.records[currentPlayerIndex])
+    }
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
@@ -101,7 +118,7 @@ export default class Collection extends Vue {
   }
 
   playRecord(playerIndex: number): void {
-    if (this.$refs.players[playerIndex]) {
+    if (this.$refs.players.length > 0 && this.$refs.players[playerIndex]) {
       this.$refs.players[playerIndex].play()
     }
   }
