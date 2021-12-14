@@ -10,8 +10,8 @@
       @timeupdate="setTime"
     />
     <button @click="togglePlay">
-      <PlayIcon v-if="!isPlaying"/>
-      <PauseIcon v-else/>
+      <PlayIcon v-if="!isPlaying" />
+      <PauseIcon v-else />
     </button>
     {{ currentTime }}
   </div>
@@ -33,7 +33,7 @@ function formatTimeToMMSS(timeInseconds: number): string {
 
 @Component({components: {PlayIcon, PauseIcon}})
 export default class AudioPlayer extends Vue {
-  @Prop({required: true}) readonly fileName!: string
+  @Prop({ required: true }) readonly fileName!: string
   @Ref() readonly audio!: HTMLAudioElement
 
   isPlaying: boolean = false
