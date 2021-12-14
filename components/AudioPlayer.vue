@@ -20,6 +20,15 @@ import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
 import PlayIcon from '~/components/icons/Play.vue'
 import PauseIcon from '~/components/icons/Pause.vue'
 
+function formatTimeToMMSS(timeInseconds: number): string {
+  const minutes = Math.round(timeInseconds / 60)
+  const seconds = Math.round(timeInseconds - minutes * 60)
+  const minuteValue = minutes < 10 ? `0${minutes}` : minutes
+  const secondValue = seconds < 10 ? `0${seconds}` : seconds
+
+  return `${minuteValue}:${secondValue}`
+}
+
 @Component({ components: { PlayIcon, PauseIcon } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly fileName!: string
@@ -33,12 +42,7 @@ export default class AudioPlayer extends Vue {
   }
 
   get currentTime(): string {
-    const minutes = Math.round(this.currentSeconds / 60)
-    const seconds = Math.round(this.currentSeconds - minutes * 60)
-    const minuteValue = minutes < 10 ? `0${minutes}` : minutes
-    const secondValue = seconds < 10 ? `0${seconds}` : seconds
-
-    return `${minuteValue}:${secondValue}`
+    return formatTimeToMMSS(this.currentSeconds)
   }
 
   play(): void {
