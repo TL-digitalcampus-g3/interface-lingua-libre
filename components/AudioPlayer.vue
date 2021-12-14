@@ -1,6 +1,6 @@
 <template>
   <div>
-    <audio ref="audio" :src="audioUrl" controls></audio>
+    <audio ref="audio" :src="audioUrl" controls @ended="endendHandler"></audio>
     <button @click="togglePlay">
       <PlayIcon v-if="!isPlaying" />
       <PauseIcon v-else />
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
+import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator'
 import PlayIcon from '~/components/icons/Play.vue'
 import PauseIcon from '~/components/icons/Pause.vue'
 
@@ -42,6 +42,10 @@ export default class AudioPlayer extends Vue {
     } else {
       this.pause()
     }
+  }
+
+  endendHandler(): void {
+    this.isPlaying = false
   }
 }
 </script>
