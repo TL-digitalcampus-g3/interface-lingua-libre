@@ -14,6 +14,7 @@
       <PauseIcon v-else />
     </button>
     {{ currentTime }}
+    <SpeedRateSelector v-model="speedRate" />
   </div>
 </template>
 
@@ -21,6 +22,8 @@
 import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
 import PlayIcon from '~/components/icons/Play.vue'
 import PauseIcon from '~/components/icons/Pause.vue'
+import SpeedRateSelector from './SpeedRateSelector.vue'
+import { SpeedRate } from './types'
 
 function formatTimeToMMSS(timeInseconds: number): string {
   const minutes = Math.round(timeInseconds / 60)
@@ -31,25 +34,35 @@ function formatTimeToMMSS(timeInseconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({ components: { PlayIcon, PauseIcon } })
+@Component({ components: { PlayIcon, PauseIcon, SpeedRateSelector } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly fileName!: string
   @Ref() readonly audio!: HTMLAudioElement
 
   isPlaying: boolean = false
   currentSeconds: number = 0
+  speedRateValue: SpeedRate = SpeedRate.Normal
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
   }
 
+  get currentTime(): string {
+    return formatTimeToMMSS(this.currentSeconds)
+  }
+
+  get speedRate(): number {
+    return this.speedRateValue
+  }
+
+  set speedRate(speedRate: SpeedRate) {
+    this.speedRateValue = speedRate
+    this.audio.playbackRate = speedRate
+  }
+
   handleEnded(): void {
     this.$emit('recordPlayed')
     this.isPlaying = false
-  }
-
-  get currentTime(): string {
-    return formatTimeToMMSS(this.currentSeconds)
   }
 
   play(): void {
