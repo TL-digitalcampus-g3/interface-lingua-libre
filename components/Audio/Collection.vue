@@ -5,7 +5,7 @@
     </div>
     <div v-else>
       <button class="btn" @click="handleClickPlayAuto">
-        <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
+        <input id="autoplay" type="checkbox" :checked="isAutoplayMode"/>
         {{ $t('GLOBAL.PLAYER_AUTO') }}
       </button>
       <div v-for="(record, index) in records" :key="record.fileName">
@@ -31,13 +31,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
+import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
-import AudioPlayer from './Player/index.vue'
+import AudioPlayer from '~/components/Audio/Player/index.vue'
 
 @Component({
-  components: { Loader, AudioPlayer },
-  async asyncData({ $axios }): Promise<any> {
+  components: {Loader, AudioPlayer},
+  async asyncData({$axios}): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
       .then((res) => res.records)
@@ -65,13 +65,13 @@ export default class Collection extends Vue {
   countRecords: number = 0
   checkedRecords: number = 0
 
-  @Watch('records', { immediate: true })
-  onRecordsChanged() {
+  @Watch('records', {immediate: true})
+  onRecordsChanged(): void {
     this.countRecords = this.records.length
   }
 
   @Watch('recordsPlayed')
-  onRecordsPlayed() {
+  onRecordsPlayed(): void {
     this.checkedRecords = this.recordsPlayed.length;
   }
 
@@ -86,16 +86,24 @@ export default class Collection extends Vue {
 
   handleClickPlayAuto(): void {
     this.isAutoplayMode = !this.isAutoplayMode
+    this.playRecord(0)
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
     this.currentRecordPlaying = null
     this.pauseOtherPlayers(currentPlayerIndex)
-    this.recordsPlayed.push(this.records[currentPlayerIndex]);
+    this.recordsPlayed.push(this.records[currentPlayerIndex])
+    this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
   handleRecordIsPlaying(currentPlayerIndex: number): void {
     this.currentRecordPlaying = currentPlayerIndex
+  }
+
+  playRecord(playerIndex: number): void {
+    if (this.$refs.players[playerIndex]) {
+      this.$refs.players[playerIndex].play()
+    }
   }
 
   pauseOtherPlayers(currentPlayerIndex: number): void {
