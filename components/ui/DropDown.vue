@@ -47,7 +47,6 @@ export default class DropDown extends Vue {
     display: none;
     position: absolute;
     background: white;
-    z-index: 100;
 
     .option {
       cursor: pointer;
