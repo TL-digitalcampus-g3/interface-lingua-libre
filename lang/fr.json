@@ -5,6 +5,7 @@
   },
   "GLOBAL": {
     "HOME": "home",
-    "RECORD": "record | records"
+    "RECORD": "record | records",
+    "PLAYER_AUTO": "Lecture automatique"
   }
 }

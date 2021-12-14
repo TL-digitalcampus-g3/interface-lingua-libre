@@ -5,6 +5,7 @@
   },
   "GLOBAL": {
     "HOME": "accueil",
-    "RECORD": "enregistrement | enregistrements"
+    "RECORD": "enregistrement | enregistrements",
+    "PLAYER_AUTO": "Autoplay"
   }
 }

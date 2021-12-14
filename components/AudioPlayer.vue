@@ -1,22 +1,22 @@
 <template>
   <div>
-    <audio ref="audio" :src="audioUrl" controls @ended="endendHandler"></audio>
+    <audio ref="audio" :src="audioUrl" controls @play="play" @pause="pause" @ended="handleEnded"></audio>
     <button @click="togglePlay">
-      <PlayIcon v-if="!isPlaying" />
-      <PauseIcon v-else />
+      <PlayIcon v-if="!isPlaying"/>
+      <PauseIcon v-else/>
     </button>
     <button class="btn bg-green-300" @click="pause">pause</button>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'vue-property-decorator'
+import {Vue, Component, Prop, Ref} from 'vue-property-decorator'
 import PlayIcon from '~/components/icons/Play.vue'
 import PauseIcon from '~/components/icons/Pause.vue'
 
-@Component({ components: { PlayIcon, PauseIcon } })
+@Component({components: {PlayIcon, PauseIcon}})
 export default class AudioPlayer extends Vue {
-  @Prop({ required: true }) readonly fileName!: string
+  @Prop({required: true}) readonly fileName!: string
   @Ref() readonly audio!: HTMLAudioElement
 
   isPlaying: boolean = false
@@ -25,8 +25,13 @@ export default class AudioPlayer extends Vue {
     return `/datas/Millars/${this.fileName}`
   }
 
+  handleEnded(): void {
+    this.$emit('recordPlayed')
+    this.isPlaying = false
+  }
+
   play(): void {
-    this.$emit('played')
+    this.$emit('recordIsPlaying')
     this.isPlaying = true
     this.audio.play()
   }
@@ -42,10 +47,6 @@ export default class AudioPlayer extends Vue {
     } else {
       this.pause()
     }
-  }
-
-  endendHandler(): void {
-    this.isPlaying = false
   }
 }
 </script>
