@@ -54,7 +54,6 @@ export default class AudioPlayer extends Vue {
   get speedRate(): number {
     return this.speedRateValue
   }
-
   set speedRate(speedRate: SpeedRate) {
     this.speedRateValue = speedRate
     this.audio.playbackRate = speedRate
