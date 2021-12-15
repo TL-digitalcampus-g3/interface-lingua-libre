@@ -1,7 +1,7 @@
-import { MutationTree, GetterTree } from 'vuex'
+import { MutationTree, GetterTree, ActionTree } from 'vuex'
 import { RecordT, Tag, TagMap } from '~/models/Record'
 
-export interface SetTagPayload {
+export interface TagMutationPayload {
   fileName: RecordT['fileName']
   tag: Tag
 }
@@ -23,14 +23,31 @@ export const getters: GetterTree<State, State> = {
 }
 
 export const mutations: MutationTree<State> = {
-  SET_TAG: (state: State, payload: SetTagPayload): void => {
+  ADD_TAG: (state: State, payload: TagMutationPayload): void => {
     const { fileName, tag } = payload
     state.tagMap = {
       ...state.tagMap,
       [fileName]: tag,
     }
   },
+  UPDATE_TAG: (state: State, payload: TagMutationPayload): void => {
+    const { fileName, tag } = payload
+    state.tagMap[fileName] = tag
+  },
   SET_ACTIVE_AUDIO: (state: State, fileName: RecordT['fileName']) => {
     state.activeAudio = fileName
+  },
+}
+
+export const actions: ActionTree<State, State> = {
+  setTag({ commit, getters }, payload: TagMutationPayload): void {
+    const { fileName } = payload
+    const isNewFile: boolean = !getters.taggedRecords.includes(fileName)
+
+    if (isNewFile) {
+      commit('ADD_TAG', payload)
+    } else {
+      commit('UPDATE_TAG', payload)
+    }
   },
 }

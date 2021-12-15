@@ -70,7 +70,7 @@ import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
 import { RecordT, Tag, TagMap } from '~/models/Record'
-import { SetTagPayload } from '@/store'
+import { TagMutationPayload } from '~/store'
 
 @Component({
   components: { Loader, AudioPlayer, CustomIcon, CheckBox },
@@ -160,12 +160,12 @@ export default class Collection extends Vue {
     this.lastRecordIndexPlayed = currentPlayerIndex
 
     if (!isCurrentRecordTagSettled) {
-      const setTagPayload: SetTagPayload = {
+      const setTagPayload: TagMutationPayload = {
         fileName: currentRecord.fileName,
         tag: Tag.Patroled,
       }
 
-      this.$store.commit('SET_TAG', setTagPayload)
+      this.$store.dispatch('setTag', setTagPayload)
     }
 
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
