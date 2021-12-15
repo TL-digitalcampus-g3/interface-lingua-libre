@@ -9,7 +9,6 @@
 
 <script lang='ts'>
     import { Vue, Component } from 'nuxt-property-decorator'
-    import CheckBox from '~/components/ui/CheckBox.vue'
 
     @Component
     export default class Aside extends Vue {}

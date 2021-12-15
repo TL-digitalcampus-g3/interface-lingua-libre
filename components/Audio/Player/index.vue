@@ -71,7 +71,10 @@ export default class AudioPlayer extends Vue {
   }
 
   pause(): void {
-    this.state = PlayerState.Pause
+    if (this.state == PlayerState.Play) {
+      this.state = PlayerState.Pause
+    }
+
     this.audio.pause()
   }
 
