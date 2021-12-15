@@ -54,13 +54,11 @@ import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
-import PlayIcon from '~/components/Icon/Play.vue'
-import PauseIcon from '~/components/Icon/Pause.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
 import Record from '~/models/Record'
 
 @Component({
-  components: { Loader, AudioPlayer, PlayIcon, PauseIcon, CheckBox },
+  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
   async asyncData({ $axios }): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
