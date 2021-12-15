@@ -1,20 +1,18 @@
 <template>
   <div class="badges">
     <button v-for="tag in tags" :key="tag" class="mx-1" @click="setTag(tag)">
-      <Badge>
-        {{ tag }}
-      </Badge>
+      <TagBadge :tag="tag" />
     </button>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
+import TagBadge from './TagBadge.vue'
 import { Tag, RecordT } from '~/models/Record'
-import Badge from '~/components/ui/Badge.vue'
 import { TagMutationPayload } from '~/store'
 
-@Component({ components: { Badge } })
+@Component({ components: { TagBadge } })
 export default class TagSelector extends Vue {
   readonly tags: Tag[] = Object.values(Tag)
 

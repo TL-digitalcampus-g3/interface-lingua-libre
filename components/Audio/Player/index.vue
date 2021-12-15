@@ -22,6 +22,7 @@
       {{ currentTime }}
     </div>
     <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
+    <TagBadge v-if="tag" class="player__tag" :tag="tag" />
   </div>
 </template>
 
@@ -29,8 +30,9 @@
 import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
 import { SpeedRate, PlayerState } from './types'
 import SpeedRateSelector from './SpeedRateSelector.vue'
-import CustomIcon from '@/components/Icon/index.vue'
-import { RecordT } from '~/models/Record'
+import CustomIcon from '~/components/Icon/index.vue'
+import TagBadge from '~/components/TagSelector/TagBadge.vue'
+import { RecordT, Tag } from '~/models/Record'
 
 function formatTimeToMMSS(timeInSeconds: number): string {
   const minutes = Math.round(timeInSeconds / 60)
@@ -41,7 +43,7 @@ function formatTimeToMMSS(timeInSeconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({ components: { CustomIcon, SpeedRateSelector } })
+@Component({ components: { CustomIcon, SpeedRateSelector, TagBadge } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
@@ -70,6 +72,12 @@ export default class AudioPlayer extends Vue {
 
   get speedRate(): number {
     return this.speedRateValue
+  }
+
+  get tag(): Tag | null {
+    return this.$store.getters.taggedRecords.includes(this.fileName)
+      ? this.$store.state.tagMap[this.fileName]
+      : null
   }
 
   set speedRate(speedRate: SpeedRate) {
@@ -115,7 +123,7 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply rounded-md bg-white my-2 p-4;
+  @apply rounded-md bg-white my-2 p-4 text-lg;
   display: flex;
   align-items: center;
   color: black;
@@ -128,7 +136,10 @@ export default class AudioPlayer extends Vue {
 
   &__word {
     font-weight: bold;
-    font-size: 1.2rem;
+  }
+
+  &__tag {
+    margin-left: auto;
   }
 }
 
