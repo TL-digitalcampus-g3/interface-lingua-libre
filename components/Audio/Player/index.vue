@@ -126,7 +126,6 @@ export default class AudioPlayer extends Vue {
   @apply rounded-md bg-white my-2 p-4 text-lg;
   display: flex;
   align-items: center;
-  color: black;
 
   &__word,
   &__time,
