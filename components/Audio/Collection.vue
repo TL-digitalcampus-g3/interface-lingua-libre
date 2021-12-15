@@ -1,17 +1,17 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader/>
+      <Loader />
     </div>
     <div v-else>
       <button class="btn" @click="handleClickPlayAuto">
-        <PauseIcon v-if="isAutoplayMode"/>
-        <PlayIcon v-else @click="pauseOtherPlayers"/>
+        <CustomIcon v-if="isAutoplayMode" name="pause" />
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
       </button>
       <div>
-        <input id="autoplay" type="checkbox" :checked="isAutoplayMode"/> {{ $t('GLOBAL.PLAYER_AUTO') }}
+        <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
+        {{ $t('GLOBAL.PLAYER_AUTO') }}
       </div>
-      {{ hasResultsToShare ? 'true' : 'false' }}
       <div v-for="(record, index) in records" :key="record.fileName">
         {{ record }}
         <AudioPlayer
@@ -33,7 +33,7 @@
           {{ countRecords }}
         </div>
         Audio(s) verified : {{ checkedRecords }} / {{ countRecords }}
-        <hr/>
+        <hr />
         {{ recordsPlayed }}
       </div>
     </div>
@@ -41,15 +41,18 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
+import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
+import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
-import PlayIcon from '~/components/Icon/Play.vue'
-import PauseIcon from '~/components/Icon/Pause.vue'
+
+interface Record {
+  fileName: string
+}
 
 @Component({
-  components: {Loader, AudioPlayer, PlayIcon, PauseIcon},
-  async asyncData({$axios}): Promise<any> {
+  components: { Loader, CustomIcon, AudioPlayer },
+  async asyncData({ $axios }): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
       .then((res) => res.records)
@@ -67,22 +70,18 @@ import PauseIcon from '~/components/Icon/Pause.vue'
   },
 })
 export default class Collection extends Vue {
-  $refs!: {
-    players: any
-  }
-
   @Ref() readonly players!: AudioPlayer[]
 
-  records: [] = []
+  records: Record[] = []
   isLoading: boolean = true
   isAutoplayMode: boolean = false
   currentRecordPlaying: number | null = null
-  recordsPlayed: [] = []
+  recordsPlayed: Record[] = []
   countRecords: number = 0
   checkedRecords: number = 0
   hasResultsToShare: boolean = false
 
-  @Watch('records', {immediate: true})
+  @Watch('records', { immediate: true })
   onRecordsChanged(): void {
     this.countRecords = this.records.length
   }
@@ -189,8 +188,8 @@ export default class Collection extends Vue {
   }
 
   playRecord(playerIndex: number): void {
-    if (this.$refs.players.length > 0 && this.$refs.players[playerIndex]) {
-      this.$refs.players[playerIndex].play()
+    if (this.players.length > 0 && this.players[playerIndex]) {
+      this.players[playerIndex].play()
     }
   }
 
