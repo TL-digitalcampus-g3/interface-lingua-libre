@@ -6,12 +6,17 @@
   "GLOBAL": {
     "HOME": "home",
     "LOADING": "chargement",
-    "PLAYER_AUTO": "lecture automatique",
     "RECORD": "enregistrement | enregistrements"
   },
   "SHORTCUT": {
     "KEYBOARD_SHORTCUT":"raccourcis clavier",
-    "PLAY_PAUSE":"lecture / pause",
-    "REPEAT":"raccourcis clavier"
+    "PLAY":"lecture",
+    "PAUSE":"pause",
+    "REPEAT":"répéter"
+  },
+  "PLAYBACK_OPTION":{
+    "PLAYBACK_OPTION":"option de lecture",
+    "JUMP_TIME": "temps entre chaque son",
+    "PLAYER_AUTO": "lecture automatique"
   }
 }
