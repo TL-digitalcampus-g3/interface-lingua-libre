@@ -22,8 +22,15 @@
     }
 
     .nav__item{
-        @apply grid place-content-center hover:scale-110;
+        @apply grid place-content-center duration-150;
         height: 80px;
+    }
+
+    .nav__item:hover{
+        transform: scale(1.2)
+    }
+    .nav__item:first-child{
+        &:hover{transform: none}
     }
 
     .nav__item__text{
