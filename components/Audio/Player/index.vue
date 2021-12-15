@@ -1,32 +1,36 @@
 <template>
-  <div class="player" :class="[
-      {'player--played': isPlayed},
-      {'player--active': isActive}
-    ]" @dblclick="play">
+  <div
+    class="player"
+    :class="[{ 'player--played': isPlayed }, { 'player--active': isActive }]"
+    @dblclick="play"
+  >
     <audio
       ref="audio"
       :src="audioUrl"
-      controls
       @play="play"
       @pause="pause"
       @ended="ended"
       @timeupdate="setTime"
     />
-    <button @click="togglePlay">
-      <CustomIcon v-show="state === 'pause'" name="play"/>
-      <CustomIcon v-show="state === 'play'" name="pause"/>
-      <CustomIcon v-show="state === 'ended'" name="refresh"/>
+    <button class="player__controls" @click="togglePlay">
+      <CustomIcon v-show="state === 'pause'" name="play" />
+      <CustomIcon v-show="state === 'play'" name="pause" />
+      <CustomIcon v-show="state === 'ended'" name="refresh" />
     </button>
-    {{ currentTime }}
-    <SpeedRateSelector v-model="speedRate"/>
+    <div class="player__word">{{ word }}</div>
+    <div class="player__time">
+      {{ currentTime }}
+    </div>
+    <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, Ref} from 'nuxt-property-decorator'
-import {SpeedRate, PlayerState} from './types'
+import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
+import { SpeedRate, PlayerState } from './types'
 import SpeedRateSelector from './SpeedRateSelector.vue'
 import CustomIcon from '@/components/Icon/index.vue'
+import { RecordT } from '~/models/Record'
 
 function formatTimeToMMSS(timeInSeconds: number): string {
   const minutes = Math.round(timeInSeconds / 60)
@@ -37,9 +41,9 @@ function formatTimeToMMSS(timeInSeconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({components: {CustomIcon, SpeedRateSelector}})
+@Component({ components: { CustomIcon, SpeedRateSelector } })
 export default class AudioPlayer extends Vue {
-  @Prop({required: true}) readonly fileName!: string
+  @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
 
   state: PlayerState = PlayerState.Pause
@@ -47,6 +51,14 @@ export default class AudioPlayer extends Vue {
   speedRateValue: SpeedRate = SpeedRate.Normal
   isPlayed: boolean = false
   isActive: boolean = false
+
+  get fileName(): RecordT['fileName'] {
+    return this.record.fileName
+  }
+
+  get word(): RecordT['word'] {
+    return this.record.word
+  }
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
@@ -104,6 +116,15 @@ export default class AudioPlayer extends Vue {
 <style lang="scss" scoped>
 .player {
   @apply rounded-md bg-white my-2 p-4;
+  display: flex;
+  align-items: center;
+  color: black;
+
+  &__word,
+  &__time,
+  &__speed-rate {
+    @apply ml-2;
+  }
 }
 
 .player--active {

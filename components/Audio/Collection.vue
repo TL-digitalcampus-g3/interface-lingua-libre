@@ -29,7 +29,7 @@
           {{ record }}
           <AudioPlayer
             ref="players"
-            :file-name="record.fileName"
+            :record="record"
             @recordIsPlaying="handleRecordIsPlaying(record.fileName)"
             @recordPlayed="handleRecordPlayed(index)"
           />
