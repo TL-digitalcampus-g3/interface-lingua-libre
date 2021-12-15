@@ -83,7 +83,6 @@ export default class Collection extends Vue {
   isLoading: boolean = true
   isAutoplayMode: boolean = false
   currentRecordPlaying: number | null = null
-  recordsPlayed: Record[] = []
   countRecords: number = 0
   checkedRecords: number = 0
   hasResultsToShare: boolean = false
@@ -97,6 +96,10 @@ export default class Collection extends Vue {
   onRecordsPlayed(): void {
     this.checkedRecords = this.recordsPlayed.length
     this.hasResultsToShare = this.recordsPlayed.length > 0
+  }
+
+  get recordsPlayed(): Record[] {
+    return this.$store.state.taggedRecords
   }
 
   async mounted() {
@@ -124,7 +127,7 @@ export default class Collection extends Vue {
       }
     })
     if (!recordFound) {
-      this.recordsPlayed.push(this.records[currentPlayerIndex])
+      this.$store.commit('ADD_TAGGED_RECORD', this.records[currentPlayerIndex])
     }
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
