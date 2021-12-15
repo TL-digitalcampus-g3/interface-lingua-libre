@@ -11,8 +11,11 @@
       <div>
         <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
         {{ $t('GLOBAL.PLAYER_AUTO') }}
-        
-        <CheckBox :label="$t('GLOBAL.PLAYER_AUTO')" :isChecked="isAutoplayMode"/>
+
+        <CheckBox
+          :label="$t('GLOBAL.PLAYER_AUTO')"
+          :isChecked="isAutoplayMode"
+        />
       </div>
       <div class="collection_sounds">
         <div v-for="(record, index) in records" :key="record.fileName">
@@ -25,18 +28,20 @@
           />
         </div>
       </div>
-      <button class="btn"
-              :class="[{'btn--disabled': !hasResultsToShare}]"
-              @click="handleClickTransfertResults"
-              :disabled="!hasResultsToShare">
+      <button
+        class="btn"
+        :class="[{ 'btn--disabled': !hasResultsToShare }]"
+        @click="handleClickTransfertResults"
+        :disabled="!hasResultsToShare"
+      >
         Send validation
       </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
         <div v-if="currentRecordPlaying !== null">
           Current audio player : {{ currentRecordPlaying + 1 }} /
-          {{ countRecords }}
+          {{ recordsCount }}
         </div>
-        Audio(s) verified : {{ checkedRecords }} / {{ countRecords }}
+        Audio(s) verified : {{ checkedRecords }} / {{ recordsCount }}
         <hr />
         {{ recordsPlayed }}
       </div>
@@ -45,20 +50,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
+import { Vue, Component, Ref } from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
-import PlayIcon from '~/components/Icon/Play.vue'
-import PauseIcon from '~/components/Icon/Pause.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-
-interface Record {
-  fileName: string
-}
+import { Record } from '~/models/Record'
 
 @Component({
-  components: { Loader, AudioPlayer, PlayIcon, PauseIcon, CheckBox },
+  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
   async asyncData({ $axios }): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
@@ -83,20 +83,21 @@ export default class Collection extends Vue {
   isLoading: boolean = true
   isAutoplayMode: boolean = false
   currentRecordPlaying: number | null = null
-  recordsPlayed: Record[] = []
-  countRecords: number = 0
-  checkedRecords: number = 0
-  hasResultsToShare: boolean = false
 
-  @Watch('records', { immediate: true })
-  onRecordsChanged(): void {
-    this.countRecords = this.records.length
+  get recordsCount(): number {
+    return this.records.length
   }
 
-  @Watch('recordsPlayed', {immediate: true})
-  onRecordsPlayed(): void {
-    this.checkedRecords = this.recordsPlayed.length
-    this.hasResultsToShare = this.recordsPlayed.length > 0
+  get recordsPlayed(): Record[] {
+    return this.$store.state.taggedRecords
+  }
+
+  get checkedRecords(): number {
+    return this.recordsPlayed.length
+  }
+
+  get hasResultsToShare(): boolean {
+    return this.recordsPlayed.length > 0
   }
 
   async mounted() {
@@ -115,17 +116,20 @@ export default class Collection extends Vue {
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
+    const currentRecord: Record = this.records[currentPlayerIndex]
+    const isCurrentRecordSet: Boolean = Boolean(
+      this.recordsPlayed.find(
+        (record) => record.fileName === currentRecord.fileName
+      )
+    )
+
     this.currentRecordPlaying = null
     this.pauseOtherPlayers(currentPlayerIndex)
-    let recordFound: boolean = false
-    this.recordsPlayed.forEach(record => {
-      if (record.fileName === this.records[currentPlayerIndex].fileName) {
-        recordFound = true
-      }
-    })
-    if (!recordFound) {
-      this.recordsPlayed.push(this.records[currentPlayerIndex])
+
+    if (!isCurrentRecordSet) {
+      this.$store.commit('ADD_TAGGED_RECORD', this.records[currentPlayerIndex])
     }
+
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
@@ -134,27 +138,27 @@ export default class Collection extends Vue {
   }
 
   handleClickTransfertResults(): void {
-    const hash = new Date().getTime();
+    const hash = new Date().getTime()
     this.generateOutputResult(`records-${hash}.xml`)
   }
 
   generateOutputResult(filename: string): void {
-    const docWrapper = document.implementation.createDocument("", "", null)
-    const patrolElement = docWrapper.createElement("patrol")
-    patrolElement.setAttribute("date", this.getCurrentDate())
+    const docWrapper = document.implementation.createDocument('', '', null)
+    const patrolElement = docWrapper.createElement('patrol')
+    patrolElement.setAttribute('date', this.getCurrentDate())
 
     this.recordsPlayed.forEach((record) => {
-      const file = docWrapper.createElement("file")
-      file.setAttribute("name", `${record.fileName}`)
+      const file = docWrapper.createElement('file')
+      file.setAttribute('name', `${record.fileName}`)
 
-      const commonsURL = docWrapper.createElement("commonsURL")
-      commonsURL.innerHTML = "https://"
+      const commonsURL = docWrapper.createElement('commonsURL')
+      commonsURL.innerHTML = 'https://'
 
-      const locutor = docWrapper.createElement("locutor")
-      locutor.innerHTML = "Guilhelma"
+      const locutor = docWrapper.createElement('locutor')
+      locutor.innerHTML = 'Guilhelma'
 
-      const tag = docWrapper.createElement("tag")
-      tag.innerHTML = "Valid"
+      const tag = docWrapper.createElement('tag')
+      tag.innerHTML = 'Valid'
 
       file.appendChild(commonsURL)
       file.appendChild(locutor)
@@ -168,19 +172,19 @@ export default class Collection extends Vue {
   }
 
   getCurrentDate(): string {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    return dd + '/' + mm + '/' + yyyy;
+    const today = new Date()
+    const dd = String(today.getDate()).padStart(2, '0')
+    const mm = String(today.getMonth() + 1).padStart(2, '0')
+    const yyyy = today.getFullYear()
+    return dd + '/' + mm + '/' + yyyy
   }
 
   downloadFile(filename: string, content?: any) {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], {type: 'application/xml'})
-    const objectUrl = URL.createObjectURL(blob);
+    const blob = new Blob([outputSerialized], { type: 'application/xml' })
+    const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
     element.setAttribute('href', objectUrl)
@@ -219,7 +223,7 @@ export default class Collection extends Vue {
   @apply bg-gray-lightest shadow-none hover:bg-gray-light text-gray;
 }
 
-.collection_sounds{
+.collection_sounds {
   @apply overflow-scroll;
   height: 400px;
 }
