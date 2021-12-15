@@ -1,7 +1,12 @@
 <template>
     <div>
         <div class="aside__block__information">
-            <vc-donut :sections="sections">Basic donut</vc-donut>
+            <vc-donut :sections="sections" background="white" foreground="grey"
+    :size="200" unit="px" :thickness="30"
+    
+ :total="100"
+    :start-angle="0" :auto-adjust-text-size="true">Basic donut</vc-donut>
+            <div class="information__text"><CustomIcon name="collection" :size="1.5"/><p>Français - Masculin</p></div>
 
         </div>
         <div class="aside__block__option">
@@ -24,12 +29,19 @@
     import { Vue, Component } from 'nuxt-property-decorator'
     import Donut from 'vue-css-donut-chart';
     import 'vue-css-donut-chart/dist/vcdonut.css';
+    import CustomIcon from '~/components/Icon/index.vue'
 
 
     @Component({
-        components: {Donut}
+        components: {Donut,CustomIcon}
     })
-    export default class Aside extends Vue {}
+    export default class Aside extends Vue {
+        sections: [{ value: 25; }, { value: 25; }]|undefined
+
+    //     handleSectionClick(section, event) {
+    //     console.log(`${section.label} clicked.`);
+    //   }
+    }
 </script>
 
 <style scoped lang="scss">
@@ -41,6 +53,14 @@
         li{
             @apply flex justify-between items-center mb-1
 
+        }
+    }
+
+    .information__text{
+        @apply flex items-center;
+
+        p{
+            @apply ml-2
         }
     }
 
