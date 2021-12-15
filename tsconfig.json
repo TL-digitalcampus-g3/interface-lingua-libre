@@ -11,6 +11,8 @@
     "noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
+    //Fix import non typé
+    "noImplicitAny": false,
     "paths": {
       "~/*": ["./*"],
       "@/*": ["./*"]

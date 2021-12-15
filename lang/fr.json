@@ -8,5 +8,10 @@
     "LOADING": "chargement",
     "PLAYER_AUTO": "lecture automatique",
     "RECORD": "enregistrement | enregistrements"
+  },
+  "SHORTCUT": {
+    "KEYBOARD_SHORTCUT":"raccourcis clavier",
+    "PLAY_PAUSE":"lecture / pause",
+    "REPEAT":"raccourcis clavier"
   }
 }
