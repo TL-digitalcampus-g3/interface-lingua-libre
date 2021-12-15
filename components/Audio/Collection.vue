@@ -270,11 +270,12 @@ export default class Collection extends Vue {
 }
 
 .collection_sounds {
-  @apply overflow-scroll;
+  @apply overflow-y-scroll;
   height: 400px;
 }
 
 .player{
   @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark
 }
+
 </style>

@@ -149,4 +149,8 @@ export default class AudioPlayer extends Vue {
 .player--played {
   @apply bg-gray-300;
 }
+
+.player__word,.player__time,.player__speed-rate{
+  @apply text-text-light dark:text-text-dark
+}
 </style>
