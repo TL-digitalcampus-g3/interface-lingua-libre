@@ -1,7 +1,9 @@
 <template>
   <div class="actionBar">
     <div class="actionBar__control"></div>
-    <div class="actionBar__tagSelector"></div>
+    <div class="actionBar__tagSelector">
+      <TagSelector />
+    </div>
     <div class="actionBar__toggleAutoPlay">
       <CheckBox label="Lecture automatique" />
     </div>
@@ -11,9 +13,10 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 import CheckBox from '~/components/ui/CheckBox.vue'
+import TagSelector from '~/components/TagSelector.vue'
 
 @Component({
-  components: { CheckBox },
+  components: { CheckBox, TagSelector },
 })
 export default class ActionBar extends Vue {}
 </script>
