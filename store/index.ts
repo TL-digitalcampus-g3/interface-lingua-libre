@@ -1,25 +1,47 @@
-import {MutationTree} from 'vuex'
-import {TaggedRecord} from '~/models/Record'
+import { MutationTree, GetterTree, ActionTree } from 'vuex'
+import { RecordT, Tag, TagMap } from '~/models/Record'
+
+export interface TagMutationPayload {
+  fileName: RecordT['fileName']
+  tag: Tag
+}
 
 interface State {
-  taggedRecords: TaggedRecord[]
+  // tagMap should be a Map structure but Map ar not reactive yet in Vue.js
+  tagMap: TagMap
+  activeAudio: RecordT['fileName'] | null
   isAutoplayMode: boolean
   isAutoplayStarted: boolean
-  isPlayingRecord: boolean
   lastRecordIndexPlayed: number | null
 }
 
 export const state = (): State => ({
-  taggedRecords: [],
+  tagMap: {},
+  activeAudio: null,
   isAutoplayMode: false,
   isAutoplayStarted: false,
-  isPlayingRecord: false,
   lastRecordIndexPlayed: null
 })
 
+export const getters: GetterTree<State, State> = {
+  taggedRecords: (state: State): RecordT['fileName'][] =>
+    Object.keys(state.tagMap),
+}
+
 export const mutations: MutationTree<State> = {
-  ADD_TAGGED_RECORD: (state, newTaggedRecord: TaggedRecord) => {
-    state.taggedRecords.push(newTaggedRecord)
+  ADD_TAG: (state: State, payload: TagMutationPayload): void => {
+    const { fileName, tag } = payload
+    state.tagMap = {
+      ...state.tagMap,
+      [fileName]: tag,
+    }
+  },
+  UPDATE_TAG: (state: State, payload: TagMutationPayload): void => {
+    const { fileName, tag } = payload
+    state.tagMap[fileName] = tag
+  },
+  SET_ACTIVE_AUDIO: (state: State, fileName: RecordT['fileName']) => {
+    state.activeAudio = fileName
   },
   UPDATE_AUTOPLAY_MODE: (state, newValue: boolean) => {
     state.isAutoplayMode = newValue
@@ -27,13 +49,23 @@ export const mutations: MutationTree<State> = {
   UPDATE_AUTOPLAY_STARDED: (state, newValue: boolean) => {
     state.isAutoplayStarted = newValue
   },
-  UPDATE_RECORD_IS_PLAYING: (state, newValue: boolean) => {
-    state.isPlayingRecord = newValue
-  },
   UPDATE_LAST_RECORD_INDEX_PLAYED: (state, newRecordIndex: number) => {
     state.lastRecordIndexPlayed = newRecordIndex
   },
   NEED_TO_PLAY_RECORD: (state, recordIndex: number) => {
     state.lastRecordIndexPlayed = recordIndex
+  },
+}
+
+export const actions: ActionTree<State, State> = {
+  setTag({ commit, getters }, payload: TagMutationPayload): void {
+    const { fileName } = payload
+    const isNewFile: boolean = !getters.taggedRecords.includes(fileName)
+
+    if (isNewFile) {
+      commit('ADD_TAG', payload)
+    } else {
+      commit('UPDATE_TAG', payload)
+    }
   },
 }

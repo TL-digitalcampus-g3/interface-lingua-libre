@@ -14,6 +14,7 @@ export default class Badge extends Vue {}
 <style lang="scss" scoped>
 .badge {
   background: white;
+  color: black;
   border-radius: 7px;
   display: inline-block;
   padding: 0.1rem 0.4rem;
