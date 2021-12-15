@@ -1,13 +1,5 @@
 <template>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    :style="iconStyle"
-  >
-    <g :fill="fillColor" :strokeColor="strokeColor">
-      <component :is="componentName" />
-    </g>
-  </svg>
+  <component :is="componentName" :style="iconStyle" />
 </template>
 
 <script lang="ts">
@@ -16,7 +8,10 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator'
 enum AvailableIcons {
   Play = 'play',
   Pause = 'pause',
-  Collection = 'pause',
+  Refresh = 'refresh',
+  Collection = 'collection',
+  Light ='light',   
+  Information ='information'
 }
 
 const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
@@ -25,14 +20,16 @@ const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
   components: {
     play: () => import('./Play.vue'),
     pause: () => import('./Pause.vue'),
+    refresh: () => import('./Refresh.vue'),
     collection: () => import('./Collection.vue'),
+    light: () => import('./Light.vue'),
+    information: () => import('./Information.vue'),
   },
 })
 export default class IconWrapper extends Vue {
   @Prop({ required: true }) readonly name!: AvailableIcons
   @Prop({ default: 3 }) readonly size!: number
-  @Prop({ default: 'var(--color-primary)' }) readonly fillColor!: string
-  @Prop({ default: 'var(--color-primary)' }) readonly strokeColor!: string
+  @Prop({ default: 'var(--color-primary)' }) readonly color!: string
 
   get componentName(): AvailableIcons {
     if (!availableIcons.includes(this.name)) {
@@ -46,6 +43,7 @@ export default class IconWrapper extends Vue {
     return {
       width: `${this.size}rem`,
       height: `${this.size}rem`,
+      color: this.color,
     }
   }
 }

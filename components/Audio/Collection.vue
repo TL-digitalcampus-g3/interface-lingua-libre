@@ -11,6 +11,8 @@
       <div>
         <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
         {{ $t('GLOBAL.PLAYER_AUTO') }}
+        
+        <CheckBox :label="$t('GLOBAL.PLAYER_AUTO')" :isChecked="isAutoplayMode"/>
       </div>
       <div v-for="(record, index) in records" :key="record.fileName">
         {{ record }}
@@ -40,13 +42,14 @@ import Loader from '~/components/Loader.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import PlayIcon from '~/components/Icon/Play.vue'
 import PauseIcon from '~/components/Icon/Pause.vue'
+import CheckBox from '~/components/ui/CheckBox.vue'
 
 interface Record {
   fileName: string
 }
 
 @Component({
-  components: { Loader, AudioPlayer, PlayIcon, PauseIcon },
+  components: { Loader, AudioPlayer, PlayIcon, PauseIcon, CheckBox },
   async asyncData({ $axios }): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)

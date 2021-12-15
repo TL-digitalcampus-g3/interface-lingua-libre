@@ -31,4 +31,8 @@
         background-color: crimson;
     }
 
+    .actionBar__toggleAutoPlay{
+        @apply justify-self-end;
+    }
+
 </style>
