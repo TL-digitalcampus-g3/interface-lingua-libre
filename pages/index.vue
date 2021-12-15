@@ -32,7 +32,7 @@ export default class Demo extends Vue {}
 <style lang="scss">
 .basePage {
   @apply grid h-screen bg-backgroundApp-light dark:bg-backgroundApp-dark;
-  grid-template-columns: 5rem auto;
+  grid-template-columns: 5rem 1fr;
   grid-template-rows: auto 5rem;
 }
 
@@ -50,7 +50,7 @@ export default class Demo extends Vue {}
 
 .pageMain__collection{
   grid-column: 1 / 2;
-  @apply col-span-full lg:col-span-1 order-1 lg:order-none
+  @apply col-span-full lg:col-span-1 order-1 lg:order-none justify-self-stretch
 }
 
 .pageMain__aside{
