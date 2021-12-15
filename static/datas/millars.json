@@ -2,15 +2,70 @@
   "records": [
     {
       "fileName": "agroalimentari.ogg",
-      "pathDirectory": "Millars"
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Agroalimentari"
+
     },
     {
       "fileName": "anxova.ogg",
-      "pathDirectory": "Millars"
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Anxova"
+    },
+    {
+      "fileName": "blau_acer.ogg",
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Blau acer"
+    },
+    {
+      "fileName": "fuet.ogg",
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Fuet"
+    },
+    {
+      "fileName": "mantega.ogg",
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Mantega"
+    },
+    {
+      "fileName": "nata.ogg",
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Nata"
+    },
+    {
+      "fileName": "orxata.ogg",
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Orxata"
+    },
+    {
+      "fileName": "sobrassada.ogg",
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "sobrassada"
+    },
+    {
+      "fileName": "te.ogg",
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Te"
     },
     {
       "fileName": "tòfona.ogg",
-      "pathDirectory": "Millars"
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Tòfona"
+    },
+    {
+      "fileName": "tomàquet.ogg",
+      "commonsURL": "https://stub.com",
+      "locutor": "John Doe",
+      "word": "Tomàquet"
     }
   ]
 }
