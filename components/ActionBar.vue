@@ -19,7 +19,7 @@ export default {
     }
 
     
-    [class$=".actionBar__"]{
+    [class*="actionBar__"]{
         background-color: crimson;
     }
 

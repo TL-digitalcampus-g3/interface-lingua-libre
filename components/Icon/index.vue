@@ -16,6 +16,7 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator'
 enum AvailableIcons {
   Play = 'play',
   Pause = 'pause',
+  Collection = 'collection',
 }
 
 const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
@@ -24,6 +25,7 @@ const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
   components: {
     play: () => import('./Play.vue'),
     pause: () => import('./Pause.vue'),
+    collection: () => import('./Collection.vue'),
   },
 })
 export default class IconWrapper extends Vue {
