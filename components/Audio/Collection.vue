@@ -55,7 +55,7 @@ import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import { Record } from '~/models/Record'
+import { Record, TaggedRecord, Tag } from '~/models/Record'
 
 @Component({
   components: { Loader, AudioPlayer, CustomIcon, CheckBox },
@@ -88,7 +88,7 @@ export default class Collection extends Vue {
     return this.records.length
   }
 
-  get recordsPlayed(): Record[] {
+  get recordsPlayed(): TaggedRecord[] {
     return this.$store.state.taggedRecords
   }
 
@@ -127,7 +127,12 @@ export default class Collection extends Vue {
     this.pauseOtherPlayers(currentPlayerIndex)
 
     if (!isCurrentRecordSet) {
-      this.$store.commit('ADD_TAGGED_RECORD', this.records[currentPlayerIndex])
+      const patroledRecord: TaggedRecord = {
+        ...currentRecord,
+        tag: Tag.Patroled,
+      }
+
+      this.$store.commit('ADD_TAGGED_RECORD', patroledRecord)
     }
 
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
