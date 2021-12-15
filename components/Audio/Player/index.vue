@@ -123,7 +123,7 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply rounded-md bg-white my-2 p-4 text-lg;
+  @apply rounded-md bg-white my-2 p-4;
   display: flex;
   align-items: center;
 
