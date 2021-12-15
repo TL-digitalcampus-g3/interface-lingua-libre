@@ -11,8 +11,11 @@
       <div>
         <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
         {{ $t('GLOBAL.PLAYER_AUTO') }}
-        
-        <CheckBox :label="$t('GLOBAL.PLAYER_AUTO')" :isChecked="isAutoplayMode"/>
+
+        <CheckBox
+          :label="$t('GLOBAL.PLAYER_AUTO')"
+          :isChecked="isAutoplayMode"
+        />
       </div>
       <div class="collection_sounds">
         <div v-for="(record, index) in records" :key="record.fileName">
@@ -25,10 +28,12 @@
           />
         </div>
       </div>
-      <button class="btn"
-              :class="[{'btn--disabled': !hasResultsToShare}]"
-              @click="handleClickTransfertResults"
-              :disabled="!hasResultsToShare">
+      <button
+        class="btn"
+        :class="[{ 'btn--disabled': !hasResultsToShare }]"
+        @click="handleClickTransfertResults"
+        :disabled="!hasResultsToShare"
+      >
         Send validation
       </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
@@ -52,10 +57,7 @@ import AudioPlayer from '~/components/Audio/Player/index.vue'
 import PlayIcon from '~/components/Icon/Play.vue'
 import PauseIcon from '~/components/Icon/Pause.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-
-interface Record {
-  fileName: string
-}
+import Record from '~/models/Record'
 
 @Component({
   components: { Loader, AudioPlayer, PlayIcon, PauseIcon, CheckBox },
@@ -93,7 +95,7 @@ export default class Collection extends Vue {
     this.countRecords = this.records.length
   }
 
-  @Watch('recordsPlayed', {immediate: true})
+  @Watch('recordsPlayed', { immediate: true })
   onRecordsPlayed(): void {
     this.checkedRecords = this.recordsPlayed.length
     this.hasResultsToShare = this.recordsPlayed.length > 0
@@ -118,7 +120,7 @@ export default class Collection extends Vue {
     this.currentRecordPlaying = null
     this.pauseOtherPlayers(currentPlayerIndex)
     let recordFound: boolean = false
-    this.recordsPlayed.forEach(record => {
+    this.recordsPlayed.forEach((record) => {
       if (record.fileName === this.records[currentPlayerIndex].fileName) {
         recordFound = true
       }
@@ -134,27 +136,27 @@ export default class Collection extends Vue {
   }
 
   handleClickTransfertResults(): void {
-    const hash = new Date().getTime();
+    const hash = new Date().getTime()
     this.generateOutputResult(`records-${hash}.xml`)
   }
 
   generateOutputResult(filename: string): void {
-    const docWrapper = document.implementation.createDocument("", "", null)
-    const patrolElement = docWrapper.createElement("patrol")
-    patrolElement.setAttribute("date", this.getCurrentDate())
+    const docWrapper = document.implementation.createDocument('', '', null)
+    const patrolElement = docWrapper.createElement('patrol')
+    patrolElement.setAttribute('date', this.getCurrentDate())
 
     this.recordsPlayed.forEach((record) => {
-      const file = docWrapper.createElement("file")
-      file.setAttribute("name", `${record.fileName}`)
+      const file = docWrapper.createElement('file')
+      file.setAttribute('name', `${record.fileName}`)
 
-      const commonsURL = docWrapper.createElement("commonsURL")
-      commonsURL.innerHTML = "https://"
+      const commonsURL = docWrapper.createElement('commonsURL')
+      commonsURL.innerHTML = 'https://'
 
-      const locutor = docWrapper.createElement("locutor")
-      locutor.innerHTML = "Guilhelma"
+      const locutor = docWrapper.createElement('locutor')
+      locutor.innerHTML = 'Guilhelma'
 
-      const tag = docWrapper.createElement("tag")
-      tag.innerHTML = "Valid"
+      const tag = docWrapper.createElement('tag')
+      tag.innerHTML = 'Valid'
 
       file.appendChild(commonsURL)
       file.appendChild(locutor)
@@ -168,19 +170,19 @@ export default class Collection extends Vue {
   }
 
   getCurrentDate(): string {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
-    return dd + '/' + mm + '/' + yyyy;
+    const today = new Date()
+    const dd = String(today.getDate()).padStart(2, '0')
+    const mm = String(today.getMonth() + 1).padStart(2, '0')
+    const yyyy = today.getFullYear()
+    return dd + '/' + mm + '/' + yyyy
   }
 
   downloadFile(filename: string, content?: any) {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], {type: 'application/xml'})
-    const objectUrl = URL.createObjectURL(blob);
+    const blob = new Blob([outputSerialized], { type: 'application/xml' })
+    const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
     element.setAttribute('href', objectUrl)
@@ -219,7 +221,7 @@ export default class Collection extends Vue {
   @apply bg-gray-lightest shadow-none hover:bg-gray-light text-gray;
 }
 
-.collection_sounds{
+.collection_sounds {
   @apply overflow-scroll;
   height: 400px;
 }
