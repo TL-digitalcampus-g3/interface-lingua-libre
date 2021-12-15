@@ -41,7 +41,7 @@ export default class Demo extends Vue {}
 // }
 
 .pageMain{
-  @apply grid px-6;
+  @apply grid p-6;
   grid-template-columns: auto 280px;
   grid-template-rows: auto 5rem;
   gap: 20px;
@@ -64,5 +64,9 @@ export default class Demo extends Vue {}
 
 body{
   @apply text-text-light dark:text-text-light
+}
+
+h3{
+  @apply text-sm font-bold uppercase mb-5
 }
 </style>

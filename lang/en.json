@@ -8,5 +8,10 @@
     "LOADING" : "loading",
     "PLAYER_AUTO": "autoplay",
     "RECORD": "record | records"
+  },
+  "SHORTCUT": {
+    "KEYBOARD_SHORTCUT":"shortcut",
+    "PLAY_PAUSE":"play / pause",
+    "REPEAT":"repeat"
   }
 }
