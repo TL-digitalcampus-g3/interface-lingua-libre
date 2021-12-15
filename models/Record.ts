@@ -8,13 +8,11 @@ export enum Tag {
   Vandalism = 'Vandalism',
 }
 
-export interface Record {
+export interface RecordT {
   fileName: string
   commonsURL: string
   locutor: string
   word: string
 }
 
-export interface TaggedRecord extends Record {
-  tag: Tag
-}
+export type TagMap = Record<RecordT['fileName'], Tag>

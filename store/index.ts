@@ -1,16 +1,31 @@
-import { MutationTree } from 'vuex'
-import { TaggedRecord } from '~/models/Record'
+import { MutationTree, GetterTree } from 'vuex'
+import { RecordT, Tag, TagMap } from '~/models/Record'
+
+export interface SetTagPayload {
+  fileName: RecordT['fileName']
+  tag: Tag
+}
 
 interface State {
-  taggedRecords: TaggedRecord[]
+  // tagMap should be a Map structure but Map ar not reactive yet in Vue.js
+  tagMap: TagMap
 }
 
 export const state = (): State => ({
-  taggedRecords: [],
+  tagMap: {},
 })
 
+export const getters: GetterTree<State, State> = {
+  taggedRecords: (state: State): RecordT['fileName'][] =>
+    Object.keys(state.tagMap),
+}
+
 export const mutations: MutationTree<State> = {
-  ADD_TAGGED_RECORD: (state, newTaggedRecord: TaggedRecord) => {
-    state.taggedRecords.push(newTaggedRecord)
+  SET_TAG: (state: State, payload: SetTagPayload): void => {
+    const { fileName, tag } = payload
+    state.tagMap = {
+      ...state.tagMap,
+      [fileName]: tag,
+    }
   },
 }
