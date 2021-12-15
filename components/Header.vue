@@ -26,11 +26,10 @@
     .nav__item{
         @apply grid place-content-center hover:scale-110;
         height: 80px;
+    }
 
-        .nav__item__text{
-            @apply text-clip overflow-hidden;
-        }
-
+    .nav__item__text{
+        @apply visible;
     }
 
     .nav__item svg{

@@ -12,7 +12,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
     .actionBar{
         @apply bg-primary grid px-9 shadow-lg items-center;
         grid-template-columns: auto auto auto;
