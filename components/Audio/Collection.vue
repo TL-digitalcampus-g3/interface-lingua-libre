@@ -10,10 +10,10 @@
       </button>
       <div>
         <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
-        {{ $t('GLOBAL.PLAYER_AUTO') }}
+        {{ $t('PLAYBACK_OPTION.PLAYER_AUTO') }}
 
         <CheckBox
-          :label="$t('GLOBAL.PLAYER_AUTO')"
+          :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
           :isChecked="isAutoplayMode"
         />
       </div>

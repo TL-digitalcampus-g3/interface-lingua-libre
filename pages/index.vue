@@ -67,6 +67,14 @@ body{
 }
 
 h3{
-  @apply text-sm font-bold uppercase mb-5
+  @apply text-sm font-bold uppercase mb-3
+}
+
+p::first-letter{
+  text-transform: uppercase;
+}
+
+ul{
+  @apply mb-5
 }
 </style>

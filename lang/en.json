@@ -6,12 +6,17 @@
   "GLOBAL": {
     "HOME": "home",
     "LOADING" : "loading",
-    "PLAYER_AUTO": "autoplay",
     "RECORD": "record | records"
   },
   "SHORTCUT": {
     "KEYBOARD_SHORTCUT":"shortcut",
-    "PLAY_PAUSE":"play / pause",
+    "PLAY":"play",
+    "PAUSE":"pause",
     "REPEAT":"repeat"
+  },
+  "PLAYBACK_OPTION":{
+    "PLAYBACK_OPTION":"playback options",
+    "JUMP_TIME": "time between sound",
+    "PLAYER_AUTO": "autoplay"
   }
 }

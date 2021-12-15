@@ -7,11 +7,14 @@
         <div class="aside__block__option">
             <h3>{{ $t('SHORTCUT.KEYBOARD_SHORTCUT') }}</h3>
             <ul>
-                <li><p>{{ $t('SHORTCUT.PLAY_PAUSE') }}</p><kbd class="keyword_shortcut">Espace</kbd></li>
+                <li><p class="capitalize">{{ $t('SHORTCUT.PLAY')+ " / "+ $t('SHORTCUT.PAUSE')}}</p><kbd class="keyword_shortcut">Espace</kbd></li>
                 <li><p>{{ $t('SHORTCUT.REPEAT') }}</p><kbd class="keyword_shortcut">←</kbd></li>
             </ul>
-        
-
+            <h3>{{ $t('PLAYBACK_OPTION.PLAYBACK_OPTION') }}</h3>
+            <ul>
+                <li><p>{{ $t('PLAYBACK_OPTION.JUMP_TIME') }}</p></li>
+                <li><p>{{ $t('PLAYBACK_OPTION.PLAYER_AUTO') }}</p></li>
+            </ul>
         </div>
 
     </div>
@@ -38,10 +41,6 @@
         li{
             @apply flex justify-between items-center mb-1
 
-        }
-
-        p{
-            @apply capitalize
         }
     }
 
