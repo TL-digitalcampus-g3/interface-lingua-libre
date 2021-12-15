@@ -20,9 +20,10 @@ import { Vue, Component } from 'nuxt-property-decorator'
 import Collection from '~/components/Audio/Collection.vue'
 import LangSwitcher from '~/components/LangSwitcher.vue'
 import Header from '~/components/Header.vue'
+import ActionBar from '~/components/ActionBar.vue'
 
 @Component({
-  components: { LangSwitcher, Collection, Header },
+  components: {LangSwitcher, Collection,Header,ActionBar},
 })
 export default class Demo extends Vue {}
 </script>
@@ -43,9 +44,7 @@ export default class Demo extends Vue {}
 
 // }
 
-.pageBottomBar {
-  @apply bg-primary shadow-lg;
-  height: 80px;
+.pageBottomBar{
   grid-column: 1 / 3;
 }
 </style>
