@@ -125,6 +125,11 @@ export default class AudioPlayer extends Vue {
   &__speed-rate {
     @apply ml-2;
   }
+
+  &__word {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
 }
 
 .player--active {
