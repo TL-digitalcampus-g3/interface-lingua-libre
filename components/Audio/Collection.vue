@@ -84,22 +84,22 @@ export default class Collection extends Vue {
   isAutoplayMode: boolean = false
   currentRecordPlaying: number | null = null
   countRecords: number = 0
-  checkedRecords: number = 0
-  hasResultsToShare: boolean = false
 
   @Watch('records', { immediate: true })
   onRecordsChanged(): void {
     this.countRecords = this.records.length
   }
 
-  @Watch('recordsPlayed', { immediate: true })
-  onRecordsPlayed(): void {
-    this.checkedRecords = this.recordsPlayed.length
-    this.hasResultsToShare = this.recordsPlayed.length > 0
-  }
-
   get recordsPlayed(): Record[] {
     return this.$store.state.taggedRecords
+  }
+
+  get checkedRecords(): number {
+    return this.recordsPlayed.length
+  }
+
+  get hasResultsToShare(): boolean {
+    return this.recordsPlayed.length > 0
   }
 
   async mounted() {
