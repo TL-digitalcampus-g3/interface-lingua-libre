@@ -41,10 +41,11 @@ export default class Demo extends Vue {}
 // }
 
 .pageMain{
-  @apply grid p-6;
+  @apply grid p-6 overflow-y-scroll;
   grid-template-columns: auto 280px;
   grid-template-rows: auto 5rem;
   gap: 20px;
+  height: calc(100vh - 80px);
 }
 
 .pageMain__collection{
@@ -63,7 +64,7 @@ export default class Demo extends Vue {}
 
 
 body{
-  @apply text-text-light dark:text-text-light
+  @apply text-text-light dark:text-text-dark
 }
 
 h3{
