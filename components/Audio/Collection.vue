@@ -1,7 +1,7 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader/>
+      <Loader />
     </div>
     <div v-else>
       <button class="btn"
@@ -10,7 +10,7 @@
         <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
       </button>
       <div>
-        <input id="autoplay" type="checkbox" :checked="isAutoplayMode"/>
+        <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
         {{ $t('GLOBAL.PLAYER_AUTO') }}
 
         <CheckBox
@@ -43,9 +43,9 @@
           }}</strong></p>
         <div v-if="currentRecordPlaying !== null">
           Current audio player : <strong>{{ currentRecordPlaying + 1 }} /
-          {{ countRecords }}</strong>
+          {{ recordsCount }}</strong>
         </div>
-        Audio(s) verified : <strong>{{ checkedRecords }} / {{ countRecords }}</strong>
+        Audio(s) verified : <strong>{{ checkedRecords }} / {{ recordsCount }}</strong>
         <hr/>
         {{ recordsPlayed }}
       </div>
@@ -54,16 +54,16 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
+import { Vue, Component, Ref } from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import Record from '~/models/Record'
+import { Record, TaggedRecord, Tag } from '~/models/Record'
 
 @Component({
-  components: {Loader, AudioPlayer, CustomIcon, CheckBox},
-  async asyncData({$axios}): Promise<any> {
+  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
+  async asyncData({ $axios }): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
       .then((res) => res.records)
@@ -88,23 +88,24 @@ export default class Collection extends Vue {
   isAutoplayMode: boolean = false
   isPlayingRecord: boolean = false
   currentRecordPlaying: number | null = null
-  recordsPlayed: Record[] = []
-  countRecords: number = 0
-  checkedRecords: number = 0
-  hasResultsToShare: boolean = false
   lastRecordIndexPlayed: number | null = null
   isAutoplayStarted: boolean = false
   delayBetweenAutoplay: number = 3000 // in ms
 
-  @Watch('records', {immediate: true})
-  onRecordsChanged(): void {
-    this.countRecords = this.records.length
+  get recordsCount(): number {
+    return this.records.length
   }
 
-  @Watch('recordsPlayed', {immediate: true})
-  onRecordsPlayed(): void {
-    this.checkedRecords = this.recordsPlayed.length
-    this.hasResultsToShare = this.recordsPlayed.length > 0
+  get recordsPlayed(): TaggedRecord[] {
+    return this.$store.state.taggedRecords
+  }
+
+  get checkedRecords(): number {
+    return this.recordsPlayed.length
+  }
+
+  get hasResultsToShare(): boolean {
+    return this.recordsPlayed.length > 0
   }
 
   async mounted() {
@@ -125,18 +126,24 @@ export default class Collection extends Vue {
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
+    const currentRecord: Record = this.records[currentPlayerIndex]
+    const isCurrentRecordSet: Boolean = Boolean(
+      this.recordsPlayed.find(
+        (record) => record.fileName === currentRecord.fileName
+      )
+    )
+
     this.currentRecordPlaying = null
     this.isPlayingRecord = false
     this.lastRecordIndexPlayed = currentPlayerIndex
 
-    let recordFound: boolean = false
-    this.recordsPlayed.forEach((record) => {
-      if (record.fileName === this.records[currentPlayerIndex].fileName) {
-        recordFound = true
+    if (!isCurrentRecordSet) {
+      const patroledRecord: TaggedRecord = {
+        ...currentRecord,
+        tag: Tag.Patroled,
       }
-    })
-    if (!recordFound) {
-      this.recordsPlayed.push(this.records[currentPlayerIndex])
+
+      this.$store.commit('ADD_TAGGED_RECORD', patroledRecord)
     }
 
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
@@ -194,7 +201,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], {type: 'application/xml'})
+    const blob = new Blob([outputSerialized], { type: 'application/xml' })
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 

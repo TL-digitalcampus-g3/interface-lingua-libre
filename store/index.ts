@@ -1,8 +1,8 @@
-import { GetterTree, ActionTree, MutationTree } from 'vuex'
-import Record from '~/models/Record'
+import { MutationTree } from 'vuex'
+import { TaggedRecord } from '~/models/Record'
 
 interface State {
-  taggedRecords: Record[]
+  taggedRecords: TaggedRecord[]
 }
 
 export const state = (): State => ({
@@ -10,7 +10,7 @@ export const state = (): State => ({
 })
 
 export const mutations: MutationTree<State> = {
-  ADD_TAGGED_RECORD: (state, newTaggedRecord: Record) => {
+  ADD_TAGGED_RECORD: (state, newTaggedRecord: TaggedRecord) => {
     state.taggedRecords.push(newTaggedRecord)
   },
 }
