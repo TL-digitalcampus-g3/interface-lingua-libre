@@ -65,10 +65,6 @@ interface Record {
   },
 })
 export default class Collection extends Vue {
-  $refs!: {
-    players: any
-  }
-
   @Ref() readonly players!: AudioPlayer[]
 
   records: Record[] = []
@@ -123,8 +119,8 @@ export default class Collection extends Vue {
   }
 
   playRecord(playerIndex: number): void {
-    if (this.$refs.players.length > 0 && this.$refs.players[playerIndex]) {
-      this.$refs.players[playerIndex].play()
+    if (this.players.length > 0 && this.players[playerIndex]) {
+      this.players[playerIndex].play()
     }
   }
 
