@@ -49,16 +49,16 @@ module.exports = {
           lightest: '#F4F4F4',
         },
         backgroundApp:{
-          light:'F0F2F3',
-          dark:'121216',
+          light:'#F0F2F3',
+          dark:'#121216',
         },
         backgroundBlock:{
-          light:'ffffff',
-          dark:'21212C',
+          light:'#ffffff',
+          dark:'#21212C',
         },
         text:{
-          light:"373A40",
-          dark:"ffffff"
+          light:"#373A40",
+          dark:"#ffffff"
         }
       },
     },
