@@ -9,10 +9,12 @@ export interface SetTagPayload {
 interface State {
   // tagMap should be a Map structure but Map ar not reactive yet in Vue.js
   tagMap: TagMap
+  activeAudio: RecordT['fileName'] | null
 }
 
 export const state = (): State => ({
   tagMap: {},
+  activeAudio: null,
 })
 
 export const getters: GetterTree<State, State> = {
@@ -27,5 +29,8 @@ export const mutations: MutationTree<State> = {
       ...state.tagMap,
       [fileName]: tag,
     }
+  },
+  SET_ACTIVE_AUDIO: (state: State, fileName: RecordT['fileName']) => {
+    state.activeAudio = fileName
   },
 }

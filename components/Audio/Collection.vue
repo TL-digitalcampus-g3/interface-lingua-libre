@@ -30,7 +30,7 @@
           <AudioPlayer
             ref="players"
             :file-name="record.fileName"
-            @recordIsPlaying="handleRecordIsPlaying(index)"
+            @recordIsPlaying="handleRecordIsPlaying(record.fileName)"
             @recordPlayed="handleRecordPlayed(index)"
           />
         </div>
@@ -50,9 +50,9 @@
             lastRecordIndexPlayed !== null ? lastRecordIndexPlayed : 'none'
           }}</strong>
         </p>
-        <div v-if="currentRecordPlaying !== null">
+        <div v-if="isPlayingRecord">
           Current audio player :
-          <strong>{{ currentRecordPlaying + 1 }} / {{ recordsCount }}</strong>
+          <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
         </div>
         Audio(s) verified :
         <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
@@ -97,8 +97,6 @@ export default class Collection extends Vue {
   records: RecordT[] = []
   isLoading: boolean = true
   isAutoplayMode: boolean = false
-  isPlayingRecord: boolean = false
-  currentRecordPlaying: number | null = null
   lastRecordIndexPlayed: number | null = null
   isAutoplayStarted: boolean = false
   delayBetweenAutoplay: number = 3000 // in ms
@@ -121,6 +119,18 @@ export default class Collection extends Vue {
 
   get hasResultsToShare(): boolean {
     return this.checkedRecordsCount > 0
+  }
+
+  get activeAudio(): RecordT['fileName'] | null {
+    return this.$store.state.activeAudio
+  }
+
+  set activeAudio(fileName: RecordT['fileName'] | null) {
+    this.$store.commit('SET_ACTIVE_AUDIO', fileName)
+  }
+
+  get isPlayingRecord(): boolean {
+    return Boolean(this.activeAudio)
   }
 
   async mounted() {
@@ -146,8 +156,7 @@ export default class Collection extends Vue {
       currentRecord.fileName
     )
 
-    this.currentRecordPlaying = null
-    this.isPlayingRecord = false
+    this.activeAudio = null
     this.lastRecordIndexPlayed = currentPlayerIndex
 
     if (!isCurrentRecordTagSettled) {
@@ -162,10 +171,9 @@ export default class Collection extends Vue {
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
-  handleRecordIsPlaying(currentPlayerIndex: number): void {
-    this.pauseOtherPlayers(currentPlayerIndex)
-    this.isPlayingRecord = true
-    this.currentRecordPlaying = currentPlayerIndex
+  handleRecordIsPlaying(fileName: RecordT['fileName']): void {
+    this.pauseOtherPlayers()
+    this.activeAudio = fileName
   }
 
   handleClickTransfertResults(): void {
@@ -244,12 +252,12 @@ export default class Collection extends Vue {
     }
   }
 
-  pauseOtherPlayers(currentPlayerIndex: number): void {
-    this.players.forEach((player, index): void => {
-      if (currentPlayerIndex !== index) {
+  pauseOtherPlayers(): void {
+    for (const player of this.players) {
+      if (player.fileName !== this.activeAudio) {
         player.pause()
       }
-    })
+    }
   }
 }
 </script>
