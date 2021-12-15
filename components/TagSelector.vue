@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <div class="badges">
-      <button v-for="tag in tags" :key="tag" class="mx-1">
-        <Badge>
-          {{ tag }}
-        </Badge>
-      </button>
-    </div>
+  <div class="badges">
+    <button v-for="tag in tags" :key="tag" class="mx-1">
+      <Badge>
+        {{ tag }}
+      </Badge>
+    </button>
   </div>
 </template>
 
