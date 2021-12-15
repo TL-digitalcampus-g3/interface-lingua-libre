@@ -6,6 +6,7 @@
                 <a href="#" class="nav__item"><CustomIcon name="collection" size="1.75"/><span class="nav__item__text">Importer les sons à révisier</span></a>
                 <a href="#" class="nav__item"><CustomIcon name="light" size="1.75"/><span class="nav__item__text">Activer/Désactiver le dark mode</span></a>
                 <a href="#" class="nav__item"><CustomIcon name="information" size="1.75"/><span class="nav__item__text">Afficher les informations</span></a>
+                <a href="#" class="nav__item"><CustomIcon name="language" size="1.75"/><span class="nav__item__text">Langues</span></a>
             </nav>
         </header>
     </div>
