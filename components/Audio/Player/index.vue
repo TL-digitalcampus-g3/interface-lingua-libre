@@ -11,6 +11,7 @@
       @pause="pause"
       @ended="ended"
       @timeupdate="setTime"
+      @loadeddata="isLoaded = true"
     />
     <button class="player__controls" @click="togglePlay">
       <CustomIcon v-show="state === 'pause'" name="play" />
@@ -18,8 +19,8 @@
       <CustomIcon v-show="state === 'ended'" name="refresh" />
     </button>
     <div class="player__word">{{ word }}</div>
-    <div class="player__time">
-      {{ currentTime }}
+    <div v-if="audioDuration" class="player__time">
+      {{ currentTime }} / {{ audioDuration }}
     </div>
     <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
     <TagBadge v-if="tag" class="player__tag" :tag="tag" />
@@ -53,6 +54,7 @@ export default class AudioPlayer extends Vue {
   speedRateValue: SpeedRate = SpeedRate.Normal
   isPlayed: boolean = false
   isActive: boolean = false
+  isLoaded: boolean = false
 
   get fileName(): RecordT['fileName'] {
     return this.record.fileName
@@ -68,6 +70,14 @@ export default class AudioPlayer extends Vue {
 
   get currentTime(): string {
     return formatTimeToMMSS(this.currentSeconds)
+  }
+
+  get audioDuration(): string | null {
+    if (this.isLoaded) {
+      return formatTimeToMMSS(this.audio.duration)
+    } else {
+      return null
+    }
   }
 
   get speedRate(): number {
@@ -123,7 +133,7 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply rounded-md bg-white my-2 p-4 text-lg;
+  @apply rounded-md bg-white my-2 p-4;
   display: flex;
   align-items: center;
 
@@ -150,7 +160,9 @@ export default class AudioPlayer extends Vue {
   @apply bg-gray-300;
 }
 
-.player__word,.player__time,.player__speed-rate{
-  @apply text-text-light dark:text-text-dark
+.player__word,
+.player__time,
+.player__speed-rate {
+  @apply text-text-light dark:text-text-dark;
 }
 </style>
