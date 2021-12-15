@@ -156,7 +156,6 @@ export default class Collection extends Vue {
       currentRecord.fileName
     )
 
-    this.activeAudio = null
     this.lastRecordIndexPlayed = currentPlayerIndex
 
     if (!isCurrentRecordTagSettled) {
