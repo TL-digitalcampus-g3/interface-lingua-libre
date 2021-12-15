@@ -185,7 +185,6 @@ export default class Collection extends Vue {
     const docWrapper = document.implementation.createDocument('', '', null)
     const patrolElement = docWrapper.createElement('patrol')
     patrolElement.setAttribute('date', this.getCurrentDate())
-
     const recordsPlayed: RecordT[] = this.records.filter((record) =>
       this.taggedRecords.includes(record.fileName)
     )
