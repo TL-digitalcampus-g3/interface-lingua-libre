@@ -247,4 +247,8 @@ export default class Collection extends Vue {
   @apply overflow-scroll;
   height: 400px;
 }
+
+.player{
+  @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark
+}
 </style>
