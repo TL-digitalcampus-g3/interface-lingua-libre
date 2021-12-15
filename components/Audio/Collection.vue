@@ -11,6 +11,7 @@
       <div>
         <input id="autoplay" type="checkbox" :checked="isAutoplayMode"/> {{ $t('GLOBAL.PLAYER_AUTO') }}
       </div>
+      {{ hasResultsToShare ? 'true' : 'false' }}
       <div v-for="(record, index) in records" :key="record.fileName">
         {{ record }}
         <AudioPlayer
@@ -20,6 +21,12 @@
           @recordPlayed="handleRecordPlayed(index)"
         />
       </div>
+      <button class="btn"
+              :class="[{'btn--disabled': !hasResultsToShare}]"
+              @click="handleClickTransfertResults"
+              :disabled="!hasResultsToShare">
+        Send validation
+      </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
         <div v-if="currentRecordPlaying !== null">
           Current audio player : {{ currentRecordPlaying + 1 }} /
@@ -37,8 +44,8 @@
 import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
-import PlayIcon from '~/components/icons/Play.vue'
-import PauseIcon from '~/components/icons/Pause.vue'
+import PlayIcon from '~/components/Icon/Play.vue'
+import PauseIcon from '~/components/Icon/Pause.vue'
 
 @Component({
   components: {Loader, AudioPlayer, PlayIcon, PauseIcon},
@@ -73,15 +80,17 @@ export default class Collection extends Vue {
   recordsPlayed: [] = []
   countRecords: number = 0
   checkedRecords: number = 0
+  hasResultsToShare: boolean = false
 
   @Watch('records', {immediate: true})
   onRecordsChanged(): void {
     this.countRecords = this.records.length
   }
 
-  @Watch('recordsPlayed')
+  @Watch('recordsPlayed', {immediate: true})
   onRecordsPlayed(): void {
-    this.checkedRecords = this.recordsPlayed.length;
+    this.checkedRecords = this.recordsPlayed.length
+    this.hasResultsToShare = this.recordsPlayed.length > 0
   }
 
   async mounted() {
@@ -96,15 +105,16 @@ export default class Collection extends Vue {
   handleClickPlayAuto(): void {
     this.isAutoplayMode = !this.isAutoplayMode
     this.playRecord(0)
+    // TODO Setup timeout (ms)
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
     this.currentRecordPlaying = null
     this.pauseOtherPlayers(currentPlayerIndex)
-    let recordFound: boolean = false;
+    let recordFound: boolean = false
     this.recordsPlayed.forEach(record => {
       if (record.fileName === this.records[currentPlayerIndex].fileName) {
-        recordFound = true;
+        recordFound = true
       }
     })
     if (!recordFound) {
@@ -115,6 +125,67 @@ export default class Collection extends Vue {
 
   handleRecordIsPlaying(currentPlayerIndex: number): void {
     this.currentRecordPlaying = currentPlayerIndex
+  }
+
+  handleClickTransfertResults(): void {
+    const hash = new Date().getTime();
+    this.generateOutputResult(`records-${hash}.xml`)
+  }
+
+  generateOutputResult(filename: string): void {
+    const docWrapper = document.implementation.createDocument("", "", null)
+    const patrolElement = docWrapper.createElement("patrol")
+    patrolElement.setAttribute("date", this.getCurrentDate())
+
+    this.recordsPlayed.forEach((record) => {
+      const file = docWrapper.createElement("file")
+      file.setAttribute("name", `${record.fileName}`)
+
+      const commonsURL = docWrapper.createElement("commonsURL")
+      commonsURL.innerHTML = "https://"
+
+      const locutor = docWrapper.createElement("locutor")
+      locutor.innerHTML = "Guilhelma"
+
+      const tag = docWrapper.createElement("tag")
+      tag.innerHTML = "Valid"
+
+      file.appendChild(commonsURL)
+      file.appendChild(locutor)
+      file.appendChild(tag)
+
+      patrolElement.appendChild(file)
+    })
+
+    docWrapper.appendChild(patrolElement)
+    this.downloadFile(filename, docWrapper)
+  }
+
+  getCurrentDate(): string {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    return dd + '/' + mm + '/' + yyyy;
+  }
+
+  downloadFile(filename: string, content?: any) {
+    // Serialize the XML file
+    const outputSerialized = new XMLSerializer().serializeToString(content)
+    // Create a blob element to wrap serialized xml file
+    const blob = new Blob([outputSerialized], {type: 'application/xml'})
+    const objectUrl = URL.createObjectURL(blob);
+    const element = document.createElement('a')
+
+    element.setAttribute('href', objectUrl)
+    element.setAttribute('download', filename)
+    // Force link element to be invisible
+    element.style.display = 'none'
+    document.body.appendChild(element)
+    // Trigger click on invisible link
+    element.click()
+    // Then delete the element form DOM
+    document.body.removeChild(element)
   }
 
   playRecord(playerIndex: number): void {
@@ -136,5 +207,9 @@ export default class Collection extends Vue {
 <style lang="scss" scoped>
 .btn {
   @apply bg-blue-500 text-white p-3 rounded;
+}
+
+.btn--disabled {
+  @apply bg-gray-lightest shadow-none hover:bg-gray-light text-gray;
 }
 </style>
