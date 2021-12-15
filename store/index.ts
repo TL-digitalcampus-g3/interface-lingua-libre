@@ -1,16 +1,53 @@
-import { MutationTree } from 'vuex'
-import { TaggedRecord } from '~/models/Record'
+import { MutationTree, GetterTree, ActionTree } from 'vuex'
+import { RecordT, Tag, TagMap } from '~/models/Record'
+
+export interface TagMutationPayload {
+  fileName: RecordT['fileName']
+  tag: Tag
+}
 
 interface State {
-  taggedRecords: TaggedRecord[]
+  // tagMap should be a Map structure but Map ar not reactive yet in Vue.js
+  tagMap: TagMap
+  activeAudio: RecordT['fileName'] | null
 }
 
 export const state = (): State => ({
-  taggedRecords: [],
+  tagMap: {},
+  activeAudio: null,
 })
 
+export const getters: GetterTree<State, State> = {
+  taggedRecords: (state: State): RecordT['fileName'][] =>
+    Object.keys(state.tagMap),
+}
+
 export const mutations: MutationTree<State> = {
-  ADD_TAGGED_RECORD: (state, newTaggedRecord: TaggedRecord) => {
-    state.taggedRecords.push(newTaggedRecord)
+  ADD_TAG: (state: State, payload: TagMutationPayload): void => {
+    const { fileName, tag } = payload
+    state.tagMap = {
+      ...state.tagMap,
+      [fileName]: tag,
+    }
+  },
+  UPDATE_TAG: (state: State, payload: TagMutationPayload): void => {
+    const { fileName, tag } = payload
+    state.tagMap[fileName] = tag
+  },
+  SET_ACTIVE_AUDIO: (state: State, fileName: RecordT['fileName']) => {
+    state.activeAudio = fileName
+  },
+}
+
+export const actions: ActionTree<State, State> = {
+  setTag({ commit, getters }, payload: TagMutationPayload): void {
+    const { fileName } = payload
+    const isNewFile: boolean = !getters.taggedRecords.includes(fileName)
+
+    if (isNewFile) {
+      commit('ADD_TAG', payload)
+    } else {
+      commit('UPDATE_TAG', payload)
+    }
   },
 }

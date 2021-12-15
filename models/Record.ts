@@ -5,16 +5,14 @@ export enum Tag {
   CutWord = 'cutWord',
   NoMatchSpelling = 'noMatchSpelling',
   NoMatchLanguage = 'noMatchLanguage',
-  Vandalism = 'Vandalism',
+  Vandalism = 'vandalism',
 }
 
-export interface Record {
+export interface RecordT {
   fileName: string
   commonsURL: string
   locutor: string
   word: string
 }
 
-export interface TaggedRecord extends Record {
-  tag: Tag
-}
+export type TagMap = Record<RecordT['fileName'], Tag>

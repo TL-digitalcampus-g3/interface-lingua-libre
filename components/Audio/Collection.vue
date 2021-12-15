@@ -4,10 +4,16 @@
       <Loader />
     </div>
     <div v-else>
-      <button class="btn"
-              @click="handleClickPlayAuto((lastRecordIndexPlayed !== null) ? (lastRecordIndexPlayed + 1) : 0)">
-        <CustomIcon v-if="isAutoplayMode" name="pause"/>
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
+      <button
+        class="btn"
+        @click="
+          handleClickPlayAuto(
+            lastRecordIndexPlayed !== null ? lastRecordIndexPlayed + 1 : 0
+          )
+        "
+      >
+        <CustomIcon v-if="isAutoplayMode" name="pause" />
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
       </button>
       <div>
         <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
@@ -23,8 +29,8 @@
           {{ record }}
           <AudioPlayer
             ref="players"
-            :file-name="record.fileName"
-            @recordIsPlaying="handleRecordIsPlaying(index)"
+            :record="record"
+            @recordIsPlaying="handleRecordIsPlaying(record.fileName)"
             @recordPlayed="handleRecordPlayed(index)"
           />
         </div>
@@ -38,16 +44,20 @@
         Send validation
       </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
-        <p>Last record's index played : <strong>{{
+        <p>
+          Last record's index played :
+          <strong>{{
             lastRecordIndexPlayed !== null ? lastRecordIndexPlayed : 'none'
-          }}</strong></p>
-        <div v-if="currentRecordPlaying !== null">
-          Current audio player : <strong>{{ currentRecordPlaying + 1 }} /
-          {{ recordsCount }}</strong>
+          }}</strong>
+        </p>
+        <div v-if="isPlayingRecord">
+          Current audio player :
+          <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
         </div>
-        Audio(s) verified : <strong>{{ checkedRecords }} / {{ recordsCount }}</strong>
-        <hr/>
-        {{ recordsPlayed }}
+        Audio(s) verified :
+        <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
+        <hr />
+        {{ taggedRecords }}
       </div>
     </div>
   </div>
@@ -59,7 +69,8 @@ import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import { Record, TaggedRecord, Tag } from '~/models/Record'
+import { RecordT, Tag, TagMap } from '~/models/Record'
+import { TagMutationPayload } from '~/store'
 
 @Component({
   components: { Loader, AudioPlayer, CustomIcon, CheckBox },
@@ -83,11 +94,9 @@ import { Record, TaggedRecord, Tag } from '~/models/Record'
 export default class Collection extends Vue {
   @Ref() readonly players!: AudioPlayer[]
 
-  records: Record[] = []
+  records: RecordT[] = []
   isLoading: boolean = true
   isAutoplayMode: boolean = false
-  isPlayingRecord: boolean = false
-  currentRecordPlaying: number | null = null
   lastRecordIndexPlayed: number | null = null
   isAutoplayStarted: boolean = false
   delayBetweenAutoplay: number = 3000 // in ms
@@ -96,16 +105,32 @@ export default class Collection extends Vue {
     return this.records.length
   }
 
-  get recordsPlayed(): TaggedRecord[] {
-    return this.$store.state.taggedRecords
+  get tagMap(): TagMap {
+    return this.$store.state.tagMap
   }
 
-  get checkedRecords(): number {
-    return this.recordsPlayed.length
+  get taggedRecords(): RecordT['fileName'][] {
+    return this.$store.getters.taggedRecords
+  }
+
+  get checkedRecordsCount(): number {
+    return this.taggedRecords.length
   }
 
   get hasResultsToShare(): boolean {
-    return this.recordsPlayed.length > 0
+    return this.checkedRecordsCount > 0
+  }
+
+  get activeAudio(): RecordT['fileName'] | null {
+    return this.$store.state.activeAudio
+  }
+
+  set activeAudio(fileName: RecordT['fileName'] | null) {
+    this.$store.commit('SET_ACTIVE_AUDIO', fileName)
+  }
+
+  get isPlayingRecord(): boolean {
+    return Boolean(this.activeAudio)
   }
 
   async mounted() {
@@ -126,33 +151,28 @@ export default class Collection extends Vue {
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
-    const currentRecord: Record = this.records[currentPlayerIndex]
-    const isCurrentRecordSet: Boolean = Boolean(
-      this.recordsPlayed.find(
-        (record) => record.fileName === currentRecord.fileName
-      )
+    const currentRecord: RecordT = this.records[currentPlayerIndex]
+    const isCurrentRecordTagSettled: Boolean = this.taggedRecords.includes(
+      currentRecord.fileName
     )
 
-    this.currentRecordPlaying = null
-    this.isPlayingRecord = false
     this.lastRecordIndexPlayed = currentPlayerIndex
 
-    if (!isCurrentRecordSet) {
-      const patroledRecord: TaggedRecord = {
-        ...currentRecord,
+    if (!isCurrentRecordTagSettled) {
+      const setTagPayload: TagMutationPayload = {
+        fileName: currentRecord.fileName,
         tag: Tag.Patroled,
       }
 
-      this.$store.commit('ADD_TAGGED_RECORD', patroledRecord)
+      this.$store.dispatch('setTag', setTagPayload)
     }
 
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
-  handleRecordIsPlaying(currentPlayerIndex: number): void {
-    this.pauseOtherPlayers(currentPlayerIndex)
-    this.isPlayingRecord = true
-    this.currentRecordPlaying = currentPlayerIndex
+  handleRecordIsPlaying(fileName: RecordT['fileName']): void {
+    this.pauseOtherPlayers()
+    this.activeAudio = fileName
   }
 
   handleClickTransfertResults(): void {
@@ -164,8 +184,11 @@ export default class Collection extends Vue {
     const docWrapper = document.implementation.createDocument('', '', null)
     const patrolElement = docWrapper.createElement('patrol')
     patrolElement.setAttribute('date', this.getCurrentDate())
+    const recordsPlayed: RecordT[] = this.records.filter((record) =>
+      this.taggedRecords.includes(record.fileName)
+    )
 
-    this.recordsPlayed.forEach((record) => {
+    recordsPlayed.forEach((record) => {
       const file = docWrapper.createElement('file')
       file.setAttribute('name', `${record.fileName}`)
 
@@ -176,7 +199,7 @@ export default class Collection extends Vue {
       locutor.innerHTML = 'Guilhelma'
 
       const tag = docWrapper.createElement('tag')
-      tag.innerHTML = 'Valid'
+      tag.innerHTML = this.tagMap[record.fileName]
 
       file.appendChild(commonsURL)
       file.appendChild(locutor)
@@ -218,18 +241,21 @@ export default class Collection extends Vue {
 
   playRecord(playerIndex: number): void {
     if (this.players.length > 0 && this.players[playerIndex]) {
-      setTimeout(() => {
-        this.players[playerIndex].play()
-      }, (this.isAutoplayStarted ? this.delayBetweenAutoplay : 0))
+      setTimeout(
+        () => {
+          this.players[playerIndex].play()
+        },
+        this.isAutoplayStarted ? this.delayBetweenAutoplay : 0
+      )
     }
   }
 
-  pauseOtherPlayers(currentPlayerIndex: number): void {
-    this.players.forEach((player, index): void => {
-      if (currentPlayerIndex !== index) {
+  pauseOtherPlayers(): void {
+    for (const player of this.players) {
+      if (player.fileName !== this.activeAudio) {
         player.pause()
       }
-    })
+    }
   }
 }
 </script>
