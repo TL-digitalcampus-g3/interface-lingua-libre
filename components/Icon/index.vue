@@ -16,7 +16,7 @@ import { Vue, Component, Prop } from 'nuxt-property-decorator'
 enum AvailableIcons {
   Play = 'play',
   Pause = 'pause',
-  Collection = 'collection',
+  Collection = 'pause',
 }
 
 const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)

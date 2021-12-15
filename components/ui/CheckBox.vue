@@ -23,9 +23,11 @@
     }
 </style>
 
-<script>
-    export default {
-        
+<script lang="ts">
+    import { Vue, Component, Prop } from 'nuxt-property-decorator'
+
+    export default class IconWrapper extends Vue {
+        @Prop({ required: true }) readonly label!: string
     }
 </script>
                
