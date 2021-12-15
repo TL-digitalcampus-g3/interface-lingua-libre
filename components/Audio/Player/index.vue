@@ -4,21 +4,25 @@
       ref="audio"
       :src="audioUrl"
       controls
-      @ended="endedHandler"
+      @play="play"
+      @pause="pause"
+      @ended="handleEnded"
       @timeupdate="setTime"
-    ></audio>
+    />
     <button @click="togglePlay">
-      <PlayIcon v-if="!isPlaying" />
-      <PauseIcon v-else />
+      <CustomIcon v-show="!isPlaying" name="play" />
+      <CustomIcon v-show="isPlaying" name="pause" />
     </button>
     {{ currentTime }}
+    <SpeedRateSelector v-model="speedRate" />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'vue-property-decorator'
-import PlayIcon from '~/components/icons/Play.vue'
-import PauseIcon from '~/components/icons/Pause.vue'
+import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
+import CustomIcon from '@/components/Icon/index.vue'
+import SpeedRateSelector from './SpeedRateSelector.vue'
+import { SpeedRate } from './types'
 
 function formatTimeToMMSS(timeInseconds: number): string {
   const minutes = Math.round(timeInseconds / 60)
@@ -29,13 +33,14 @@ function formatTimeToMMSS(timeInseconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({ components: { PlayIcon, PauseIcon } })
+@Component({ components: { CustomIcon, SpeedRateSelector } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly fileName!: string
   @Ref() readonly audio!: HTMLAudioElement
 
   isPlaying: boolean = false
   currentSeconds: number = 0
+  speedRateValue: SpeedRate = SpeedRate.Normal
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
@@ -45,8 +50,21 @@ export default class AudioPlayer extends Vue {
     return formatTimeToMMSS(this.currentSeconds)
   }
 
+  get speedRate(): number {
+    return this.speedRateValue
+  }
+  set speedRate(speedRate: SpeedRate) {
+    this.speedRateValue = speedRate
+    this.audio.playbackRate = speedRate
+  }
+
+  handleEnded(): void {
+    this.$emit('recordPlayed')
+    this.isPlaying = false
+  }
+
   play(): void {
-    this.$emit('played')
+    this.$emit('recordIsPlaying')
     this.isPlaying = true
     this.audio.play()
   }
@@ -62,10 +80,6 @@ export default class AudioPlayer extends Vue {
     } else {
       this.pause()
     }
-  }
-
-  endedHandler(): void {
-    this.isPlaying = false
   }
 
   setTime(): void {
