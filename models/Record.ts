@@ -1,4 +1,4 @@
-export default interface Record {
+export  interface Record {
   fileName: string
   commonsURL: string
   locutor: string

@@ -1,5 +1,5 @@
-import { GetterTree, ActionTree, MutationTree } from 'vuex'
-import Record from '~/models/Record'
+import { MutationTree } from 'vuex'
+import { Record } from '~/models/Record'
 
 interface State {
   taggedRecords: Record[]

@@ -55,7 +55,7 @@ import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import Record from '~/models/Record'
+import { Record } from '~/models/Record'
 
 @Component({
   components: { Loader, AudioPlayer, CustomIcon, CheckBox },
