@@ -1,21 +1,16 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader />
+      <Loader/>
     </div>
     <div v-else>
-      <button class="btn"
-              @click="handleClickPlayAuto((lastRecordIndexPlayed !== null) ? (lastRecordIndexPlayed + 1) : 0)">
-        <CustomIcon v-if="isAutoplayMode" name="pause"/>
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
-      </button>
       <div>
-        <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
+        <input id="autoplay" type="checkbox" :checked="$store.state.isAutoplayMode"/>
         {{ $t('PLAYBACK_OPTION.PLAYER_AUTO') }}
 
         <CheckBox
           :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
-          :isChecked="isAutoplayMode"
+          :isChecked="$store.state.isAutoplayMode"
         />
       </div>
       <div class="collection_sounds">
@@ -39,7 +34,7 @@
       </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
         <p>Last record's index played : <strong>{{
-            lastRecordIndexPlayed !== null ? lastRecordIndexPlayed : 'none'
+            $store.state.lastRecordIndexPlayed !== null ? $store.state.lastRecordIndexPlayed : 'none'
           }}</strong></p>
         <div v-if="currentRecordPlaying !== null">
           Current audio player : <strong>{{ currentRecordPlaying + 1 }} /
@@ -54,16 +49,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref } from 'nuxt-property-decorator'
+import {Vue, Component, Ref} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
-import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import { Record, TaggedRecord, Tag } from '~/models/Record'
+import {Record, TaggedRecord, Tag} from '~/models/Record'
 
 @Component({
-  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
-  async asyncData({ $axios }): Promise<any> {
+  components: {Loader, AudioPlayer, CheckBox},
+  async asyncData({$axios}): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
       .then((res) => res.records)
@@ -85,10 +79,7 @@ export default class Collection extends Vue {
 
   records: Record[] = []
   isLoading: boolean = true
-  isAutoplayMode: boolean = false
-  isPlayingRecord: boolean = false
   currentRecordPlaying: number | null = null
-  lastRecordIndexPlayed: number | null = null
   isAutoplayStarted: boolean = false
   delayBetweenAutoplay: number = 3000 // in ms
 
@@ -117,14 +108,6 @@ export default class Collection extends Vue {
     }
   }
 
-  handleClickPlayAuto(startIndex: number = 0): void {
-    this.isAutoplayMode = !this.isAutoplayMode
-    if (!this.isPlayingRecord) {
-      this.playRecord(startIndex)
-      this.isAutoplayStarted = !this.isAutoplayStarted
-    }
-  }
-
   handleRecordPlayed(currentPlayerIndex: number): void {
     const currentRecord: Record = this.records[currentPlayerIndex]
     const isCurrentRecordSet: Boolean = Boolean(
@@ -134,8 +117,8 @@ export default class Collection extends Vue {
     )
 
     this.currentRecordPlaying = null
-    this.isPlayingRecord = false
-    this.lastRecordIndexPlayed = currentPlayerIndex
+    this.$store.commit('UPDATE_RECORD_IS_PLAYING', false)
+    this.$store.commit('UPDATE_LAST_RECORD_INDEX_PLAYED', currentPlayerIndex)
 
     if (!isCurrentRecordSet) {
       const patroledRecord: TaggedRecord = {
@@ -146,12 +129,12 @@ export default class Collection extends Vue {
       this.$store.commit('ADD_TAGGED_RECORD', patroledRecord)
     }
 
-    this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
+    this.$store.state.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
   handleRecordIsPlaying(currentPlayerIndex: number): void {
     this.pauseOtherPlayers(currentPlayerIndex)
-    this.isPlayingRecord = true
+    this.$store.commit('UPDATE_RECORD_IS_PLAYING', true)
     this.currentRecordPlaying = currentPlayerIndex
   }
 
@@ -201,7 +184,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], { type: 'application/xml' })
+    const blob = new Blob([outputSerialized], {type: 'application/xml'})
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
