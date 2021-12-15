@@ -2,6 +2,7 @@ module.exports = {
   prefix: '',
   important: false,
   separator: ':',
+  darkMode: 'media',
   theme: {
     screens: {
       xs: '340px',
