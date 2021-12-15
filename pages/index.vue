@@ -29,7 +29,7 @@ import Aside from '~/components/Aside.vue'
 export default class Demo extends Vue {}
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .basePage {
   @apply grid h-screen bg-backgroundApp-light dark:bg-backgroundApp-dark;
   grid-template-columns: 5rem auto;
@@ -59,5 +59,10 @@ export default class Demo extends Vue {}
 }
 .pageBottomBar{
   grid-column: 1 / 3;
+}
+
+
+body{
+  @apply text-text-light dark:text-text-light
 }
 </style>

@@ -14,14 +14,16 @@
         
         <CheckBox :label="$t('GLOBAL.PLAYER_AUTO')" :isChecked="isAutoplayMode"/>
       </div>
-      <div v-for="(record, index) in records" :key="record.fileName">
-        {{ record }}
-        <AudioPlayer
-          ref="players"
-          :file-name="record.fileName"
-          @recordIsPlaying="handleRecordIsPlaying(index)"
-          @recordPlayed="handleRecordPlayed(index)"
-        />
+      <div class="collection_sounds">
+        <div v-for="(record, index) in records" :key="record.fileName">
+          {{ record }}
+          <AudioPlayer
+            ref="players"
+            :file-name="record.fileName"
+            @recordIsPlaying="handleRecordIsPlaying(index)"
+            @recordPlayed="handleRecordPlayed(index)"
+          />
+        </div>
       </div>
       <button class="btn"
               :class="[{'btn--disabled': !hasResultsToShare}]"
@@ -215,5 +217,10 @@ export default class Collection extends Vue {
 
 .btn--disabled {
   @apply bg-gray-lightest shadow-none hover:bg-gray-light text-gray;
+}
+
+.collection_sounds{
+  @apply overflow-scroll;
+  height: 600px;
 }
 </style>
