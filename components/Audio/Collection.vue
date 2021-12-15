@@ -5,8 +5,8 @@
     </div>
     <div v-else>
       <button class="btn" @click="handleClickPlayAuto">
-        <PauseIcon v-if="isAutoplayMode" />
-        <PlayIcon v-else @click="pauseOtherPlayers" />
+        <CustomIcon v-if="isAutoplayMode" name="pause" />
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
       </button>
       <div>
         <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
@@ -37,16 +37,15 @@
 <script lang="ts">
 import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
+import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
-import PlayIcon from '~/components/Icon/Play.vue'
-import PauseIcon from '~/components/Icon/Pause.vue'
 
 interface Record {
   fileName: string
 }
 
 @Component({
-  components: { Loader, AudioPlayer, PlayIcon, PauseIcon },
+  components: { Loader, CustomIcon, AudioPlayer },
   async asyncData({ $axios }): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
