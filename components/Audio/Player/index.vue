@@ -2,7 +2,7 @@
   <div class="player" :class="[
       {'player--played': isPlayed},
       {'player--active': isActive}
-    ]">
+    ]" @dblclick="play">
     <audio
       ref="audio"
       :src="audioUrl"
