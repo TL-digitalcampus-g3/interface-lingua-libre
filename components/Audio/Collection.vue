@@ -37,8 +37,8 @@
 import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
-import PlayIcon from '~/components/icons/Play.vue'
-import PauseIcon from '~/components/icons/Pause.vue'
+import PlayIcon from '~/components/Icon/Play.vue'
+import PauseIcon from '~/components/Icon/Pause.vue'
 
 @Component({
   components: {Loader, AudioPlayer, PlayIcon, PauseIcon},
@@ -66,7 +66,7 @@ export default class Collection extends Vue {
 
   @Ref() readonly players!: AudioPlayer[]
 
-  records: [] = []
+  records: any = []
   isLoading: boolean = true
   isAutoplayMode: boolean = false
   currentRecordPlaying: number | null = null
