@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="badges">
-      <button>
-        <Badge v-for="tag in tags" :key="tag" class="mx-1">
+      <button v-for="tag in tags" :key="tag" class="mx-1">
+        <Badge>
           {{ tag }}
         </Badge>
       </button>
