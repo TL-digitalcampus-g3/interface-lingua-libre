@@ -4,9 +4,10 @@
       <Loader />
     </div>
     <div v-else>
-      <button class="btn" @click="handleClickPlayAuto">
-        <CustomIcon v-if="isAutoplayMode" name="pause" />
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
+      <button class="btn"
+              @click="handleClickPlayAuto((lastRecordIndexPlayed !== null) ? (lastRecordIndexPlayed + 1) : 0)">
+        <CustomIcon v-if="isAutoplayMode" name="pause"/>
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
       </button>
       <div>
         <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
@@ -37,12 +38,15 @@
         Send validation
       </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
+        <p>Last record's index played : <strong>{{
+            lastRecordIndexPlayed !== null ? lastRecordIndexPlayed : 'none'
+          }}</strong></p>
         <div v-if="currentRecordPlaying !== null">
-          Current audio player : {{ currentRecordPlaying + 1 }} /
-          {{ recordsCount }}
+          Current audio player : <strong>{{ currentRecordPlaying + 1 }} /
+          {{ recordsCount }}</strong>
         </div>
-        Audio(s) verified : {{ checkedRecords }} / {{ recordsCount }}
-        <hr />
+        Audio(s) verified : <strong>{{ checkedRecords }} / {{ recordsCount }}</strong>
+        <hr/>
         {{ recordsPlayed }}
       </div>
     </div>
@@ -82,7 +86,11 @@ export default class Collection extends Vue {
   records: Record[] = []
   isLoading: boolean = true
   isAutoplayMode: boolean = false
+  isPlayingRecord: boolean = false
   currentRecordPlaying: number | null = null
+  lastRecordIndexPlayed: number | null = null
+  isAutoplayStarted: boolean = false
+  delayBetweenAutoplay: number = 3000 // in ms
 
   get recordsCount(): number {
     return this.records.length
@@ -109,10 +117,12 @@ export default class Collection extends Vue {
     }
   }
 
-  handleClickPlayAuto(): void {
+  handleClickPlayAuto(startIndex: number = 0): void {
     this.isAutoplayMode = !this.isAutoplayMode
-    this.playRecord(0)
-    // TODO Setup timeout (ms)
+    if (!this.isPlayingRecord) {
+      this.playRecord(startIndex)
+      this.isAutoplayStarted = !this.isAutoplayStarted
+    }
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
@@ -124,7 +134,8 @@ export default class Collection extends Vue {
     )
 
     this.currentRecordPlaying = null
-    this.pauseOtherPlayers(currentPlayerIndex)
+    this.isPlayingRecord = false
+    this.lastRecordIndexPlayed = currentPlayerIndex
 
     if (!isCurrentRecordSet) {
       const patroledRecord: TaggedRecord = {
@@ -139,6 +150,8 @@ export default class Collection extends Vue {
   }
 
   handleRecordIsPlaying(currentPlayerIndex: number): void {
+    this.pauseOtherPlayers(currentPlayerIndex)
+    this.isPlayingRecord = true
     this.currentRecordPlaying = currentPlayerIndex
   }
 
@@ -205,7 +218,9 @@ export default class Collection extends Vue {
 
   playRecord(playerIndex: number): void {
     if (this.players.length > 0 && this.players[playerIndex]) {
-      this.players[playerIndex].play()
+      setTimeout(() => {
+        this.players[playerIndex].play()
+      }, (this.isAutoplayStarted ? this.delayBetweenAutoplay : 0))
     }
   }
 

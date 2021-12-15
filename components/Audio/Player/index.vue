@@ -1,47 +1,52 @@
 <template>
-  <div>
+  <div class="player" :class="[
+      {'player--played': isPlayed},
+      {'player--active': isActive}
+    ]">
     <audio
       ref="audio"
       :src="audioUrl"
       controls
       @play="play"
       @pause="pause"
-      @ended="handleEnded"
+      @ended="ended"
       @timeupdate="setTime"
     />
     <button @click="togglePlay">
-      <CustomIcon v-show="state === 'pause'" name="play" />
-      <CustomIcon v-show="state === 'play'" name="pause" />
-      <CustomIcon v-show="state === 'ended'" name="refresh" />
+      <CustomIcon v-show="state === 'pause'" name="play"/>
+      <CustomIcon v-show="state === 'play'" name="pause"/>
+      <CustomIcon v-show="state === 'ended'" name="refresh"/>
     </button>
     {{ currentTime }}
-    <SpeedRateSelector v-model="speedRate" />
+    <SpeedRateSelector v-model="speedRate"/>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
-import CustomIcon from '@/components/Icon/index.vue'
+import {Vue, Component, Prop, Ref} from 'nuxt-property-decorator'
+import {SpeedRate, PlayerState} from './types'
 import SpeedRateSelector from './SpeedRateSelector.vue'
-import { SpeedRate, PlayerState } from './types'
+import CustomIcon from '@/components/Icon/index.vue'
 
-function formatTimeToMMSS(timeInseconds: number): string {
-  const minutes = Math.round(timeInseconds / 60)
-  const seconds = Math.round(timeInseconds - minutes * 60)
+function formatTimeToMMSS(timeInSeconds: number): string {
+  const minutes = Math.round(timeInSeconds / 60)
+  const seconds = Math.round(timeInSeconds - minutes * 60)
   const minuteValue = minutes < 10 ? `0${minutes}` : minutes
   const secondValue = seconds < 10 ? `0${seconds}` : seconds
 
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({ components: { CustomIcon, SpeedRateSelector } })
+@Component({components: {CustomIcon, SpeedRateSelector}})
 export default class AudioPlayer extends Vue {
-  @Prop({ required: true }) readonly fileName!: string
+  @Prop({required: true}) readonly fileName!: string
   @Ref() readonly audio!: HTMLAudioElement
 
   state: PlayerState = PlayerState.Pause
   currentSeconds: number = 0
   speedRateValue: SpeedRate = SpeedRate.Normal
+  isPlayed: boolean = false
+  isActive: boolean = false
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
@@ -54,24 +59,28 @@ export default class AudioPlayer extends Vue {
   get speedRate(): number {
     return this.speedRateValue
   }
+
   set speedRate(speedRate: SpeedRate) {
     this.speedRateValue = speedRate
     this.audio.playbackRate = speedRate
   }
 
-  handleEnded(): void {
+  ended(): void {
     this.$emit('recordPlayed')
     this.state = PlayerState.Ended
+    this.isPlayed = true
+    this.isActive = false
   }
 
   play(): void {
     this.$emit('recordIsPlaying')
     this.state = PlayerState.Play
     this.audio.play()
+    this.isActive = true
   }
 
   pause(): void {
-    if (this.state == PlayerState.Play) {
+    if (this.state === PlayerState.Play) {
       this.state = PlayerState.Pause
     }
 
@@ -91,3 +100,17 @@ export default class AudioPlayer extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.player {
+  @apply rounded-md bg-white my-2 p-4;
+}
+
+.player--active {
+  @apply shadow-2xl transition duration-500;
+}
+
+.player--played {
+  @apply bg-gray-300;
+}
+</style>
