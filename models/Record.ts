@@ -5,7 +5,7 @@ export enum Tag {
   CutWord = 'cutWord',
   NoMatchSpelling = 'noMatchSpelling',
   NoMatchLanguage = 'noMatchLanguage',
-  Vandalism = 'Vandalism',
+  Vandalism = 'vandalism',
 }
 
 export interface RecordT {
