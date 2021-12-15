@@ -130,7 +130,7 @@ export default class AudioPlayer extends Vue {
   &__word,
   &__time,
   &__speed-rate {
-    @apply ml-2;
+    @apply ml-4;
   }
 
   &__word {
