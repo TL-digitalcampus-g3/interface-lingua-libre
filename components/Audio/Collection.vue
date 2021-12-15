@@ -221,6 +221,6 @@ export default class Collection extends Vue {
 
 .collection_sounds{
   @apply overflow-scroll;
-  height: 600px;
+  height: 400px;
 }
 </style>
