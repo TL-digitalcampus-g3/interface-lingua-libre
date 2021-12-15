@@ -118,17 +118,20 @@ export default class Collection extends Vue {
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
+    const currentRecord: Record = this.records[currentPlayerIndex]
+    const isCurrentRecordSet: Boolean = Boolean(
+      this.recordsPlayed.find(
+        (record) => record.fileName === currentRecord.fileName
+      )
+    )
+
     this.currentRecordPlaying = null
     this.pauseOtherPlayers(currentPlayerIndex)
-    let recordFound: boolean = false
-    this.recordsPlayed.forEach((record) => {
-      if (record.fileName === this.records[currentPlayerIndex].fileName) {
-        recordFound = true
-      }
-    })
-    if (!recordFound) {
+
+    if (!isCurrentRecordSet) {
       this.$store.commit('ADD_TAGGED_RECORD', this.records[currentPlayerIndex])
     }
+
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
