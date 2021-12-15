@@ -1,15 +1,16 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader />
+      <Loader/>
     </div>
     <div v-else>
-      <button class="btn" @click="handleClickPlayAuto">
-        <CustomIcon v-if="isAutoplayMode" name="pause" />
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
+      <button class="btn"
+              @click="handleClickPlayAuto((lastRecordIndexPlayed !== null) ? (lastRecordIndexPlayed + 1) : 0)">
+        <CustomIcon v-if="isAutoplayMode" name="pause"/>
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
       </button>
       <div>
-        <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
+        <input id="autoplay" type="checkbox" :checked="isAutoplayMode"/>
         {{ $t('GLOBAL.PLAYER_AUTO') }}
 
         <CheckBox
@@ -37,12 +38,15 @@
         Send validation
       </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
+        <p>Last record's index played : <strong>{{
+            lastRecordIndexPlayed !== null ? lastRecordIndexPlayed : 'none'
+          }}</strong></p>
         <div v-if="currentRecordPlaying !== null">
-          Current audio player : {{ currentRecordPlaying + 1 }} /
-          {{ countRecords }}
+          Current audio player : <strong>{{ currentRecordPlaying + 1 }} /
+          {{ countRecords }}</strong>
         </div>
-        Audio(s) verified : {{ checkedRecords }} / {{ countRecords }}
-        <hr />
+        Audio(s) verified : <strong>{{ checkedRecords }} / {{ countRecords }}</strong>
+        <hr/>
         {{ recordsPlayed }}
       </div>
     </div>
@@ -50,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
+import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
@@ -58,8 +62,8 @@ import CheckBox from '~/components/ui/CheckBox.vue'
 import Record from '~/models/Record'
 
 @Component({
-  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
-  async asyncData({ $axios }): Promise<any> {
+  components: {Loader, AudioPlayer, CustomIcon, CheckBox},
+  async asyncData({$axios}): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
       .then((res) => res.records)
@@ -82,18 +86,22 @@ export default class Collection extends Vue {
   records: Record[] = []
   isLoading: boolean = true
   isAutoplayMode: boolean = false
+  isPlayingRecord: boolean = false
   currentRecordPlaying: number | null = null
   recordsPlayed: Record[] = []
   countRecords: number = 0
   checkedRecords: number = 0
   hasResultsToShare: boolean = false
+  lastRecordIndexPlayed: number | null = null
+  isAutoplayStarted: boolean = false
+  delayBetweenAutoplay: number = 3000 // in ms
 
-  @Watch('records', { immediate: true })
+  @Watch('records', {immediate: true})
   onRecordsChanged(): void {
     this.countRecords = this.records.length
   }
 
-  @Watch('recordsPlayed', { immediate: true })
+  @Watch('recordsPlayed', {immediate: true})
   onRecordsPlayed(): void {
     this.checkedRecords = this.recordsPlayed.length
     this.hasResultsToShare = this.recordsPlayed.length > 0
@@ -108,15 +116,19 @@ export default class Collection extends Vue {
     }
   }
 
-  handleClickPlayAuto(): void {
+  handleClickPlayAuto(startIndex: number = 0): void {
     this.isAutoplayMode = !this.isAutoplayMode
-    this.playRecord(0)
-    // TODO Setup timeout (ms)
+    if (!this.isPlayingRecord) {
+      this.playRecord(startIndex)
+      this.isAutoplayStarted = !this.isAutoplayStarted
+    }
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
     this.currentRecordPlaying = null
-    this.pauseOtherPlayers(currentPlayerIndex)
+    this.isPlayingRecord = false
+    this.lastRecordIndexPlayed = currentPlayerIndex
+
     let recordFound: boolean = false
     this.recordsPlayed.forEach((record) => {
       if (record.fileName === this.records[currentPlayerIndex].fileName) {
@@ -126,10 +138,13 @@ export default class Collection extends Vue {
     if (!recordFound) {
       this.recordsPlayed.push(this.records[currentPlayerIndex])
     }
+
     this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
   handleRecordIsPlaying(currentPlayerIndex: number): void {
+    this.pauseOtherPlayers(currentPlayerIndex)
+    this.isPlayingRecord = true
     this.currentRecordPlaying = currentPlayerIndex
   }
 
@@ -179,7 +194,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], { type: 'application/xml' })
+    const blob = new Blob([outputSerialized], {type: 'application/xml'})
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
@@ -196,7 +211,9 @@ export default class Collection extends Vue {
 
   playRecord(playerIndex: number): void {
     if (this.players.length > 0 && this.players[playerIndex]) {
-      this.players[playerIndex].play()
+      setTimeout(() => {
+        this.players[playerIndex].play()
+      }, (this.isAutoplayStarted ? this.delayBetweenAutoplay : 0))
     }
   }
 

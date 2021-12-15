@@ -9,7 +9,7 @@
       controls
       @play="play"
       @pause="pause"
-      @ended="handleEnded"
+      @ended="ended"
       @timeupdate="setTime"
     />
     <button @click="togglePlay">
@@ -28,9 +28,9 @@ import {SpeedRate, PlayerState} from './types'
 import SpeedRateSelector from './SpeedRateSelector.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 
-function formatTimeToMMSS(timeInseconds: number): string {
-  const minutes = Math.round(timeInseconds / 60)
-  const seconds = Math.round(timeInseconds - minutes * 60)
+function formatTimeToMMSS(timeInSeconds: number): string {
+  const minutes = Math.round(timeInSeconds / 60)
+  const seconds = Math.round(timeInSeconds - minutes * 60)
   const minuteValue = minutes < 10 ? `0${minutes}` : minutes
   const secondValue = seconds < 10 ? `0${seconds}` : seconds
 
@@ -65,7 +65,7 @@ export default class AudioPlayer extends Vue {
     this.audio.playbackRate = speedRate
   }
 
-  handleEnded(): void {
+  ended(): void {
     this.$emit('recordPlayed')
     this.state = PlayerState.Ended
     this.isPlayed = true
