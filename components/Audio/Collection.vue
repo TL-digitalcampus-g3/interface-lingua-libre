@@ -39,9 +39,9 @@
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
         <div v-if="currentRecordPlaying !== null">
           Current audio player : {{ currentRecordPlaying + 1 }} /
-          {{ countRecords }}
+          {{ recordsCount }}
         </div>
-        Audio(s) verified : {{ checkedRecords }} / {{ countRecords }}
+        Audio(s) verified : {{ checkedRecords }} / {{ recordsCount }}
         <hr />
         {{ recordsPlayed }}
       </div>
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
+import { Vue, Component, Ref } from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
@@ -83,11 +83,9 @@ export default class Collection extends Vue {
   isLoading: boolean = true
   isAutoplayMode: boolean = false
   currentRecordPlaying: number | null = null
-  countRecords: number = 0
 
-  @Watch('records', { immediate: true })
-  onRecordsChanged(): void {
-    this.countRecords = this.records.length
+  get recordsCount(): number {
+    return this.records.length
   }
 
   get recordsPlayed(): Record[] {
