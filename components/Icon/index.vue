@@ -9,6 +9,7 @@ enum AvailableIcons {
   Play = 'play',
   Pause = 'pause',
   Refresh = 'refresh',
+  Collection = 'collection',
 }
 
 const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
@@ -18,6 +19,7 @@ const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
     play: () => import('./Play.vue'),
     pause: () => import('./Pause.vue'),
     refresh: () => import('./Refresh.vue'),
+    collection: () => import('./Collection.vue'),
   },
 })
 export default class IconWrapper extends Vue {

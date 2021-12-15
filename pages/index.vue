@@ -8,9 +8,8 @@
         <LangSwitcher />
       </div>
 
-      <div class="pageBottomBar">
-        <!-- <BottomBar/> -->
-      </div>
+      <ActionBar class="pageBottomBar"></ActionBar>
+     
     </div>
   </div>
 </template>
