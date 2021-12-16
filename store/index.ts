@@ -48,7 +48,7 @@ export const mutations: MutationTree<State> = {
   },
   UPDATE_AUTOPLAY_STARTED: (state, newValue: boolean) => {
     state.isAutoplayStarted = newValue
-  },
+  }
 }
 
 export const actions: ActionTree<State, State> = {

@@ -96,6 +96,16 @@ export default class Collection extends Vue {
     return this.$store.state.tagMap
   }
 
+  get recordsMapIndex(): Record<RecordT['fileName'], number> {
+    const recordsMap: Record<RecordT['fileName'], number> = {}
+
+    this.records.forEach((record, index) => {
+      recordsMap[record.fileName] = index
+    })
+
+    return recordsMap
+  }
+
   get taggedRecords(): RecordT['fileName'][] {
     return this.$store.getters.taggedRecords
   }
