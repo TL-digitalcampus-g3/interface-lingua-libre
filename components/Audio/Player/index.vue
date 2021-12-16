@@ -21,16 +21,14 @@
       @state-button-clicked="togglePlay"
     />
     <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
-    <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
     <TagBadge v-if="tag" class="player__tag" :tag="tag" />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
-import SpeedRateSelector from './SpeedRateSelector.vue'
 import MinimalPlayer from './MinimalPlayer.vue'
-import { SpeedRate, PlayerState } from '~/models/Audio'
+import { PlayerState, SpeedRate } from '~/models/Audio'
 import TagBadge from '~/components/TagSelector/TagBadge.vue'
 import { RecordT, Tag } from '~/models/Record'
 import { AudioDataStateMutation } from '~/store'
@@ -44,13 +42,12 @@ function formatTimeToMMSS(timeInSeconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({ components: { MinimalPlayer, SpeedRateSelector, TagBadge } })
+@Component({ components: { MinimalPlayer, TagBadge } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
 
   currentSeconds: number = 0
-  speedRateValue: SpeedRate = SpeedRate.Normal
   isPlaying: boolean = false
   isPlayed: boolean = false
   duration: number = 0
@@ -65,15 +62,6 @@ export default class AudioPlayer extends Vue {
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
-  }
-
-  get speedRate(): number {
-    return this.speedRateValue
-  }
-
-  set speedRate(speedRate: SpeedRate) {
-    this.speedRateValue = speedRate
-    this.audio.playbackRate = speedRate
   }
 
   get tag(): Tag | null {
@@ -100,6 +88,10 @@ export default class AudioPlayer extends Vue {
 
   get audioDuration(): string | null {
     return formatTimeToMMSS(this.duration)
+  }
+
+  get speedRate(): SpeedRate {
+    return this.$store.state.audioSpeedRate
   }
 
   ended(): void {
@@ -166,6 +158,13 @@ export default class AudioPlayer extends Vue {
         break
     }
   }
+
+  @Watch('speedRate')
+  onSpeedRateChange(): void {
+    if (this.audio) {
+      this.audio.playbackRate = this.speedRate
+    }
+  }
 }
 </script>
 
@@ -175,7 +174,6 @@ export default class AudioPlayer extends Vue {
   display: flex;
   align-items: center;
 
-  &__speed-rate,
   &__duration {
     @apply ml-4;
   }
@@ -194,8 +192,7 @@ export default class AudioPlayer extends Vue {
 }
 
 .player__word,
-.player__time,
-.player__speed-rate {
+.player__time {
   @apply text-text-light dark:text-text-dark;
 }
 </style>

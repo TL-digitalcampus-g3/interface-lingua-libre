@@ -1,6 +1,6 @@
 import { MutationTree, GetterTree, ActionTree } from 'vuex'
 import { RecordT, Tag, TagMap } from '~/models/Record'
-import { AudioData, AudioDataMap, PlayerState } from '~/models/Audio'
+import { AudioData, AudioDataMap, PlayerState, SpeedRate } from '~/models/Audio'
 
 export interface TagMutationPayload {
   fileName: RecordT['fileName']
@@ -17,6 +17,7 @@ interface State {
   tagMap: TagMap
   audioDataMap: AudioDataMap
   activeAudio: AudioData['fileName'] | null
+  audioSpeedRate: SpeedRate
   isAutoplayMode: boolean
   isAutoplayStarted: boolean
   lastRecordIndexPlayed: number | null
@@ -28,6 +29,7 @@ export const state = (): State => ({
   tagMap: {},
   audioDataMap: {},
   activeAudio: null,
+  audioSpeedRate: SpeedRate.Normal,
   isAutoplayMode: false,
   isAutoplayStarted: false,
   lastRecordIndexPlayed: null,
@@ -60,6 +62,9 @@ export const mutations: MutationTree<State> = {
   },
   SET_LATEST_AUDIO_INDEX_PLAYED: (state: State, index: number) => {
     state.lastRecordIndexPlayed = index
+  },
+  SET_SPEED_RATE: (state: State, speedRate: SpeedRate) => {
+    state.audioSpeedRate = speedRate
   },
   UPDATE_AUTOPLAY_MODE: (state, newValue: boolean) => {
     state.isAutoplayMode = newValue
