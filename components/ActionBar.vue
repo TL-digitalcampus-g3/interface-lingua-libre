@@ -24,7 +24,7 @@
 import {Vue, Component} from 'nuxt-property-decorator'
 import CustomIcon from '@/components/Icon/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import TagSelector from '~/components/TagSelector.vue'
+import TagSelector from '~/components/TagSelector/index.vue'
 
 @Component({
   components: {CheckBox, TagSelector, CustomIcon},
@@ -45,10 +45,6 @@ export default class ActionBar extends Vue {
 .actionBar {
   @apply bg-primary grid px-9 shadow-lg items-center;
   grid-template-columns: auto auto auto;
-}
-
-[class*='actionBar__'] {
-  background-color: crimson;
 }
 
 .actionBar__toggleAutoPlay {

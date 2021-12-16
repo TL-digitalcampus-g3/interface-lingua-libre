@@ -1,19 +1,26 @@
 <template>
-  <div class="badge">
+  <div class="badge" :style="style">
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component
-export default class Badge extends Vue {}
+export default class Badge extends Vue {
+  @Prop({ default: 'white' }) readonly bgColor!: string
+
+  get style(): Record<string, string> {
+    return {
+      backgroundColor: this.bgColor,
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .badge {
-  background: white;
   color: black;
   border-radius: 7px;
   display: inline-block;

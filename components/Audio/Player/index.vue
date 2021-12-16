@@ -1,32 +1,39 @@
 <template>
-  <div class="player" :class="[
-      {'player--played': isPlayed},
-      {'player--active': isActive}
-    ]" @dblclick="play">
+  <div
+    class="player"
+    :class="[{ 'player--played': isPlayed }, { 'player--active': isActive }]"
+    @dblclick="play"
+  >
     <audio
       ref="audio"
       :src="audioUrl"
-      controls
       @play="play"
       @pause="pause"
       @ended="ended"
       @timeupdate="setTime"
+      @loadeddata="isLoaded = true"
     />
-    <button @click="togglePlay">
-      <CustomIcon v-show="state === 'pause'" name="play"/>
-      <CustomIcon v-show="state === 'play'" name="pause"/>
-      <CustomIcon v-show="state === 'ended'" name="refresh"/>
+    <button class="player__controls" @click="togglePlay">
+      <CustomIcon v-show="state === 'pause'" name="play" />
+      <CustomIcon v-show="state === 'play'" name="pause" />
+      <CustomIcon v-show="state === 'ended'" name="refresh" />
     </button>
-    {{ currentTime }}
-    <SpeedRateSelector v-model="speedRate"/>
+    <div class="player__word">{{ word }}</div>
+    <div v-if="audioDuration" class="player__time">
+      {{ currentTime }} / {{ audioDuration }}
+    </div>
+    <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
+    <TagBadge v-if="tag" class="player__tag" :tag="tag" />
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, Ref} from 'nuxt-property-decorator'
-import {SpeedRate, PlayerState} from './types'
+import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
+import { SpeedRate, PlayerState } from './types'
 import SpeedRateSelector from './SpeedRateSelector.vue'
-import CustomIcon from '@/components/Icon/index.vue'
+import CustomIcon from '~/components/Icon/index.vue'
+import TagBadge from '~/components/TagSelector/TagBadge.vue'
+import { RecordT, Tag } from '~/models/Record'
 
 function formatTimeToMMSS(timeInSeconds: number): string {
   const minutes = Math.round(timeInSeconds / 60)
@@ -37,9 +44,9 @@ function formatTimeToMMSS(timeInSeconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({components: {CustomIcon, SpeedRateSelector}})
+@Component({ components: { CustomIcon, SpeedRateSelector, TagBadge } })
 export default class AudioPlayer extends Vue {
-  @Prop({required: true}) readonly fileName!: string
+  @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
 
   state: PlayerState = PlayerState.Pause
@@ -47,6 +54,15 @@ export default class AudioPlayer extends Vue {
   speedRateValue: SpeedRate = SpeedRate.Normal
   isPlayed: boolean = false
   isActive: boolean = false
+  isLoaded: boolean = false
+
+  get fileName(): RecordT['fileName'] {
+    return this.record.fileName
+  }
+
+  get word(): RecordT['word'] {
+    return this.record.word
+  }
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
@@ -56,8 +72,22 @@ export default class AudioPlayer extends Vue {
     return formatTimeToMMSS(this.currentSeconds)
   }
 
+  get audioDuration(): string | null {
+    if (this.isLoaded) {
+      return formatTimeToMMSS(this.audio.duration)
+    } else {
+      return null
+    }
+  }
+
   get speedRate(): number {
     return this.speedRateValue
+  }
+
+  get tag(): Tag | null {
+    return this.$store.getters.taggedRecords.includes(this.fileName)
+      ? this.$store.state.tagMap[this.fileName]
+      : null
   }
 
   set speedRate(speedRate: SpeedRate) {
@@ -104,6 +134,22 @@ export default class AudioPlayer extends Vue {
 <style lang="scss" scoped>
 .player {
   @apply rounded-md bg-white my-2 p-4;
+  display: flex;
+  align-items: center;
+
+  &__word,
+  &__time,
+  &__speed-rate {
+    @apply ml-4;
+  }
+
+  &__word {
+    font-weight: bold;
+  }
+
+  &__tag {
+    margin-left: auto;
+  }
 }
 
 .player--active {
@@ -112,5 +158,11 @@ export default class AudioPlayer extends Vue {
 
 .player--played {
   @apply bg-gray-300;
+}
+
+.player__word,
+.player__time,
+.player__speed-rate {
+  @apply text-text-light dark:text-text-dark;
 }
 </style>

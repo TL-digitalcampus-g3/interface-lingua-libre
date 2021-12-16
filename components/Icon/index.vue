@@ -10,8 +10,10 @@ enum AvailableIcons {
   Pause = 'pause',
   Refresh = 'refresh',
   Collection = 'collection',
-  Light ='light',   
-  Information ='information'
+  ChevronDown = 'chevronDown',
+  Light = 'light',
+  Information = 'information',
+  Language = 'language',
 }
 
 const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
@@ -24,6 +26,8 @@ const availableIcons: AvailableIcons[] = Object.values(AvailableIcons)
     collection: () => import('./Collection.vue'),
     light: () => import('./Light.vue'),
     information: () => import('./Information.vue'),
+    chevronDown: () => import('./ChevronDown.vue'),
+    language: () => import('./Language.vue'),
   },
 })
 export default class IconWrapper extends Vue {

@@ -32,7 +32,7 @@ export default class Demo extends Vue {}
 <style lang="scss">
 .basePage {
   @apply grid h-screen bg-backgroundApp-light dark:bg-backgroundApp-dark;
-  grid-template-columns: 5rem auto;
+  grid-template-columns: 5rem 1fr;
   grid-template-rows: auto 5rem;
 }
 
@@ -41,7 +41,7 @@ export default class Demo extends Vue {}
 // }
 
 .pageMain{
-  @apply grid p-6 overflow-y-scroll;
+  @apply grid p-6 overflow-y-scroll justify-self-center max-w-7xl;
   grid-template-columns: auto 280px;
   grid-template-rows: auto 5rem;
   gap: 20px;
@@ -49,17 +49,19 @@ export default class Demo extends Vue {}
 }
 
 .pageMain__collection{
-  grid-column: 1 / 2
+  grid-column: 1 / 2;
+  @apply col-span-full lg:col-span-1 order-1 lg:order-none justify-self-stretch
 }
 
 .pageMain__aside{
-  grid-column: 2 / 3
+  grid-column: 2 / 3;
+  @apply col-span-full lg:col-span-1 
 }
 .pageMain__langSwitcher{
-  grid-column: 1 / 3
+  @apply col-span-full
 }
 .pageBottomBar{
-  grid-column: 1 / 3;
+  @apply col-span-full
 }
 
 
@@ -77,5 +79,31 @@ p::first-letter{
 
 ul{
   @apply mb-5
+}
+
+
+
+
+//Scroll Bar
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) var(--color-secondary);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--color-secondary);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
+  border-radius: 20px;
+  border: 3px solid var(--color-secondary);
 }
 </style>
