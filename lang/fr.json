@@ -28,5 +28,9 @@
     "PARASITE": "parasite",
     "VALID": "valide",
     "VANDALISM": "vandalisme"
+  },
+  "GENDER": {
+    "M": "homme",
+    "F": "femme"
   }
 }
