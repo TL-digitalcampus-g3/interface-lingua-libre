@@ -9,25 +9,22 @@
       </div>
 
       <ActionBar class="pageBottomBar"></ActionBar>
-
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Watch} from 'nuxt-property-decorator'
+import { Vue, Component, Watch } from 'nuxt-property-decorator'
 import Collection from '~/components/Audio/Collection.vue'
 import Header from '~/components/Header.vue'
 import ActionBar from '~/components/ActionBar.vue'
 import Aside from '~/components/Aside.vue'
 
 @Component({
-  components: {Collection, Header, ActionBar, Aside},
+  components: { Collection, Header, ActionBar, Aside },
 })
-
-export default class Demo extends Vue {
-
-  @Watch('isDarkMode', {immediate: true})
+export default class HomePage extends Vue {
+  @Watch('isDarkMode', { immediate: true })
   changeDarkMode() {
     if (this.isDarkMode) {
       document.documentElement.classList.add('dark')
@@ -57,25 +54,24 @@ export default class Demo extends Vue {
 }
 
 .pageMain__collection {
-  @apply col-span-full lg:col-span-1 lg:order-none justify-self-stretch
+  @apply col-span-full lg:col-span-1 lg:order-none justify-self-stretch;
 }
 
 .pageMain__aside {
   grid-template-columns: 1fr 1fr;
-  @apply col-span-full lg:col-span-1 grid gap-4 auto-rows-max
+  @apply col-span-full lg:col-span-1 grid gap-4 auto-rows-max;
 }
 
 .pageBottomBar {
-  @apply col-span-full
+  @apply col-span-full;
 }
 
-
 body {
-  @apply text-text-light dark:text-text-dark
+  @apply text-text-light dark:text-text-dark;
 }
 
 h3 {
-  @apply text-sm font-bold uppercase mb-3
+  @apply text-sm font-bold uppercase mb-3;
 }
 
 p::first-letter {
@@ -83,9 +79,8 @@ p::first-letter {
 }
 
 ul {
-  @apply mb-5
+  @apply mb-5;
 }
-
 
 //Scroll Bar
 

@@ -22,15 +22,12 @@
       @state-button-clicked="togglePlay"
     />
     <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
-    <Badge
+    <PlayerTagSelector
       v-if="tag"
+      :active-tag="tag"
+      :file-name="fileName"
       class="player__tag"
-      bg-color="var(--color-primary)"
-      border-color="var(--color-primary)"
-      text-color="white"
-    >
-      {{ $t('TAGS.' + tag.toUpperCase()) }}
-    </Badge>
+    />
   </div>
 </template>
 
@@ -38,7 +35,7 @@
 import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
 import MinimalPlayer from './MinimalPlayer.vue'
 import { PlayerState, SpeedRate } from '~/models/Audio'
-import Badge from '~/components/ui/Badge.vue'
+import PlayerTagSelector from '~/components/TagSelector/PlayerTagSelector.vue'
 import { RecordT, Tag } from '~/models/Record'
 import { AudioDataStateMutation } from '~/store'
 
@@ -51,7 +48,7 @@ function formatTimeToMMSS(timeInSeconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({ components: { MinimalPlayer, Badge } })
+@Component({ components: { MinimalPlayer, PlayerTagSelector } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
