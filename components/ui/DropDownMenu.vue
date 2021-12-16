@@ -19,20 +19,20 @@
         <button class="btn btn-blue">{{ $t('LANGS.FR') }}</button>
       </NuxtLink>
     </div>
+    <div class="dropdownMenu__user" v-if="options==='isUser'">
+        <p class="font-bold">WorkshopM2TLGPE3 (Q710559)</p>
+        <p>Masculin - français - locuteur natif</p>
+        <p class="underline">Déconnexion</p>
+        
+
+
+    </div>
   </div>
 
 </template>
 
 <script lang="ts">
 import {Vue, Component, Prop, Watch} from 'nuxt-property-decorator'
-
-
-// if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-//   document.documentElement.classList.add('dark')
-// } else {
-//   document.documentElement.classList.remove('dark')
-// }
-
 
 @Component
 export default class DropDownMenu extends Vue {
@@ -66,6 +66,9 @@ export default class DropDownMenu extends Vue {
 
 .btn-blue:hover {
   @apply bg-gray-200;
+}
+.dropdownMenu__user p{
+    @apply m-2
 }
 
 </style>
