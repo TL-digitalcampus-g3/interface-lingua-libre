@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="dropdown-menu">
     <!-- <div class="dropdownMenu__collection" v-if="options==='isCollection'"></div>-->
     <div class="dropdownMenu__light" v-if="options==='isLight'">
       <button class="btn btn-blue" @click="handleDarkMode('dark')">Dark</button>
@@ -20,19 +20,17 @@
       </NuxtLink>
     </div>
     <div class="dropdownMenu__user" v-if="options==='isUser'">
-        <p class="font-bold">WorkshopM2TLGPE3 (Q710559)</p>
-        <p>Masculin - Français - Locuteur natif</p>
-        <p class="underline">Déconnexion</p>
-        
+      <p class="font-bold">WorkshopM2TLGPE3 (Q710559)</p>
+      <p>Masculin - Français - Locuteur natif</p>
+      <p class="underline">Déconnexion</p>
 
 
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, Watch} from 'nuxt-property-decorator'
+import {Vue, Component, Prop} from 'nuxt-property-decorator'
 
 @Component
 export default class DropDownMenu extends Vue {
@@ -52,6 +50,10 @@ export default class DropDownMenu extends Vue {
 
 <style lang="scss">
 
+#dropdown-menu {
+  @apply z-100;
+}
+
 [class*="dropdownMenu__"] {
   @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark p-4 shadow rounded-lg max-w-xs w-max
 }
@@ -67,8 +69,9 @@ export default class DropDownMenu extends Vue {
 .btn-blue:hover {
   @apply bg-gray-200 dark:bg-gray-darkest dark:text-white;
 }
-.dropdownMenu__user p{
-    @apply m-2
+
+.dropdownMenu__user p {
+  @apply m-2
 }
 
 </style>
