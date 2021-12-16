@@ -266,7 +266,7 @@ export default class Collection extends Vue {
 }
 
 .collection_sounds {
-  @apply lg:overflow-y-scroll pr-5;
+  @apply lg:overflow-y-scroll px-5;
 }
 
 

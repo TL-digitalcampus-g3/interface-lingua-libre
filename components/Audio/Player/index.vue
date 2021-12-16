@@ -184,8 +184,9 @@ export default class AudioPlayer extends Vue {
   cursor: pointer;
 
   &:hover {
-    @apply shadow-lg;
+    @apply shadow-xl;
   }
+
   &__duration {
     @apply ml-4;
   }
@@ -196,7 +197,7 @@ export default class AudioPlayer extends Vue {
 }
 
 .player--active {
-  @apply shadow-2xl transition duration-500;
+  @apply shadow-xl transition duration-500;
 }
 
 .player--played {
