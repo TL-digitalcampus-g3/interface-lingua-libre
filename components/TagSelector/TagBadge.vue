@@ -5,16 +5,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import {Vue, Component, Prop} from 'vue-property-decorator'
 import Badge from '~/components/ui/Badge.vue'
-import { Tag } from '@/models/Record'
+import {Tag} from '@/models/Record'
 
-@Component({ components: { Badge } })
+@Component({components: {Badge}})
 export default class className extends Vue {
-  @Prop({ required: true }) readonly tag!: Tag
+  @Prop({required: true}) readonly tag!: Tag
 
   get bgColor(): string {
-    if (this.tag === Tag.Patroled) {
+    if (this.tag === Tag.Valid) {
       return 'var(--color-light-green)'
     } else {
       return 'var(--color-light-red)'

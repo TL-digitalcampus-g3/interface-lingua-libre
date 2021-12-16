@@ -1,7 +1,7 @@
 <template>
   <div class="badges">
     <button v-for="tag in tags" :key="tag" class="mx-1" @click="setTag(tag)">
-      <TagBadge :tag="tag" />
+      <TagBadge :tag="$t('TAGS.'+tag.toUpperCase())" />
     </button>
   </div>
 </template>

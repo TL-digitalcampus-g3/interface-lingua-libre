@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'nuxt-property-decorator'
-import { PlayerState } from './types'
+import { PlayerState } from '~/models/Audio'
 import CustomIcon from '~/components/Icon/index.vue'
 
 function formatTimeToMMSS(timeInSeconds: number): string {

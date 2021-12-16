@@ -1,5 +1,5 @@
 export enum Tag {
-  Patroled = 'patroled',
+  Valid = 'valid',
   NoSound = 'noSound',
   Parasite = 'parasite',
   CutWord = 'cutWord',
