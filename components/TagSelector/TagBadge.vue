@@ -1,6 +1,6 @@
 <template>
   <Badge :bg-color="bgColor">
-    {{ tag }}
+    {{ $t('TAGS.' + tag.toUpperCase()) }}
   </Badge>
 </template>
 
