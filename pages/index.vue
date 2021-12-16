@@ -6,7 +6,6 @@
       <div class="pageMain">
         <Collection class="pageMain__collection"></Collection>
         <Aside class="pageMain__aside"></Aside>
-        <LangSwitcher class="pageMain__langSwitcher"/>
       </div>
 
       <ActionBar class="pageBottomBar"></ActionBar>
@@ -18,13 +17,12 @@
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
 import Collection from '~/components/Audio/Collection.vue'
-import LangSwitcher from '~/components/LangSwitcher.vue'
 import Header from '~/components/Header.vue'
 import ActionBar from '~/components/ActionBar.vue'
 import Aside from '~/components/Aside.vue'
 
 @Component({
-  components: {LangSwitcher, Collection,Header,ActionBar,Aside},
+  components: {Collection,Header,ActionBar,Aside},
 })
 export default class Demo extends Vue {}
 </script>
@@ -56,9 +54,7 @@ export default class Demo extends Vue {}
   grid-column: 2 / 3;
   @apply col-span-full lg:col-span-1 
 }
-.pageMain__langSwitcher{
-  @apply col-span-full
-}
+
 .pageBottomBar{
   @apply col-span-full
 }

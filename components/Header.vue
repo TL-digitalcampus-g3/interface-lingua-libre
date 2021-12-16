@@ -3,14 +3,52 @@
         <header>
             <nav class="nav">
                 <a href="#" class="nav__item"><img src="~/assets/logos/lingualibreLogo.svg" alt=""></a>
-                <a href="#" class="nav__item"><CustomIcon name="collection" size="1.75"/><span class="nav__item__text">Importer les sons à révisier</span></a>
-                <a href="#" class="nav__item"><CustomIcon name="light" size="1.75"/><span class="nav__item__text">Activer/Désactiver le dark mode</span></a>
-                <a href="#" class="nav__item"><CustomIcon name="information" size="1.75"/><span class="nav__item__text">Afficher les informations</span></a>
-                <a href="#" class="nav__item"><CustomIcon name="language" size="1.75"/><span class="nav__item__text">Langues</span></a>
+                <a href="#" class="nav__item" @mouseover="idCollection = true"  @mouseleave="idCollection = false">
+                    <CustomIcon name="collection" size="1.75"/>
+                    <span class="nav__item__text">Importer les sons à révisier</span>
+                    <DropDownMenu class="dropDownMenu" options="idCollection" v-if="idCollection"></DropDownMenu></a>
+                <a href="#" class="nav__item" @mouseover="isLight = true"  @mouseleave="isLight = false">
+                    <CustomIcon name="light" size="1.75"/>
+                    <span class="nav__item__text">Activer/Désactiver le dark mode</span>
+                    <DropDownMenu class="dropDownMenu" options="isLight" v-if="isLight"></DropDownMenu></a>
+                <a href="#" class="nav__item" @mouseover="isInformation = true"  @mouseleave="isInformation = false">
+                    <CustomIcon name="information" size="1.75"/>
+                    <span class="nav__item__text">Afficher les informations</span>
+                    <DropDownMenu class="dropDownMenu" options="isInformation" v-if="isInformation"></DropDownMenu></a>
+                <a href="#" class="nav__item" @mouseover="isLanguage = true"  @mouseleave="isLanguage = false">
+                    <CustomIcon name="language" size="1.75"/>
+                    <span class="nav__item__text">Langues</span>
+                    <DropDownMenu class="dropDownMenu" options="isLanguage" v-if="isLanguage"></DropDownMenu>
+                </a>
             </nav>
         </header>
     </div>
 </template>
+
+<script lang="ts">
+import { Vue, Component } from 'nuxt-property-decorator'
+import CustomIcon from '~/components/Icon/index.vue'
+import DropDownMenu from '~/components/ui/DropDownMenu.vue'
+
+
+@Component({
+  components: {CustomIcon,DropDownMenu},
+
+  
+    data(){
+        return {
+            idCollection:   false,
+            isLight:   false,
+            isInformation: false,
+            isLanguage:  false
+        }
+    }
+    
+  
+})
+
+export default class Header extends Vue {}
+</script>
 
 <style scoped lang="scss">
     header{
@@ -22,15 +60,23 @@
     }
 
     .nav__item{
-        @apply grid place-content-center duration-150;
+        @apply grid place-content-center relative;
         height: 80px;
+
+        svg{
+            @apply duration-150
+        }
     }
 
     .nav__item:hover{
-        transform: scale(1.2)
+        svg{transform: scale(0.8)}
     }
     .nav__item:first-child{
         &:hover{transform: none}
+    }
+
+    .dropDownMenu{
+        @apply absolute top-0 left-20;
     }
 
     .nav__item__text{
@@ -42,15 +88,3 @@
     }
 
 </style>
-
-<script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
-import CustomIcon from '~/components/Icon/index.vue'
-
-
-@Component({
-  components: {CustomIcon},
-})
-
-export default class Header extends Vue {}
-</script>
