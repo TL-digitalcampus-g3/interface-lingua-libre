@@ -280,7 +280,9 @@ export default class Collection extends Vue {
 }
 
 .collection_sounds {
-  @apply overflow-y-scroll;
-  height: 400px;
+  @apply lg:overflow-y-scroll;
+  @screen lg{
+    height: 400px;
+    }
 }
 </style>

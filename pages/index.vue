@@ -39,20 +39,19 @@ export default class Demo extends Vue {}
 // }
 
 .pageMain{
-  @apply grid p-6 overflow-y-scroll max-w-6xl;
+  @apply grid p-6 overflow-y-scroll lg:overflow-hidden max-w-6xl;
   grid-template-columns: auto 280px;
   gap: 20px;
   height: calc(100vh - 80px);
 }
 
 .pageMain__collection{
-  grid-column: 1 / 2;
-  @apply col-span-full lg:col-span-1 order-1 lg:order-none justify-self-stretch
+  @apply col-span-full lg:col-span-1 lg:order-none justify-self-stretch
 }
 
 .pageMain__aside{
-  grid-column: 2 / 3;
-  @apply col-span-full lg:col-span-1 
+  grid-template-columns: 1fr 1fr;
+  @apply col-span-full lg:col-span-1 grid gap-4 auto-rows-max
 }
 
 .pageBottomBar{
