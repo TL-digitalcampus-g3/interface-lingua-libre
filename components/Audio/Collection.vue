@@ -13,7 +13,7 @@
         "
       >
         <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
+        <CustomIcon v-else name="play" />
       </button>
       <div class="collection_sounds">
         <AudioPlayer
@@ -21,7 +21,6 @@
           :key="record.fileName"
           ref="players"
           :record="record"
-          @recordIsPlaying="handleRecordIsPlaying"
           @recordPlayed="handleRecordPlayed(index)"
         />
       </div>
@@ -211,10 +210,6 @@ export default class Collection extends Vue {
     this.$store.commit('SET_LATEST_AUDIO_INDEX_PLAYED', currentPlayerIndex)
   }
 
-  handleRecordIsPlaying(): void {
-    // this.pauseOtherPlayers()
-  }
-
   handleClickTransfertResults(): void {
     const hash = new Date().getTime()
     this.generateOutputResult(`records-${hash}.xml`)
@@ -287,14 +282,6 @@ export default class Collection extends Vue {
         },
         this.$store.state.isAutoplayStarted ? this.delayBetweenAutoplay : 0
       )
-    }
-  }
-
-  pauseOtherPlayers(): void {
-    for (const player of this.players) {
-      if (player.fileName !== this.activeAudio) {
-        player.pause()
-      }
     }
   }
 }

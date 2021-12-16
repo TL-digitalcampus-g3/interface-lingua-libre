@@ -105,4 +105,20 @@ export const actions: ActionTree<State, State> = {
       commit('UPDATE_TAG', payload)
     }
   },
+  playAudio({ commit, state }, payload: AudioDataStateMutation): void {
+    const { value } = payload
+
+    if (value === PlayerState.Play) {
+      for (const name in state.audioDataMap) {
+        if (state.audioDataMap[name].playerState === PlayerState.Play) {
+          commit('UPDATE_AUDIO_DATA_STATE', {
+            fileName: name,
+            value: PlayerState.Pause,
+          })
+        }
+      }
+    }
+
+    commit('UPDATE_AUDIO_DATA_STATE', payload)
+  },
 }

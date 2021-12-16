@@ -110,13 +110,12 @@ export default class AudioPlayer extends Vue {
       this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
     }
     this.isPlaying = true
-    this.$emit('recordIsPlaying')
 
     const stateMutationPayload: AudioDataStateMutation = {
       fileName: this.record.fileName,
       value: PlayerState.Play,
     }
-    this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
+    this.$store.dispatch('playAudio', stateMutationPayload)
     this.isPlayed = false
   }
 
