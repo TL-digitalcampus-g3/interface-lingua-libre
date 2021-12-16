@@ -2,12 +2,13 @@
   <div id="collection">
     <Loader v-if="isLoading"/>
     <div v-else class="collection_structure">
-      <div class="collection_sounds">
+      <div ref="collectionWrapper" class="collection_sounds">
         <AudioPlayer
           v-for="(record, index) in records"
           :key="record.fileName"
           ref="players"
           :record="record"
+          @scrollTo="handleScrollTo"
           @recordPlayed="handleRecordPlayed(index)"
         />
       </div>
@@ -152,6 +153,11 @@ export default class Collection extends Vue {
     this.$store.commit('UPDATE_RECORDS_COUNT', this.records.length)
   }
 
+  handleScrollTo(pxValue: number) {
+    console.log(pxValue)
+    this.$refs.collectionWrapper.scrollTop = pxValue
+  }
+
   handleRecordPlayed(currentPlayerIndex: number): void {
     const currentRecord: RecordT = this.records[currentPlayerIndex]
     const isCurrentRecordTagSettled: Boolean = this.taggedRecords.includes(
@@ -266,7 +272,10 @@ export default class Collection extends Vue {
 }
 
 .collection_sounds {
-  @apply lg:overflow-y-scroll px-5;
+  @apply lg:overflow-y-scroll px-5 flex flex-col justify-start;
+
+  scroll-behavior: smooth;
+  // padding-top: 30%;
 }
 
 .collection_btn{
