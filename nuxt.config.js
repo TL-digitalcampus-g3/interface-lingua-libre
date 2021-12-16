@@ -37,7 +37,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/Donuts.client.ts',
-    '~/plugins/persistedState.client.ts'
+    '~/plugins/persistedState.client.ts',
+    '~/plugins/vue-wave-surfer.client.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
