@@ -65,7 +65,7 @@ export default class DropDownMenu extends Vue {
 }
 
 .btn-blue:hover {
-  @apply bg-gray-200;
+  @apply bg-gray-200 dark:bg-gray-darkest dark:text-white;
 }
 .dropdownMenu__user p{
     @apply m-2

@@ -6,8 +6,8 @@
           :sections="[
             { value: taggedRecordsCount, color: 'var(--color-primary)' },
           ]"
-          :size="100"
-          :thickness="20"
+          :size="70"
+          :thickness="25"
           :total="$store.state.recordsCount"
           :start-angle="0"
           :background="donutBgColor"

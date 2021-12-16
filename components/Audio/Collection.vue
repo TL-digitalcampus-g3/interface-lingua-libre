@@ -11,7 +11,7 @@
           @recordPlayed="handleRecordPlayed(index)"
         />
       </div>
-      <div>
+      <div class="collection_btn">
         <button
           class="btn-share"
           :class="[{ 'btn--disabled': !hasResultsToShare }]"
@@ -252,7 +252,7 @@ export default class Collection extends Vue {
 
 <style lang="scss" scoped>
 .btn-share {
-  @apply bg-blue-500 text-white p-3 rounded mt-5 uppercase;
+  @apply bg-blue-500 text-white p-3 rounded mt-5 mb-2 uppercase;
 }
 
 .btn--disabled {
@@ -261,12 +261,16 @@ export default class Collection extends Vue {
 
 .collection_structure {
   @apply grid;
-  height: calc(100vh - 110px);
+  height: calc(100vh - 128px);
 
 }
 
 .collection_sounds {
   @apply lg:overflow-y-scroll px-5;
+}
+
+.collection_btn{
+  @apply text-center
 }
 
 
