@@ -1,9 +1,24 @@
 <template>
   <div class="minimal-player">
     <button class="state-button" @click="$emit('state-button-clicked')">
-      <CustomIcon v-show="state === 'pause'" name="play" :color="color" />
-      <CustomIcon v-show="state === 'play'" name="pause" :color="color" />
-      <CustomIcon v-show="state === 'ended'" name="refresh" :color="color" />
+      <CustomIcon
+        v-show="state === 'pause'"
+        name="play"
+        :color="color"
+        size="2.7"
+      />
+      <CustomIcon
+        v-show="state === 'play'"
+        name="pause"
+        :color="color"
+        size="2.7"
+      />
+      <CustomIcon
+        v-show="state === 'ended'"
+        name="refresh"
+        :color="color"
+        size="2.7"
+      />
     </button>
     <div class="title">{{ title }}</div>
   </div>
