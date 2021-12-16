@@ -15,6 +15,7 @@ interface State {
   isAutoplayStarted: boolean
   lastRecordIndexPlayed: number | null
   recordsCount: number
+  isDarkMode: boolean
 }
 
 export const state = (): State => ({
@@ -24,6 +25,7 @@ export const state = (): State => ({
   isAutoplayStarted: false,
   lastRecordIndexPlayed: null,
   recordsCount: 0,
+  isDarkMode: false
 })
 
 export const getters: GetterTree<State, State> = {
@@ -33,6 +35,8 @@ export const getters: GetterTree<State, State> = {
     state.activeAudio?.fileName,
   taggedRecordsCount: (state: State): number =>
     Object.keys(state.tagMap).length,
+  isDarkMode: (state: State): boolean =>
+    state.isDarkMode
 }
 
 export const mutations: MutationTree<State> = {
@@ -61,6 +65,9 @@ export const mutations: MutationTree<State> = {
   },
   UPDATE_RECORDS_COUNT: (state, updatedCount: number) => {
     state.recordsCount = updatedCount
+  },
+  UPDATE_DARK_MODE: (state, updatedDarkMode: boolean) => {
+    state.isDarkMode = updatedDarkMode
   },
 }
 

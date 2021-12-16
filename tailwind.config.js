@@ -2,7 +2,7 @@ module.exports = {
   prefix: '',
   important: false,
   separator: ':',
-  darkMode: 'media',
+  darkMode: 'class',
   theme: {
     screens: {
       xs: '340px',
