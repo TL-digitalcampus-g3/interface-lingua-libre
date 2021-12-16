@@ -1,18 +1,7 @@
 <template>
   <div class="actionBar">
     <div class="actionBar__control">
-      <MinimalPlayer
-        title="stub"
-        state="pause"
-        color="white"
-        @state-button-clicked="
-          handleClickPlayAuto(
-            $store.state.lastRecordIndexPlayed !== null
-              ? $store.state.lastRecordIndexPlayed + 1
-              : 0
-          )
-        "
-      />
+      <GlobalPlayer />
     </div>
     <div class="actionBar__tagSelector">
       <TagSelector />
@@ -31,17 +20,12 @@
 import { Vue, Component } from 'nuxt-property-decorator'
 import CheckBox from '~/components/ui/CheckBox.vue'
 import TagSelector from '~/components/TagSelector/index.vue'
-import MinimalPlayer from '~/components/Audio/Player/MinimalPlayer.vue'
+import GlobalPlayer from '~/components/Audio/Player/GlobalPlayer.vue'
 
 @Component({
-  components: { CheckBox, TagSelector, MinimalPlayer },
+  components: { CheckBox, TagSelector, GlobalPlayer },
 })
 export default class ActionBar extends Vue {
-  handleClickPlayAuto(): void {
-    console.log('handleClickPlayAuto')
-    this.$store.commit('HANDLE_PLAY_RECORDS', { autoplay: true, startIndex: 0 })
-  }
-
   handleClickCheckboxAutoplay(): void {
     this.$store.commit(
       'UPDATE_AUTOPLAY_MODE',

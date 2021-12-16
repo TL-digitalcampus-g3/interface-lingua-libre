@@ -7,7 +7,6 @@
     <audio
       ref="audio"
       :src="audioUrl"
-      @play="play"
       @pause="pause"
       @ended="ended"
       @timeupdate="setTime"
@@ -27,11 +26,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
-import { SpeedRate, PlayerState, AudioData } from '~/models/Audio'
 import SpeedRateSelector from './SpeedRateSelector.vue'
 import MinimalPlayer from './MinimalPlayer.vue'
+import { SpeedRate, PlayerState, AudioData } from '~/models/Audio'
 import TagBadge from '~/components/TagSelector/TagBadge.vue'
 import { RecordT, Tag } from '~/models/Record'
+import { AudioPlayerStateMutationPayload } from '~/store'
 
 @Component({ components: { MinimalPlayer, SpeedRateSelector, TagBadge } })
 export default class AudioPlayer extends Vue {
@@ -74,7 +74,7 @@ export default class AudioPlayer extends Vue {
   get audioData(): AudioData {
     return {
       ...this.record,
-      playerState: this.state,
+      playerState: this.playerState,
       duration: this.duration,
       currentTimeSecondes: this.currentSeconds,
     }
@@ -88,26 +88,41 @@ export default class AudioPlayer extends Vue {
     return this.activeAudioName === this.record.fileName
   }
 
+  get playerState(): PlayerState {
+    return this.state
+  }
+
+  set playerState(state: PlayerState) {
+    const payload: AudioPlayerStateMutationPayload = {
+      playerState: state,
+      fileName: this.record.fileName,
+    }
+
+    this.state = state
+    this.$store.commit('SET_ACTIVE_AUDIO_STATE', payload)
+  }
+
   ended(): void {
     this.$emit('recordPlayed')
-    this.state = PlayerState.Ended
+    this.playerState = PlayerState.Ended
     this.isPlayed = true
   }
 
   play(): void {
+    console.log('play')
     if (this.activeAudioName !== this.record.fileName) {
       this.$store.commit('SET_ACTIVE_AUDIO', this.audioData)
     }
 
     this.$emit('recordIsPlaying')
-    this.state = PlayerState.Play
+    this.playerState = PlayerState.Play
     this.audio.play()
     this.isPlayed = false
   }
 
   pause(): void {
-    if (this.state === PlayerState.Play) {
-      this.state = PlayerState.Pause
+    if (this.playerState === PlayerState.Play) {
+      this.playerState = PlayerState.Pause
     }
 
     this.audio.pause()

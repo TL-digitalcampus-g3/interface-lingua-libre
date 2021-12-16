@@ -1,10 +1,15 @@
 import { MutationTree, GetterTree, ActionTree } from 'vuex'
 import { RecordT, Tag, TagMap } from '~/models/Record'
-import { AudioData } from '~/models/Audio'
+import { AudioData, PlayerState } from '~/models/Audio'
 
 export interface TagMutationPayload {
   fileName: RecordT['fileName']
   tag: Tag
+}
+
+export interface AudioPlayerStateMutationPayload {
+  playerState: PlayerState
+  fileName: RecordT['fileName']
 }
 
 interface State {
@@ -58,6 +63,13 @@ export const mutations: MutationTree<State> = {
   },
   UPDATE_RECORDS_COUNT: (state, updatedCount: number) => {
     state.recordsCount = updatedCount
+  },
+  SET_ACTIVE_AUDIO_STATE: (state, payload: AudioPlayerStateMutationPayload) => {
+    const { fileName, playerState } = payload
+
+    if (state.activeAudio && state.activeAudio.fileName === fileName) {
+      state.activeAudio.playerState = playerState
+    }
   },
 }
 
