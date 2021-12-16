@@ -1,7 +1,7 @@
 <template>
   <div class="badges">
     <button v-for="tag in tags" :key="tag" class="mx-1" @click="setTag(tag)">
-      <TagBadge :tag="tag" :class="[{ 'badge--active': currentTag === tag }]" />
+      <TagBadge :tag="tag" :is-active="tag === currentTag" />
     </button>
   </div>
 </template>
@@ -37,9 +37,5 @@ export default class TagSelector extends Vue {
 .badges {
   display: flex;
   justify-content: center;
-
-  .badge--active {
-    background: white !important;
-  }
 }
 </style>
