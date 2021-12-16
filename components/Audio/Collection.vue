@@ -89,7 +89,7 @@ export default class Collection extends Vue {
   delayBetweenAutoplay: number = 3000 // in ms
 
   get recordsCount(): number {
-    return this.records.length
+    return this.$store.state.recordsCount
   }
 
   get tagMap(): TagMap {
@@ -146,6 +146,11 @@ export default class Collection extends Vue {
   @Watch('isAutoPlayMode')
   changeAutoPlayMode() {
     console.log('autoplay mode changed', this.isAutoPlayMode)
+  }
+
+  @Watch('records')
+  updateRecords() {
+    this.$store.commit('UPDATE_RECORDS_COUNT', this.records.length)
   }
 
   handleClickPlayAuto(startIndex: number = 0): void {

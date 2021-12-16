@@ -1,13 +1,15 @@
 <template>
   <div>
     <div class="aside__block__information">
-        <div class="flex items-end mb-5">
-      <vc-donut :sections="sections" background="white" foreground="var(--color-secondary)" :size="100" unit="px" :thickness="20"
-        :total="100" :start-angle="0"></vc-donut>
-        <p class="ml-4 text-sm"><span class="block font-bold text-lg">5/10 </span>sons révisés</p>
-        </div>
+      <div class="flex items-end mb-5">
+        <vc-donut :sections="sections" background="white" foreground="var(--color-secondary)" :size="100" unit="px"
+                  :thickness="20"
+                  :total="100" :start-angle="0"/>
+        <p class="ml-4 text-sm"><span class="block font-bold text-lg">5/{{ $store.state.recordsCount }} </span>sons
+          révisés</p>
+      </div>
       <div class="information__text">
-        <CustomIcon name="collection" :size="1.5" />
+        <CustomIcon name="collection" :size="1.5"/>
         <p>Français - Masculin</p>
       </div>
 
@@ -16,8 +18,8 @@
       <h3>{{ $t('SHORTCUT.KEYBOARD_SHORTCUT') }}</h3>
       <ul>
         <li>
-          <p class="capitalize">{{ $t('SHORTCUT.PLAY')+ " / "+ $t('SHORTCUT.PAUSE')}}</p><kbd
-            class="keyword_shortcut">Espace</kbd>
+          <p class="capitalize">{{ $t('SHORTCUT.PLAY') + " / " + $t('SHORTCUT.PAUSE') }}</p><kbd
+          class="keyword_shortcut">Espace</kbd>
         </li>
         <li>
           <p>{{ $t('SHORTCUT.REPEAT') }}</p><kbd class="keyword_shortcut">←</kbd>
@@ -38,65 +40,64 @@
 </template>
 
 <script lang='ts'>
-  import {
-    Vue,
-    Component
-  } from 'nuxt-property-decorator'
-  import CustomIcon from '~/components/Icon/index.vue'
+import {
+  Vue,
+  Component
+} from 'nuxt-property-decorator'
+import CustomIcon from '~/components/Icon/index.vue'
 
 
-  @Component({
-    components: {
-      CustomIcon
-    }
-  })
-  export default class Aside extends Vue {
-     sections: any[] = [{ value: 25 ,color: 'var(--color-primary)'}]
-
-    //     handleSectionClick(section, event) {
-    //     console.log(`${section.label} clicked.`);
-    //   }
+@Component({
+  components: {
+    CustomIcon
   }
+})
+export default class Aside extends Vue {
+  sections: any[] = [{value: 25, color: 'var(--color-primary)'}]
+
+  //     handleSectionClick(section, event) {
+  //     console.log(`${section.label} clicked.`);
+  //   }
+}
 
 </script>
 
 <style scoped lang="scss">
-  [class*="aside__block__"] {
-    @apply dark:bg-backgroundBlock-dark bg-backgroundBlock-light rounded-lg p-5 mb-6
+[class*="aside__block__"] {
+  @apply dark:bg-backgroundBlock-dark bg-backgroundBlock-light rounded-lg p-5 mb-6
+}
+
+.aside__block__option {
+  li {
+    @apply flex justify-between items-center mb-1
+  }
+}
+
+.information__text {
+  @apply flex items-center;
+
+  p {
+    @apply ml-2
   }
 
-  .aside__block__option {
-    li {
-      @apply flex justify-between items-center mb-1
-    }
-  }
 
-  .information__text {
-    @apply flex items-center;
+}
 
-    p {
-      @apply ml-2
-    }
+.cdc-container {
+  @apply inline-block;
+}
 
-    
-  }
-
-  .cdc-container{
-        @apply inline-block;
-    }
-
-    .cdc-overlay{
-        @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark;
-    }
+.cdc-overlay {
+  @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark;
+}
 
 
-  .keyword_shortcut {
-    @apply inline-block text-xs border-4 px-2 py-1 m-1 rounded bg-backgroundApp-light dark:bg-backgroundApp-dark shadow-sm;
+.keyword_shortcut {
+  @apply inline-block text-xs border-4 px-2 py-1 m-1 rounded bg-backgroundApp-light dark:bg-backgroundApp-dark shadow-sm;
 
-    border: 1px solid rgb(204, 204, 204);
+  border: 1px solid rgb(204, 204, 204);
 
 
-
-  }
+}
 
 </style>
