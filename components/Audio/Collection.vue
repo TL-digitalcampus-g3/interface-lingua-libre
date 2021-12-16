@@ -1,10 +1,7 @@
 <template>
   <div id="collection">
-    <div v-if="isLoading">
-      <Loader/>
-    </div>
-    <div class="collection_structure" v-else>
-
+    <Loader v-if="isLoading"/>
+    <div v-else class="collection_structure">
       <div class="collection_sounds">
         <AudioPlayer
           v-for="(record, index) in records"
