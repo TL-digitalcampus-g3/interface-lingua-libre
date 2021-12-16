@@ -4,19 +4,7 @@
       <Loader/>
     </div>
     <div class="collection_structure" v-else>
-      <button
-        class="btn"
-        @click="
-          handleClickPlayAuto(
-            $store.state.lastRecordIndexPlayed !== null
-              ? $store.state.lastRecordIndexPlayed + 1
-              : 0
-          )
-        "
-      >
-        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
-        <CustomIcon v-else name="play" />
-      </button>
+      
       <div class="collection_sounds">
         <AudioPlayer
           v-for="(record, index) in records"
@@ -31,12 +19,14 @@
         class="btn"
         @click="
           handleClickPlayAuto(
-            lastRecordIndexPlayed !== null ? lastRecordIndexPlayed + 1 : 0
+            $store.state.lastRecordIndexPlayed !== null
+              ? $store.state.lastRecordIndexPlayed + 1
+              : 0
           )
         "
       >
         <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
+        <CustomIcon v-else name="play" />
       </button>
       <button
         class="btn-share"
