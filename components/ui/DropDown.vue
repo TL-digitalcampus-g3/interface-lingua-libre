@@ -35,7 +35,7 @@ export interface DropdownOption {
 
 @Component({ components: { CustomIcon } })
 export default class DropDown extends Vue {
-  @VModel({ required: true }) readonly selectedValue!: string | number
+  @VModel({ required: true }) selectedValue!: string | number
   @Prop({ required: true }) readonly options!: DropdownOption[]
 
   get selectedValueText(): string {
