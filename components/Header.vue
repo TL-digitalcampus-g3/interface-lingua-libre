@@ -3,19 +3,19 @@
         <header>
             <nav class="nav">
                 <a href="#" class="nav__item"><img src="~/assets/logos/lingualibreLogo.svg" alt=""></a>
-                <a href="#" class="nav__item" @mouseover="idCollection = true"  @mouseleave="idCollection = false">
+                <a href="#" class="nav__item" @click.prevent.self @mouseover="idCollection = true"  @mouseleave="idCollection = false">
                     <CustomIcon name="collection" size="1.75"/>
                     <span class="nav__item__text">Importer les sons à révisier</span>
                     <DropDownMenu class="dropDownMenu" options="idCollection" v-if="idCollection"></DropDownMenu></a>
-                <a href="#" class="nav__item" @mouseover="isLight = true"  @mouseleave="isLight = false">
+                <a href="#" class="nav__item" @click.prevent.self @mouseover="isLight = true"  @mouseleave="isLight = false">
                     <CustomIcon name="light" size="1.75"/>
                     <span class="nav__item__text">Activer/Désactiver le dark mode</span>
                     <DropDownMenu class="dropDownMenu" options="isLight" v-if="isLight"></DropDownMenu></a>
-                <a href="#" class="nav__item" @mouseover="isInformation = true"  @mouseleave="isInformation = false">
+                <a href="#" class="nav__item" @click.prevent.self @mouseover="isInformation = true"  @mouseleave="isInformation = false">
                     <CustomIcon name="information" size="1.75"/>
                     <span class="nav__item__text">Afficher les informations</span>
                     <DropDownMenu class="dropDownMenu" options="isInformation" v-if="isInformation"></DropDownMenu></a>
-                <a href="#" class="nav__item" @mouseover="isLanguage = true"  @mouseleave="isLanguage = false">
+                <a href="#" class="nav__item" @click.prevent.self @mouseover="isLanguage = true"  @mouseleave="isLanguage = false">
                     <CustomIcon name="language" size="1.75"/>
                     <span class="nav__item__text">Langues</span>
                     <DropDownMenu class="dropDownMenu" options="isLanguage" v-if="isLanguage"></DropDownMenu>
@@ -64,12 +64,12 @@ export default class Header extends Vue {}
         height: 80px;
 
         svg{
-            @apply duration-150
+            @apply duration-200
         }
     }
 
     .nav__item:hover{
-        svg{transform: scale(0.8)}
+        svg{transform: scale(0.9)}
     }
     .nav__item:first-child{
         &:hover{transform: none}

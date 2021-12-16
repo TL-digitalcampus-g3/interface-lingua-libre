@@ -51,12 +51,12 @@ export default class ActionBar extends Vue {
 
 <style scoped lang="scss">
 .actionBar {
-  @apply bg-primary flex px-9 shadow-lg items-center;
+  @apply bg-primary flex px-9 shadow-lg items-center justify-between text-text-dark;
   grid-template-columns: auto auto;
 }
 
 .actionBar__control{
-  @apply grid items-center gap-3
+  @apply flex flex-wrap items-center gap-3
 }
 
 .actionBar__tagSelector {
