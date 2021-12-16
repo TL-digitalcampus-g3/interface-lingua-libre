@@ -7,11 +7,8 @@ export interface TagMutationPayload {
   tag: Tag
 }
 
-interface AudioDataMutationPayloadBase {
+export interface AudioDataStateMutation {
   fileName: RecordT['fileName']
-}
-
-export interface AudioDataStateMutation extends AudioDataMutationPayloadBase {
   value: PlayerState
 }
 
