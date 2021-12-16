@@ -1,24 +1,26 @@
 <template>
-  <MinimalPlayer
-    v-if="activeAudioData"
-    :title="activeAudioData.word"
-    :state="activeAudioData.playerState"
-    :duration="activeAudioData.duration"
-    :current-time-in-seconds="activeAudioData.currentTimeInSeconds"
-    color="white"
-    @state-button-clicked="updatePlayerState"
-  />
+  <div class="global-player">
+    <MinimalPlayer
+      v-if="activeAudioData"
+      :title="activeAudioData.word"
+      :state="activeAudioData.playerState"
+      color="white"
+      @state-button-clicked="updatePlayerState"
+    />
+    <SpeedRateSelector v-model="speedRate" class="ml-4" />
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import MinimalPlayer from '~/components/Audio/Player/MinimalPlayer.vue'
-import { AudioData, PlayerState } from '~/models/Audio'
+import SpeedRateSelector from '~/components/Audio/Player/SpeedRateSelector.vue'
+import { AudioData, PlayerState, SpeedRate } from '~/models/Audio'
 import { RecordT } from '~/models/Record'
 import { AudioDataStateMutation } from '~/store'
 
 @Component({
-  components: { MinimalPlayer },
+  components: { MinimalPlayer, SpeedRateSelector },
 })
 export default class GlobalPlayer extends Vue {
   get activeAudioData(): AudioData | null {
@@ -34,6 +36,14 @@ export default class GlobalPlayer extends Vue {
 
   get playerState(): PlayerState | null {
     return this.activeAudioData?.playerState ?? null
+  }
+
+  get speedRate(): SpeedRate {
+    return this.$store.state.audioSpeedRate
+  }
+
+  set speedRate(speedRate: SpeedRate) {
+    this.$store.commit('SET_SPEED_RATE', speedRate)
   }
 
   updatePlayerState(): void {
@@ -57,3 +67,10 @@ export default class GlobalPlayer extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.global-player {
+  display: flex;
+  align-items: center;
+}
+</style>

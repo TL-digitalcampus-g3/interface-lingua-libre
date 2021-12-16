@@ -1,5 +1,5 @@
 <template>
-  <DropDown :options="options" v-model="speedRate" />
+  <DropDown v-model="speedRate" :options="options" />
 </template>
 
 <script lang="ts">
