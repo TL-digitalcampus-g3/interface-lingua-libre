@@ -43,7 +43,6 @@ export const getters: GetterTree<State, State> = {
   taggedRecordsCount: (state: State): number =>
     Object.keys(state.tagMap).length,
   isDarkMode: (state: State): boolean => state.isDarkMode,
-  activeAudio: (state: State): AudioData['fileName'] | null => state.activeAudio,
 }
 
 export const mutations: MutationTree<State> = {

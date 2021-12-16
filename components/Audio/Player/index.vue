@@ -3,7 +3,7 @@
     ref="audio-player"
     class="player"
     :class="[
-      { 'player--played': isPlayed },
+      { 'player--played': isTagged },
       { 'player--active': isActive },
     ]"
     @click="setActive"
@@ -26,6 +26,7 @@
       @state-button-clicked="togglePlay"
     />
     <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
+    <div class="player__gender">{{ $t(`GENDER.${record.gender}`) }}</div>
     <PlayerTagSelector
       v-if="tag"
       :active-tag="tag"
@@ -38,9 +39,9 @@
 <script lang="ts">
 import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
 import MinimalPlayer from './MinimalPlayer.vue'
-import { PlayerState, SpeedRate } from '~/models/Audio'
 import PlayerTagSelector from '~/components/TagSelector/PlayerTagSelector.vue'
 import { RecordT, Tag } from '~/models/Record'
+import { PlayerState, SpeedRate } from '~/models/Audio'
 import { AudioDataStateMutation } from '~/store'
 
 function formatTimeToMMSS(timeInSeconds: number): string {
@@ -59,7 +60,6 @@ export default class AudioPlayer extends Vue {
 
   currentSeconds: number = 0
   isPlaying: boolean = false
-  isPlayed: boolean = false
   duration: number = 0
 
   @Watch('isActive')
@@ -86,8 +86,12 @@ export default class AudioPlayer extends Vue {
       : null
   }
 
+  get isTagged(): boolean {
+    return Boolean(this.tag)
+  }
+
   get activeAudio(): RecordT['fileName'] {
-    return this.$store.getters.activeAudio
+    return this.$store.state.activeAudio
   }
 
   get isActive(): boolean {
@@ -117,7 +121,6 @@ export default class AudioPlayer extends Vue {
     }
     this.$emit('recordPlayed')
     this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
-    this.isPlayed = true
     this.isPlaying = false
   }
 
@@ -136,7 +139,6 @@ export default class AudioPlayer extends Vue {
       value: PlayerState.Play,
     }
     this.$store.dispatch('playAudio', stateMutationPayload)
-    this.isPlayed = false
   }
 
   pause(): void {
@@ -197,7 +199,8 @@ export default class AudioPlayer extends Vue {
     @apply shadow-xl;
   }
 
-  &__duration {
+  &__duration,
+  &__gender {
     @apply ml-4;
   }
 

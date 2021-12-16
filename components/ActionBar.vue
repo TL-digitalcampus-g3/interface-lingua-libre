@@ -1,7 +1,7 @@
 <template>
   <div class="actionBar">
     <div class="actionBar__control">
-      <GlobalPlayer/>
+      <GlobalPlayer />
       <CheckBox
         :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
         :isChecked="$store.state.isAutoplayMode"
@@ -39,11 +39,11 @@ export default class ActionBar extends Vue {
   grid-template-columns: auto auto;
 }
 
-.actionBar__control{
-  @apply flex flex-wrap items-center gap-3
+.actionBar__control {
+  @apply flex flex-wrap items-center gap-3 lg:mx-0 mx-auto;
 }
 
 .actionBar__tagSelector {
-  @apply justify-self-end;
+  @apply justify-self-end hidden lg:block;
 }
 </style>
