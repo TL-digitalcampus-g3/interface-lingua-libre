@@ -6,18 +6,27 @@
   "GLOBAL": {
     "HOME": "home",
     "LOADING": "chargement",
-    "SEND_TAGGED_RECORDS" : "transmettre mes résultats",
+    "SEND_TAGGED_RECORDS": "transmettre mes résultats",
     "RECORD": "enregistrement | enregistrements"
   },
   "SHORTCUT": {
-    "KEYBOARD_SHORTCUT":"raccourcis clavier",
-    "PLAY":"lecture",
-    "PAUSE":"pause",
-    "REPEAT":"répéter"
+    "KEYBOARD_SHORTCUT": "raccourcis clavier",
+    "PLAY": "lecture",
+    "PAUSE": "pause",
+    "REPEAT": "répéter"
   },
-  "PLAYBACK_OPTION":{
-    "PLAYBACK_OPTION":"option de lecture",
+  "PLAYBACK_OPTION": {
+    "PLAYBACK_OPTION": "option de lecture",
     "JUMP_TIME": "temps entre chaque son",
     "PLAYER_AUTO": "lecture automatique"
+  },
+  "TAGS": {
+    "CUTWORD": "mot coupé",
+    "NOMATCHLANGUAGE": "mauvaise langue",
+    "NOMATCHSPELLING": "mauvaise prononciation",
+    "NOSOUND": "pas de son",
+    "PARASITE": "parasite",
+    "VALID": "valide",
+    "VANDALISM": "vandalisme"
   }
 }

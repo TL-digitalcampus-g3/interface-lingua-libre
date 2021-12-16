@@ -5,19 +5,28 @@
   },
   "GLOBAL": {
     "HOME": "home",
-    "LOADING" : "loading",
-    "SEND_TAGGED_RECORDS" : "share my results",
+    "LOADING": "loading",
+    "SEND_TAGGED_RECORDS": "share my results",
     "RECORD": "record | records"
   },
   "SHORTCUT": {
-    "KEYBOARD_SHORTCUT":"shortcut",
-    "PLAY":"play",
-    "PAUSE":"pause",
-    "REPEAT":"repeat"
+    "KEYBOARD_SHORTCUT": "shortcut",
+    "PLAY": "play",
+    "PAUSE": "pause",
+    "REPEAT": "repeat"
   },
-  "PLAYBACK_OPTION":{
-    "PLAYBACK_OPTION":"playback options",
+  "PLAYBACK_OPTION": {
+    "PLAYBACK_OPTION": "playback options",
     "JUMP_TIME": "time between sound",
     "PLAYER_AUTO": "autoplay"
+  },
+  "TAGS": {
+    "CUTWORD": "cut word",
+    "NOMATCHLANGUAGE": "wrong language",
+    "NOMATCHSPELLING": "wrong spelling",
+    "NOSOUND": "no sound",
+    "PARASITE": "parasit",
+    "VALID": "valid",
+    "VANDALISM": "vandalism"
   }
 }

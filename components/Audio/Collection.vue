@@ -170,7 +170,7 @@ export default class Collection extends Vue {
     if (!isCurrentRecordTagSettled) {
       const setTagPayload: TagMutationPayload = {
         fileName: currentRecord.fileName,
-        tag: Tag.Patroled,
+        tag: Tag.Valid,
       }
 
       this.$store.dispatch('setTag', setTagPayload)
