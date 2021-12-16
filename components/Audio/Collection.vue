@@ -1,7 +1,7 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader />
+      <Loader/>
     </div>
     <div class="collection_structure" v-else>
       <button
@@ -47,6 +47,7 @@
         {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }}
       </button>
     </div>
+  </div>
   </div>
 </template>
 
