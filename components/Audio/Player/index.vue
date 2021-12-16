@@ -17,32 +17,37 @@
     />
     <MinimalPlayer
       :title="title"
-      :duration="duration"
-      :current-time-in-seconds="currentSeconds"
       :state="playerState"
       @state-button-clicked="togglePlay"
     />
-    <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
+    <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
     <TagBadge v-if="tag" class="player__tag" :tag="tag" />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
-import SpeedRateSelector from './SpeedRateSelector.vue'
 import MinimalPlayer from './MinimalPlayer.vue'
-import { SpeedRate, PlayerState } from '~/models/Audio'
+import { PlayerState, SpeedRate } from '~/models/Audio'
 import TagBadge from '~/components/TagSelector/TagBadge.vue'
 import { RecordT, Tag } from '~/models/Record'
 import { AudioDataStateMutation } from '~/store'
 
-@Component({ components: { MinimalPlayer, SpeedRateSelector, TagBadge } })
+function formatTimeToMMSS(timeInSeconds: number): string {
+  const minutes = Math.round(timeInSeconds / 60)
+  const seconds = Math.round(timeInSeconds - minutes * 60)
+  const minuteValue = minutes < 10 ? `0${minutes}` : minutes
+  const secondValue = seconds < 10 ? `0${seconds}` : seconds
+
+  return `${minuteValue}:${secondValue}`
+}
+
+@Component({ components: { MinimalPlayer, TagBadge } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
 
   currentSeconds: number = 0
-  speedRateValue: SpeedRate = SpeedRate.Normal
   isPlaying: boolean = false
   isPlayed: boolean = false
   duration: number = 0
@@ -57,15 +62,6 @@ export default class AudioPlayer extends Vue {
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
-  }
-
-  get speedRate(): number {
-    return this.speedRateValue
-  }
-
-  set speedRate(speedRate: SpeedRate) {
-    this.speedRateValue = speedRate
-    this.audio.playbackRate = speedRate
   }
 
   get tag(): Tag | null {
@@ -86,6 +82,18 @@ export default class AudioPlayer extends Vue {
     return this.$store.state.audioDataMap[this.fileName].playerState
   }
 
+  get currentTime(): string {
+    return formatTimeToMMSS(this.currentSeconds)
+  }
+
+  get audioDuration(): string | null {
+    return formatTimeToMMSS(this.duration)
+  }
+
+  get speedRate(): SpeedRate {
+    return this.$store.state.audioSpeedRate
+  }
+
   ended(): void {
     const stateMutationPayload: AudioDataStateMutation = {
       fileName: this.record.fileName,
@@ -102,13 +110,12 @@ export default class AudioPlayer extends Vue {
       this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
     }
     this.isPlaying = true
-    this.$emit('recordIsPlaying')
 
     const stateMutationPayload: AudioDataStateMutation = {
       fileName: this.record.fileName,
       value: PlayerState.Play,
     }
-    this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
+    this.$store.dispatch('playAudio', stateMutationPayload)
     this.isPlayed = false
   }
 
@@ -150,6 +157,13 @@ export default class AudioPlayer extends Vue {
         break
     }
   }
+
+  @Watch('speedRate')
+  onSpeedRateChange(): void {
+    if (this.audio) {
+      this.audio.playbackRate = this.speedRate
+    }
+  }
 }
 </script>
 
@@ -159,7 +173,7 @@ export default class AudioPlayer extends Vue {
   display: flex;
   align-items: center;
 
-  &__speed-rate {
+  &__duration {
     @apply ml-4;
   }
 
@@ -177,8 +191,7 @@ export default class AudioPlayer extends Vue {
 }
 
 .player__word,
-.player__time,
-.player__speed-rate {
+.player__time {
   @apply text-text-light dark:text-text-dark;
 }
 </style>

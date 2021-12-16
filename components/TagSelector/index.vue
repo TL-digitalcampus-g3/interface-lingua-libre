@@ -1,7 +1,7 @@
 <template>
   <div class="badges">
     <button v-for="tag in tags" :key="tag" class="mx-1" @click="setTag(tag)">
-      <TagBadge :tag="tag" />
+      <TagBadge :tag="tag" :class="[{ 'badge--active': currentTag === tag }]" />
     </button>
   </div>
 </template>
@@ -20,6 +20,10 @@ export default class TagSelector extends Vue {
     return this.$store.state.activeAudio
   }
 
+  get currentTag(): Tag {
+    return this.$store.state.tagMap[this.activeAudio]
+  }
+
   setTag(tag: Tag): void {
     if (this.activeAudio) {
       const payload: TagMutationPayload = { fileName: this.activeAudio, tag }
@@ -30,9 +34,12 @@ export default class TagSelector extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.badges {
+  display: flex;
+  justify-content: center;
 
-  .badges {
-    display: flex;
-    justify-content: center;
+  .badge--active {
+    background: white !important;
   }
+}
 </style>

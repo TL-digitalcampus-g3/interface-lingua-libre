@@ -4,15 +4,27 @@
       <Loader />
     </div>
     <div class="collection_structure" v-else>
+      <button
+        class="btn"
+        @click="
+          handleClickPlayAuto(
+            $store.state.lastRecordIndexPlayed !== null
+              ? $store.state.lastRecordIndexPlayed + 1
+              : 0
+          )
+        "
+      >
+        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
+        <CustomIcon v-else name="play" />
+      </button>
       <div class="collection_sounds">
-        <div v-for="(record, index) in records" :key="record.fileName">
-          <AudioPlayer
-            ref="players"
-            :record="record"
-            @recordIsPlaying="handleRecordIsPlaying"
-            @recordPlayed="handleRecordPlayed(index)"
-          />
-        </div>
+        <AudioPlayer
+          v-for="(record, index) in records"
+          :key="record.fileName"
+          ref="players"
+          :record="record"
+          @recordPlayed="handleRecordPlayed(index)"
+        />
       </div>
       <div>
         <button
@@ -34,25 +46,6 @@
       >
         {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }}
       </button>
-      </div>
-      
-      <!-- <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
-        <p>
-          Last record's index played :
-          <strong>{{
-            $store.state.lastRecordIndexPlayed !== null
-              ? $store.state.lastRecordIndexPlayed
-              : 'none'
-          }}</strong>
-        </p>
-        <div v-if="isPlayingRecord">
-          Current audio player :
-          <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
-        </div>
-        Audio(s) verified :
-        <strong>{{ taggedRecordsCount }} / {{ recordsCount }}</strong>
-        <hr />
-      </div> -->
     </div>
   </div>
 </template>
@@ -132,22 +125,22 @@ export default class Collection extends Vue {
   mounted(): void {
     this.fetchContent()
     document.onkeydown = function (event) {
-      const key = window.event.keyCode;
+      const key = window.event.keyCode
       if (key === 65 && event.ctrlKey) {
         console.log('crtl + a')
-        window.event.preventDefault();
+        window.event.preventDefault()
       } else if (key === KeycodeList.ESCAPE) {
-        console.log('escape key pressed');
-        window.event.preventDefault();
+        console.log('escape key pressed')
+        window.event.preventDefault()
       } else if (key === KeycodeList.SPACE) {
         console.log('space key pressed')
-        window.event.preventDefault();
+        window.event.preventDefault()
       } else if (key === KeycodeList.ARROW_LEFT) {
         console.log('arrow left key pressed')
-        window.event.preventDefault();
+        window.event.preventDefault()
       } else if (key === KeycodeList.ARROW_RIGHT) {
         console.log('arrow right key pressed')
-        window.event.preventDefault();
+        window.event.preventDefault()
       }
     }
   }
@@ -163,13 +156,12 @@ export default class Collection extends Vue {
           fileName: record.fileName,
           word: record.word,
           playerState: PlayerState.Pause,
-          duration: 0,
-          currentTimeSecondes: 0,
         })
       )
 
       this.records = records
       this.$store.commit('SET_AUDIO_MAP', audioDatas)
+      this.$store.commit('SET_ACTIVE_AUDIO', records[0].fileName)
     } finally {
       this.isLoading = false
     }
@@ -187,6 +179,7 @@ export default class Collection extends Vue {
 
   handleClickPlayAuto(startIndex: number = 0): void {
     if (!this.isPlayingRecord) {
+      console.log('handleClickPlayAuto')
       this.playRecord(startIndex)
       this.$store.commit(
         'UPDATE_AUTOPLAY_STARTED',
@@ -214,10 +207,6 @@ export default class Collection extends Vue {
 
     this.$store.state.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
     this.$store.commit('SET_LATEST_AUDIO_INDEX_PLAYED', currentPlayerIndex)
-  }
-
-  handleRecordIsPlaying(): void {
-    // this.pauseOtherPlayers()
   }
 
   handleClickTransfertResults(): void {
@@ -292,14 +281,6 @@ export default class Collection extends Vue {
         },
         this.$store.state.isAutoplayStarted ? this.delayBetweenAutoplay : 0
       )
-    }
-  }
-
-  pauseOtherPlayers(): void {
-    for (const player of this.players) {
-      if (player.fileName !== this.activeAudio) {
-        player.pause()
-      }
     }
   }
 }

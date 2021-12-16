@@ -1,17 +1,14 @@
 import { MutationTree, GetterTree, ActionTree } from 'vuex'
 import { RecordT, Tag, TagMap } from '~/models/Record'
-import { AudioData, AudioDataMap, PlayerState } from '~/models/Audio'
+import { AudioData, AudioDataMap, PlayerState, SpeedRate } from '~/models/Audio'
 
 export interface TagMutationPayload {
   fileName: RecordT['fileName']
   tag: Tag
 }
 
-interface AudioDataMutationPayloadBase {
+export interface AudioDataStateMutation {
   fileName: RecordT['fileName']
-}
-
-export interface AudioDataStateMutation extends AudioDataMutationPayloadBase {
   value: PlayerState
 }
 
@@ -20,6 +17,7 @@ interface State {
   tagMap: TagMap
   audioDataMap: AudioDataMap
   activeAudio: AudioData['fileName'] | null
+  audioSpeedRate: SpeedRate
   isAutoplayMode: boolean
   isAutoplayStarted: boolean
   lastRecordIndexPlayed: number | null
@@ -31,6 +29,7 @@ export const state = (): State => ({
   tagMap: {},
   audioDataMap: {},
   activeAudio: null,
+  audioSpeedRate: SpeedRate.Normal,
   isAutoplayMode: false,
   isAutoplayStarted: false,
   lastRecordIndexPlayed: null,
@@ -63,6 +62,9 @@ export const mutations: MutationTree<State> = {
   },
   SET_LATEST_AUDIO_INDEX_PLAYED: (state: State, index: number) => {
     state.lastRecordIndexPlayed = index
+  },
+  SET_SPEED_RATE: (state: State, speedRate: SpeedRate) => {
+    state.audioSpeedRate = speedRate
   },
   UPDATE_AUTOPLAY_MODE: (state, newValue: boolean) => {
     state.isAutoplayMode = newValue
@@ -102,5 +104,21 @@ export const actions: ActionTree<State, State> = {
     } else {
       commit('UPDATE_TAG', payload)
     }
+  },
+  playAudio({ commit, state }, payload: AudioDataStateMutation): void {
+    const { value } = payload
+
+    if (value === PlayerState.Play) {
+      for (const name in state.audioDataMap) {
+        if (state.audioDataMap[name].playerState === PlayerState.Play) {
+          commit('UPDATE_AUDIO_DATA_STATE', {
+            fileName: name,
+            value: PlayerState.Pause,
+          })
+        }
+      }
+    }
+
+    commit('UPDATE_AUDIO_DATA_STATE', payload)
   },
 }
