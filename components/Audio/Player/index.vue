@@ -28,7 +28,7 @@
       border-color="var(--color-primary)"
       text-color="white"
     >
-      {{ tag }}
+      {{ $t('TAGS.' + tag.toUpperCase()) }}
     </Badge>
   </div>
 </template>
