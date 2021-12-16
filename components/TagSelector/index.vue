@@ -1,9 +1,7 @@
 <template>
   <div class="badges">
     <button v-for="tag in tags" :key="tag" class="mx-1" @click="setTag(tag)">
-      <TagBadge :tag="tag" :class="[
-        {'badge--active' : (currentTag === tag)}
-      ]"/>
+      <TagBadge :tag="tag" :class="[{ 'badge--active': currentTag === tag }]" />
     </button>
   </div>
 </template>
@@ -18,14 +16,15 @@ import { TagMutationPayload } from '~/store'
 export default class TagSelector extends Vue {
   readonly tags: Tag[] = Object.values(Tag)
 
-  currentTag: Tag | null = null
-
   get activeAudio(): RecordT['fileName'] {
     return this.$store.state.activeAudio
   }
 
+  get currentTag(): Tag {
+    return this.$store.state.tagMap[this.activeAudio]
+  }
+
   setTag(tag: Tag): void {
-    this.currentTag = tag
     if (this.activeAudio) {
       const payload: TagMutationPayload = { fileName: this.activeAudio, tag }
       this.$store.dispatch('setTag', payload)
@@ -43,5 +42,4 @@ export default class TagSelector extends Vue {
     background: white !important;
   }
 }
-
 </style>
