@@ -10,11 +10,17 @@ interface State {
   // tagMap should be a Map structure but Map ar not reactive yet in Vue.js
   tagMap: TagMap
   activeAudio: RecordT['fileName'] | null
+  isAutoplayMode: boolean
+  isAutoplayStarted: boolean
+  lastRecordIndexPlayed: number | null
 }
 
 export const state = (): State => ({
   tagMap: {},
   activeAudio: null,
+  isAutoplayMode: false,
+  isAutoplayStarted: false,
+  lastRecordIndexPlayed: null
 })
 
 export const getters: GetterTree<State, State> = {
@@ -36,6 +42,12 @@ export const mutations: MutationTree<State> = {
   },
   SET_ACTIVE_AUDIO: (state: State, fileName: RecordT['fileName']) => {
     state.activeAudio = fileName
+  },
+  UPDATE_AUTOPLAY_MODE: (state, newValue: boolean) => {
+    state.isAutoplayMode = newValue
+  },
+  UPDATE_AUTOPLAY_STARTED: (state, newValue: boolean) => {
+    state.isAutoplayStarted = newValue
   },
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader />
+      <Loader/>
     </div>
     <div v-else>
       <button
@@ -12,21 +12,11 @@
           )
         "
       >
-        <CustomIcon v-if="isAutoplayMode" name="pause" />
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
+        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause"/>
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
       </button>
-      <div>
-        <input id="autoplay" type="checkbox" :checked="isAutoplayMode" />
-        {{ $t('PLAYBACK_OPTION.PLAYER_AUTO') }}
-
-        <CheckBox
-          :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
-          :isChecked="isAutoplayMode"
-        />
-      </div>
       <div class="collection_sounds">
         <div v-for="(record, index) in records" :key="record.fileName">
-          {{ record }}
           <AudioPlayer
             ref="players"
             :record="record"
@@ -47,16 +37,15 @@
         <p>
           Last record's index played :
           <strong>{{
-            lastRecordIndexPlayed !== null ? lastRecordIndexPlayed : 'none'
-          }}</strong>
+              $store.state.lastRecordIndexPlayed !== null ? $store.state.lastRecordIndexPlayed : 'none'
+            }}</strong>
         </p>
         <div v-if="isPlayingRecord">
           Current audio player :
           <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
         </div>
-        Audio(s) verified :
-        <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
-        <hr />
+        Audio(s) verified : <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
+        <hr/>
         {{ taggedRecords }}
       </div>
     </div>
@@ -64,17 +53,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref } from 'nuxt-property-decorator'
+import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import { RecordT, Tag, TagMap } from '~/models/Record'
-import { TagMutationPayload } from '~/store'
+import {RecordT, Tag, TagMap} from '~/models/Record'
+import {TagMutationPayload} from '~/store'
 
 @Component({
-  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
-  async asyncData({ $axios }): Promise<any> {
+  components: {Loader, AudioPlayer, CustomIcon, CheckBox},
+  async asyncData({$axios}): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
       .then((res) => res.records)
@@ -96,9 +85,7 @@ export default class Collection extends Vue {
 
   records: RecordT[] = []
   isLoading: boolean = true
-  isAutoplayMode: boolean = false
   lastRecordIndexPlayed: number | null = null
-  isAutoplayStarted: boolean = false
   delayBetweenAutoplay: number = 3000 // in ms
 
   get recordsCount(): number {
@@ -111,6 +98,10 @@ export default class Collection extends Vue {
 
   get taggedRecords(): RecordT['fileName'][] {
     return this.$store.getters.taggedRecords
+  }
+
+  get isAutoPlayMode(): boolean {
+    return this.$store.state.isAutoplayMode
   }
 
   get checkedRecordsCount(): number {
@@ -142,11 +133,15 @@ export default class Collection extends Vue {
     }
   }
 
+  @Watch('isAutoPlayMode')
+  changeAutoPlayMode() {
+    console.log('autoplay mode changed', this.isAutoPlayMode)
+  }
+
   handleClickPlayAuto(startIndex: number = 0): void {
-    this.isAutoplayMode = !this.isAutoplayMode
     if (!this.isPlayingRecord) {
       this.playRecord(startIndex)
-      this.isAutoplayStarted = !this.isAutoplayStarted
+      this.$store.commit('UPDATE_AUTOPLAY_STARTED', !this.$store.state.isAutoplayStarted)
     }
   }
 
@@ -167,7 +162,7 @@ export default class Collection extends Vue {
       this.$store.dispatch('setTag', setTagPayload)
     }
 
-    this.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
+    this.$store.state.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
   handleRecordIsPlaying(fileName: RecordT['fileName']): void {
@@ -224,7 +219,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], { type: 'application/xml' })
+    const blob = new Blob([outputSerialized], {type: 'application/xml'})
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
@@ -245,7 +240,7 @@ export default class Collection extends Vue {
         () => {
           this.players[playerIndex].play()
         },
-        this.isAutoplayStarted ? this.delayBetweenAutoplay : 0
+        this.$store.state.isAutoplayStarted ? this.delayBetweenAutoplay : 0
       )
     }
   }
@@ -273,9 +268,4 @@ export default class Collection extends Vue {
   @apply overflow-y-scroll;
   height: 400px;
 }
-
-.player{
-  @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark
-}
-
 </style>
