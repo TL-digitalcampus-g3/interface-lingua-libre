@@ -65,22 +65,6 @@ import { TagMutationPayload } from '~/store'
 
 @Component({
   components: { Loader, AudioPlayer, CustomIcon, CheckBox },
-  async asyncData({ $axios }): Promise<any> {
-    const records = await $axios
-      .$get(`datas/millars.json`)
-      .then((res) => res.records)
-      .catch((error) => {
-        if (this.$axios.isCancel(error)) {
-          console.log('Request canceled', error)
-        } else {
-          console.log(error)
-        }
-      })
-
-    return {
-      records,
-    }
-  },
 })
 export default class Collection extends Vue {
   @Ref() readonly players!: AudioPlayer[]
