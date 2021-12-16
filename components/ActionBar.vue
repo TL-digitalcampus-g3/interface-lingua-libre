@@ -1,23 +1,18 @@
 <template>
   <div class="actionBar">
     <div class="actionBar__control">
-      <button
-        class="btn"
-        @click="
+      <MinimalPlayer
+        title="stub"
+        state="pause"
+        color="white"
+        @state-button-clicked="
           handleClickPlayAuto(
             $store.state.lastRecordIndexPlayed !== null
               ? $store.state.lastRecordIndexPlayed + 1
               : 0
           )
         "
-      >
-        <CustomIcon
-          v-if="$store.state.isAutoplayMode"
-          name="pause"
-          color="white"
-        />
-        <CustomIcon v-else name="play" color="white" />
-      </button>
+      />
     </div>
     <div class="actionBar__tagSelector">
       <TagSelector />
@@ -34,13 +29,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
-import CustomIcon from '@/components/Icon/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
 import TagSelector from '~/components/TagSelector/index.vue'
 import MinimalPlayer from '~/components/Audio/Player/MinimalPlayer.vue'
 
 @Component({
-  components: { CheckBox, TagSelector, CustomIcon, MinimalPlayer },
+  components: { CheckBox, TagSelector, MinimalPlayer },
 })
 export default class ActionBar extends Vue {
   handleClickPlayAuto(): void {
