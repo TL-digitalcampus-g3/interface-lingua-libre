@@ -26,9 +26,6 @@ export default class Badge extends Vue {
 <style lang="scss" scoped>
   .badge {
     @apply duration-200 ease-out;
-    &:hover{
-      transform: scale(0.98);
-    }
 
     color: black;
     border-radius: 7px;

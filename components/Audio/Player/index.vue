@@ -26,7 +26,7 @@
       @state-button-clicked="togglePlay"
     />
     <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
-    <div class="player__gender">{{ $t(`GENDER.${record.gender}`) }}</div>
+    <div class="player__gender">({{ $t(`GENDER.${record.gender}`) }})</div>
     <PlayerTagSelector
       v-if="tag"
       :active-tag="tag"
@@ -204,7 +204,7 @@ export default class AudioPlayer extends Vue {
 
   &__duration,
   &__gender {
-    @apply ml-4;
+    @apply ml-4 text-xs;
   }
 
   &__tag {
@@ -214,6 +214,7 @@ export default class AudioPlayer extends Vue {
 
 .player--active {
   @apply shadow-xl;
+  background: white !important;
 }
 
 .player--played {

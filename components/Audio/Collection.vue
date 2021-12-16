@@ -19,7 +19,7 @@
           @click="handleClickTransfertResults"
           :disabled="!hasResultsToShare"
         >
-          {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }}
+          {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }} <span v-if="taggedRecordsCount">({{ taggedRecordsCount }})</span>
         </button>
       </div>
     </div>
@@ -263,7 +263,7 @@ export default class Collection extends Vue {
 
 <style lang="scss" scoped>
 .btn-share {
-  @apply bg-blue-500 text-white p-3 rounded mt-5 mb-2 uppercase;
+  @apply bg-primary text-white p-3 rounded mt-5 mb-2 px-5 uppercase text-sm;
 }
 
 .btn--disabled {
