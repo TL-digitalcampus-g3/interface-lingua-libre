@@ -1,14 +1,26 @@
 <template>
   <div class="actionBar">
     <div class="actionBar__control">
-      <button class="btn"
-              @click="handleClickPlayAuto(($store.state.lastRecordIndexPlayed !== null) ? ($store.state.lastRecordIndexPlayed + 1) : 0)">
-        <CustomIcon v-if="$store.state.isAutoplayMode" name="pause" color="white"/>
-        <CustomIcon v-else name="play" color="white"/>
+      <button
+        class="btn"
+        @click="
+          handleClickPlayAuto(
+            $store.state.lastRecordIndexPlayed !== null
+              ? $store.state.lastRecordIndexPlayed + 1
+              : 0
+          )
+        "
+      >
+        <CustomIcon
+          v-if="$store.state.isAutoplayMode"
+          name="pause"
+          color="white"
+        />
+        <CustomIcon v-else name="play" color="white" />
       </button>
     </div>
     <div class="actionBar__tagSelector">
-      <TagSelector/>
+      <TagSelector />
     </div>
     <div class="actionBar__toggleAutoPlay">
       <CheckBox
@@ -21,22 +33,26 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component} from 'nuxt-property-decorator'
+import { Vue, Component } from 'nuxt-property-decorator'
 import CustomIcon from '@/components/Icon/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
 import TagSelector from '~/components/TagSelector/index.vue'
+import MinimalPlayer from '~/components/Audio/Player/MinimalPlayer.vue'
 
 @Component({
-  components: {CheckBox, TagSelector, CustomIcon},
+  components: { CheckBox, TagSelector, CustomIcon, MinimalPlayer },
 })
 export default class ActionBar extends Vue {
   handleClickPlayAuto(): void {
     console.log('handleClickPlayAuto')
-    this.$store.commit('HANDLE_PLAY_RECORDS', {'autoplay': true, 'startIndex': 0})
+    this.$store.commit('HANDLE_PLAY_RECORDS', { autoplay: true, startIndex: 0 })
   }
 
   handleClickCheckboxAutoplay(): void {
-    this.$store.commit('UPDATE_AUTOPLAY_MODE', !this.$store.state.isAutoplayMode)
+    this.$store.commit(
+      'UPDATE_AUTOPLAY_MODE',
+      !this.$store.state.isAutoplayMode
+    )
   }
 }
 </script>
