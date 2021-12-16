@@ -7,7 +7,8 @@
     "HOME": "home",
     "LOADING": "loading",
     "SEND_TAGGED_RECORDS": "share my results",
-    "RECORD": "record | records"
+    "RECORD": "record | records",
+    "WEBPAGE_TITLE": "Control interface"
   },
   "SHORTCUT": {
     "KEYBOARD_SHORTCUT": "shortcut",

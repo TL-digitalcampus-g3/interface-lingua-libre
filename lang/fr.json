@@ -7,7 +7,8 @@
     "HOME": "home",
     "LOADING": "chargement",
     "SEND_TAGGED_RECORDS": "transmettre mes résultats",
-    "RECORD": "enregistrement | enregistrements"
+    "RECORD": "enregistrement | enregistrements",
+    "WEBPAGE_TITLE": "Interface de contrôle"
   },
   "SHORTCUT": {
     "KEYBOARD_SHORTCUT": "raccourcis clavier",
