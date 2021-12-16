@@ -22,6 +22,7 @@
       @state-button-clicked="togglePlay"
     />
     <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
+    <div class="player__gender">{{ $t(`GENDER.${record.gender}`) }}</div>
     <PlayerTagSelector
       v-if="tag"
       :active-tag="tag"
@@ -34,9 +35,9 @@
 <script lang="ts">
 import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
 import MinimalPlayer from './MinimalPlayer.vue'
-import { PlayerState, SpeedRate } from '~/models/Audio'
 import PlayerTagSelector from '~/components/TagSelector/PlayerTagSelector.vue'
 import { RecordT, Tag } from '~/models/Record'
+import { PlayerState, SpeedRate } from '~/models/Audio'
 import { AudioDataStateMutation } from '~/store'
 
 function formatTimeToMMSS(timeInSeconds: number): string {
@@ -188,7 +189,8 @@ export default class AudioPlayer extends Vue {
     @apply shadow-xl;
   }
 
-  &__duration {
+  &__duration,
+  &__gender {
     @apply ml-4;
   }
 

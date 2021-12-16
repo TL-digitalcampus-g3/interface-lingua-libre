@@ -13,6 +13,7 @@ export interface RecordT {
   commonsURL: string
   locutor: string
   word: string
+  gender: 'M' | 'F'
 }
 
 export type TagMap = Record<RecordT['fileName'], Tag>
