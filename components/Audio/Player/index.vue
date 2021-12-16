@@ -29,18 +29,18 @@
       class="player__tag"
     />
     <div class="player__wave" v-if="isActive">
-      <vue-wave-surfer :src="audioUrl" :options="{}"/>
+      <vue-wave-surfer ref="wavePlayer" :src="audioUrl" :options="{}" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, Ref, Watch} from 'nuxt-property-decorator'
+import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
 import MinimalPlayer from './MinimalPlayer.vue'
-import {PlayerState, SpeedRate} from '~/models/Audio'
+import { PlayerState, SpeedRate } from '~/models/Audio'
 import PlayerTagSelector from '~/components/TagSelector/PlayerTagSelector.vue'
-import {RecordT, Tag} from '~/models/Record'
-import {AudioDataStateMutation} from '~/store'
+import { RecordT, Tag } from '~/models/Record'
+import { AudioDataStateMutation } from '~/store'
 
 function formatTimeToMMSS(timeInSeconds: number): string {
   const minutes = Math.round(timeInSeconds / 60)
@@ -51,10 +51,11 @@ function formatTimeToMMSS(timeInSeconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({components: {MinimalPlayer, PlayerTagSelector}})
+@Component({ components: { MinimalPlayer, PlayerTagSelector } })
 export default class AudioPlayer extends Vue {
-  @Prop({required: true}) readonly record!: RecordT
+  @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
+  @Ref() readonly wavePlayer!: any
 
   currentSeconds: number = 0
   isPlaying: boolean = false
@@ -163,7 +164,8 @@ export default class AudioPlayer extends Vue {
   onPlayerStateChange(): void {
     switch (this.playerState) {
       case PlayerState.Play:
-        this.audio.play()
+        // this.audio.play()
+        this.wavePlayer.waveSurfer.play()
         break
       case PlayerState.Pause:
         this.audio.pause()
