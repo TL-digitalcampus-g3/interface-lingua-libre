@@ -101,22 +101,25 @@ export default class Collection extends Vue {
   mounted(): void {
     this.fetchContent()
     document.onkeydown = function (event) {
-      const key = window.event.keyCode
-      if (key === 65 && event.ctrlKey) {
-        console.log('crtl + a')
-        window.event.preventDefault()
-      } else if (key === KeycodeList.ESCAPE) {
-        console.log('escape key pressed')
-        window.event.preventDefault()
-      } else if (key === KeycodeList.SPACE) {
-        console.log('space key pressed')
-        window.event.preventDefault()
-      } else if (key === KeycodeList.ARROW_LEFT) {
-        console.log('arrow left key pressed')
-        window.event.preventDefault()
-      } else if (key === KeycodeList.ARROW_RIGHT) {
-        console.log('arrow right key pressed')
-        window.event.preventDefault()
+      if (window.event) {
+        // @ts-ignore
+        const key = window.event.keyCode
+        if (key === 65 && event.ctrlKey) {
+          console.log('crtl + a')
+          window.event.preventDefault()
+        } else if (key === KeycodeList.ESCAPE) {
+          console.log('escape key pressed')
+          window.event.preventDefault()
+        } else if (key === KeycodeList.SPACE) {
+          console.log('space key pressed')
+          window.event.preventDefault()
+        } else if (key === KeycodeList.ARROW_LEFT) {
+          console.log('arrow left key pressed')
+          window.event.preventDefault()
+        } else if (key === KeycodeList.ARROW_RIGHT) {
+          console.log('arrow right key pressed')
+          window.event.preventDefault()
+        }
       }
     }
   }
@@ -153,9 +156,11 @@ export default class Collection extends Vue {
     this.$store.commit('UPDATE_RECORDS_COUNT', this.records.length)
   }
 
-  handleScrollTo(pxValue: number) {
-    console.log(pxValue)
-    this.$refs.collectionWrapper.scrollTop = pxValue
+  handleScrollTo(pxValue: number): void {
+    if (this.$refs.collectionWrapper) {
+      // @ts-ignore
+      this.$refs.collectionWrapper.scrollTop = pxValue
+    }
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {
@@ -281,7 +286,7 @@ export default class Collection extends Vue {
 .collection_btn {
   @apply text-center relative;
 
-  &::before{
+  &::before {
     @apply bg-gradient-to-t from-backgroundApp-light dark:from-backgroundApp-dark block absolute w-full top-0 left-0;
     content: '';
 

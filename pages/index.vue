@@ -14,17 +14,26 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'nuxt-property-decorator'
+import {Vue, Component, Watch} from 'nuxt-property-decorator'
 import Collection from '~/components/Audio/Collection.vue'
 import Header from '~/components/Header.vue'
 import ActionBar from '~/components/ActionBar.vue'
 import Aside from '~/components/Aside.vue'
 
 @Component({
-  components: { Collection, Header, ActionBar, Aside },
+  components: {Collection, Header, ActionBar, Aside},
 })
 export default class HomePage extends Vue {
-  @Watch('isDarkMode', { immediate: true })
+  head() {
+    return {
+      title: this.$t('GLOBAL.WEBPAGE_TITLE'),
+      meta: [
+        {hid: 'description', name: 'description', content: 'Lingua Libre audios verification interface'}
+      ]
+    }
+  }
+
+  @Watch('isDarkMode', {immediate: true})
   changeDarkMode() {
     if (this.isDarkMode) {
       document.documentElement.classList.add('dark')

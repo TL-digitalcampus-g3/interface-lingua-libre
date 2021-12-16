@@ -37,12 +37,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
+import {Vue, Component, Prop, Ref, Watch} from 'nuxt-property-decorator'
 import MinimalPlayer from './MinimalPlayer.vue'
 import PlayerTagSelector from '~/components/TagSelector/PlayerTagSelector.vue'
-import { RecordT, Tag } from '~/models/Record'
-import { PlayerState, SpeedRate } from '~/models/Audio'
-import { AudioDataStateMutation } from '~/store'
+import {RecordT, Tag} from '~/models/Record'
+import {PlayerState, SpeedRate} from '~/models/Audio'
+import {AudioDataStateMutation} from '~/store'
 
 function formatTimeToMMSS(timeInSeconds: number): string {
   const minutes = Math.round(timeInSeconds / 60)
@@ -53,9 +53,9 @@ function formatTimeToMMSS(timeInSeconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({ components: { MinimalPlayer, PlayerTagSelector } })
+@Component({components: {MinimalPlayer, PlayerTagSelector}})
 export default class AudioPlayer extends Vue {
-  @Prop({ required: true }) readonly record!: RecordT
+  @Prop({required: true}) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
 
   currentSeconds: number = 0
@@ -63,9 +63,12 @@ export default class AudioPlayer extends Vue {
   duration: number = 0
 
   @Watch('isActive')
-  updateIsActive(){
-    const topPos = this.$refs['audio-player'].offsetTop - 32;
-    this.$emit('scrollTo', topPos)
+  updateIsActive() {
+    if (this.$refs['audio-player']) {
+      // @ts-ignore
+      const topPos = this.$refs['audio-player'].offsetTop - 32;
+      this.$emit('scrollTo', topPos)
+    }
   }
 
   get fileName(): RecordT['fileName'] {
