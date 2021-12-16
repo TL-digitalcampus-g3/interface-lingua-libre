@@ -10,7 +10,7 @@
 </template>
 
 
-<style scoped >
+<style scoped>
 
     .toggle-checkbox:checked {
       @apply: right-0 border-green-400;

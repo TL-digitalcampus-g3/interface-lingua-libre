@@ -1,7 +1,10 @@
 <template>
   <div
     class="player"
-    :class="[{ 'player--played': isPlayed }, { 'player--active': isActive }]"
+    :class="[
+      { 'player--played': isPlayed },
+      { 'player--active': isActive && isPlaying },
+    ]"
     @dblclick="play"
   >
     <audio
@@ -40,6 +43,7 @@ export default class AudioPlayer extends Vue {
 
   currentSeconds: number = 0
   speedRateValue: SpeedRate = SpeedRate.Normal
+  isPlaying: boolean = false
   isPlayed: boolean = false
   duration: number = 0
 
@@ -90,13 +94,14 @@ export default class AudioPlayer extends Vue {
     this.$emit('recordPlayed')
     this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
     this.isPlayed = true
+    this.isPlaying = false
   }
 
   play(): void {
     if (this.activeAudio !== this.record.fileName) {
       this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
     }
-
+    this.isPlaying = true
     this.$emit('recordIsPlaying')
 
     const stateMutationPayload: AudioDataStateMutation = {
@@ -150,7 +155,7 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark my-2 p-4;
+  @apply rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark my-2 p-4 transition duration-500;
   display: flex;
   align-items: center;
 

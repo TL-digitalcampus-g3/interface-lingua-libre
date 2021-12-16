@@ -64,6 +64,15 @@ import { RecordT, Tag, TagMap } from '~/models/Record'
 import { TagMutationPayload } from '~/store'
 import { AudioData, PlayerState } from '~/models/Audio'
 
+enum KeycodeList {
+  SPACE = 32,
+  ESCAPE = 27,
+  ARROW_LEFT = 37,
+  ARROW_UP = 38,
+  ARROW_RIGHT = 39,
+  ARROW_DOWN = 40,
+}
+
 @Component({
   components: { Loader, AudioPlayer, CustomIcon, CheckBox },
 })
@@ -117,7 +126,26 @@ export default class Collection extends Vue {
     return Boolean(this.activeAudio)
   }
 
-  async mounted(): Promise<void> {
+  mounted(): void {
+    this.fetchContent()
+    document.onkeydown = function (event) {
+      const key = window.event.keyCode
+      window.event.preventDefault()
+      if (key === 65 && event.ctrlKey) {
+        console.log('crtl + a')
+      } else if (key === KeycodeList.ESCAPE) {
+        console.log('escape key pressed')
+      } else if (key === KeycodeList.SPACE) {
+        console.log('space key pressed')
+      } else if (key === KeycodeList.ARROW_LEFT) {
+        console.log('arrow left key pressed')
+      } else if (key === KeycodeList.ARROW_RIGHT) {
+        console.log('arrow right key pressed')
+      }
+    }
+  }
+
+  async fetchContent() {
     try {
       const res = await this.$axios.get<{ records: RecordT[] }>(
         `datas/millars.json`
@@ -177,6 +205,7 @@ export default class Collection extends Vue {
     }
 
     this.$store.state.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
+    this.$store.commit('SET_LATEST_AUDIO_INDEX_PLAYED', currentPlayerIndex)
   }
 
   handleRecordIsPlaying(): void {
@@ -278,7 +307,9 @@ export default class Collection extends Vue {
 }
 
 .collection_sounds {
-  @apply overflow-y-scroll;
-  height: 400px;
+  @apply lg:overflow-y-scroll;
+  @screen lg {
+    height: 400px;
+  }
 }
 </style>
