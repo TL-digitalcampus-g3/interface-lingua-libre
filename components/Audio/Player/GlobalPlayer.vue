@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="global-player">
     <MinimalPlayer
       v-if="activeAudioData"
       :title="activeAudioData.word"
@@ -7,7 +7,7 @@
       color="white"
       @state-button-clicked="updatePlayerState"
     />
-    <SpeedRateSelector v-model="speedRate" class="player__speed-rate" />
+    <SpeedRateSelector v-model="speedRate" class="ml-4" />
   </div>
 </template>
 
@@ -67,3 +67,10 @@ export default class GlobalPlayer extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.global-player {
+  display: flex;
+  align-items: center;
+}
+</style>
