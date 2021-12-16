@@ -40,7 +40,7 @@ import { Tag, RecordT } from '~/models/Record'
 import { TagMutationPayload } from '~/store'
 
 @Component({ components: { Badge } })
-export default class className extends Vue {
+export default class PlayerTagSelector extends Vue {
   @Prop({ required: true }) readonly activeTag!: Tag
   @Prop({ required: true }) readonly fileName!: RecordT['fileName']
 
