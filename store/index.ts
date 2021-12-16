@@ -50,6 +50,9 @@ export const mutations: MutationTree<State> = {
   SET_ACTIVE_AUDIO: (state: State, activeAudio: AudioData) => {
     state.activeAudio = activeAudio
   },
+  SET_LATEST_AUDIO_INDEX_PLAYED: (state: State, index: number) => {
+    state.lastRecordIndexPlayed = index
+  },
   UPDATE_AUTOPLAY_MODE: (state, newValue: boolean) => {
     state.isAutoplayMode = newValue
   },
