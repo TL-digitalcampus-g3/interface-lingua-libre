@@ -1,7 +1,11 @@
 <template>
     <div>
-        <!-- <div class="dropdownMenu__collection" v-if="options==='isCollection'"></div>
-        <div class="dropdownMenu__light" v-if="options==='isLight'"></div> -->
+        <!-- <div class="dropdownMenu__collection" v-if="options==='isCollection'"></div>-->
+        <div class="dropdownMenu__light" v-if="options==='isLight'">
+            <button class="btn btn-blue" @click="handleDarkMode('dark')">Dark</button>
+            <button class="btn btn-blue" @click="handleDarkMode('light')">Light</button>
+            <button class="btn btn-blue" @click="handleDarkMode('auto')">System</button>
+        </div>
         <div class="dropdownMenu__information" v-if="options==='isInformation'">
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores vero veritatis ipsam quidem, ad adipisci cupiditate praesentium eum corporis commodi minima unde quasi officiis sunt placeat in labore soluta officia!</p>
         </div>
@@ -18,11 +22,69 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component,Prop} from 'nuxt-property-decorator'
+import {Vue, Component,Prop,Watch} from 'nuxt-property-decorator'
+
+
+
+// if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+//   document.documentElement.classList.add('dark')
+// } else {
+//   document.documentElement.classList.remove('dark')
+// }
+
+
 
 @Component
 export default class DropDownMenu extends Vue {
       @Prop({ required: true }) readonly options!: string
+
+    //   setDarkMode() :void{
+    //     this.$store.commit('UPDATE_DARK_MODE',true)
+    //     // document.documentElement.classList.add('dark')
+    //     }
+
+    //     setLightMode() :void{
+    //     this.$store.commit('UPDATE_DARK_MODE',false)}
+
+
+    handleDarkMode(mode : string) :void{
+        if(mode === 'dark'){
+            this.$store.commit('UPDATE_DARK_MODE',true)
+        }else if(mode === 'light'){
+            this.$store.commit('UPDATE_DARK_MODE',false)
+        }else{
+            this.$store.commit('UPDATE_DARK_MODE',window.matchMedia('(prefers-color-scheme: dark)').matches)
+        }
+    }
+
+    get isDarkMode():boolean {
+        return this.$store.getters.isDarkMode
+    }
+  
+  @Watch('isDarkMode')
+  changeDarkMode(){
+      console.log('changeDarkMode')
+      if(this.isDarkMode){
+        document.documentElement.classList.add('dark')
+    }else{
+        document.documentElement.classList.remove('dark')
+    }
+  }
+
+// @Watch("window.matchMedia('(prefers-color-scheme: dark)')")
+// changeDarkModeWithAuto(){
+//     console.log('yes oui')
+// }
+
+// mounted(){
+//     window.matchMedia("(prefers-color-scheme: dark)").addListener(()=>{
+// console.log('change auto')  
+//     }
+  
+// );
+// }
+
+
     
 
 }
