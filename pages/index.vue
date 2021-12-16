@@ -9,22 +9,37 @@
       </div>
 
       <ActionBar class="pageBottomBar"></ActionBar>
-     
+
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
+import {Vue, Component, Watch} from 'nuxt-property-decorator'
 import Collection from '~/components/Audio/Collection.vue'
 import Header from '~/components/Header.vue'
 import ActionBar from '~/components/ActionBar.vue'
 import Aside from '~/components/Aside.vue'
 
 @Component({
-  components: {Collection,Header,ActionBar,Aside},
+  components: {Collection, Header, ActionBar, Aside},
 })
-export default class Demo extends Vue {}
+
+export default class Demo extends Vue {
+
+  @Watch('isDarkMode', {immediate: true})
+  changeDarkMode() {
+    if (this.isDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
+
+  get isDarkMode(): boolean {
+    return this.$store.getters.isDarkMode
+  }
+}
 </script>
 
 <style lang="scss">
@@ -34,48 +49,42 @@ export default class Demo extends Vue {}
   grid-template-rows: auto 5rem;
 }
 
-// .pageHeader {
-//   @apply ;
-// }
-
-.pageMain{
+.pageMain {
   @apply grid p-6 overflow-y-scroll lg:overflow-hidden max-w-6xl;
   grid-template-columns: auto 280px;
   gap: 20px;
   height: calc(100vh - 80px);
 }
 
-.pageMain__collection{
+.pageMain__collection {
   @apply col-span-full lg:col-span-1 lg:order-none justify-self-stretch
 }
 
-.pageMain__aside{
+.pageMain__aside {
   grid-template-columns: 1fr 1fr;
   @apply col-span-full lg:col-span-1 grid gap-4 auto-rows-max
 }
 
-.pageBottomBar{
+.pageBottomBar {
   @apply col-span-full
 }
 
 
-body{
+body {
   @apply text-text-light dark:text-text-dark
 }
 
-h3{
+h3 {
   @apply text-sm font-bold uppercase mb-3
 }
 
-p::first-letter{
+p::first-letter {
   text-transform: uppercase;
 }
 
-ul{
+ul {
   @apply mb-5
 }
-
-
 
 
 //Scroll Bar
