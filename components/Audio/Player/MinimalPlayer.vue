@@ -35,5 +35,6 @@ export default class MinimalPlayer extends Vue {
 
 .title {
   font-weight: bold;
+  font-size: 1.3rem;
 }
 </style>
