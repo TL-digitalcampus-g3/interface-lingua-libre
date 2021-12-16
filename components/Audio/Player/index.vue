@@ -89,7 +89,7 @@ export default class AudioPlayer extends Vue {
   }
 
   ended(): void {
-    // this.$emit('recordPlayed')
+    this.$emit('recordPlayed')
     this.state = PlayerState.Ended
     this.isPlayed = true
   }
