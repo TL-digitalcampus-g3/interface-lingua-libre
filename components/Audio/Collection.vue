@@ -145,17 +145,21 @@ export default class Collection extends Vue {
     this.fetchContent()
     document.onkeydown = function (event) {
       const key = window.event.keyCode;
-      window.event.preventDefault();
       if (key === 65 && event.ctrlKey) {
         console.log('crtl + a')
+        window.event.preventDefault();
       } else if (key === KeycodeList.ESCAPE) {
         console.log('escape key pressed');
+        window.event.preventDefault();
       } else if (key === KeycodeList.SPACE) {
         console.log('space key pressed')
+        window.event.preventDefault();
       } else if (key === KeycodeList.ARROW_LEFT) {
         console.log('arrow left key pressed')
+        window.event.preventDefault();
       } else if (key === KeycodeList.ARROW_RIGHT) {
         console.log('arrow right key pressed')
+        window.event.preventDefault();
       }
     }
   }
