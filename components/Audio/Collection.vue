@@ -1,10 +1,7 @@
 <template>
   <div id="collection">
-    <div v-if="isLoading">
-      <Loader/>
-    </div>
-    <div class="collection_structure" v-else>
-      
+    <Loader v-if="isLoading"/>
+    <div v-else class="collection_structure">
       <div class="collection_sounds">
         <AudioPlayer
           v-for="(record, index) in records"
@@ -16,40 +13,27 @@
       </div>
       <div>
         <button
-        class="btn"
-        @click="
-          handleClickPlayAuto(
-            $store.state.lastRecordIndexPlayed !== null
-              ? $store.state.lastRecordIndexPlayed + 1
-              : 0
-          )
-        "
-      >
-        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
-        <CustomIcon v-else name="play" />
-      </button>
-      <button
-        class="btn-share"
-        :class="[{ 'btn--disabled': !hasResultsToShare }]"
-        @click="handleClickTransfertResults"
-        :disabled="!hasResultsToShare"
-      >
-        {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }}
-      </button>
+          class="btn-share"
+          :class="[{ 'btn--disabled': !hasResultsToShare }]"
+          @click="handleClickTransfertResults"
+          :disabled="!hasResultsToShare"
+        >
+          {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }}
+        </button>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
+import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import { RecordT, Tag, TagMap } from '~/models/Record'
-import { TagMutationPayload } from '~/store'
-import { AudioData, PlayerState } from '~/models/Audio'
+import {RecordT, Tag, TagMap} from '~/models/Record'
+import {TagMutationPayload} from '~/store'
+import {AudioData, PlayerState} from '~/models/Audio'
 
 enum KeycodeList {
   SPACE = 32,
@@ -61,7 +45,7 @@ enum KeycodeList {
 }
 
 @Component({
-  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
+  components: {Loader, AudioPlayer, CustomIcon, CheckBox},
 })
 export default class Collection extends Vue {
   @Ref() readonly players!: AudioPlayer[]
@@ -168,17 +152,6 @@ export default class Collection extends Vue {
     this.$store.commit('UPDATE_RECORDS_COUNT', this.records.length)
   }
 
-  handleClickPlayAuto(startIndex: number = 0): void {
-    if (!this.isPlayingRecord) {
-      console.log('handleClickPlayAuto')
-      this.playRecord(startIndex)
-      this.$store.commit(
-        'UPDATE_AUTOPLAY_STARTED',
-        !this.$store.state.isAutoplayStarted
-      )
-    }
-  }
-
   handleRecordPlayed(currentPlayerIndex: number): void {
     const currentRecord: RecordT = this.records[currentPlayerIndex]
     const isCurrentRecordTagSettled: Boolean = this.taggedRecords.includes(
@@ -249,7 +222,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], { type: 'application/xml' })
+    const blob = new Blob([outputSerialized], {type: 'application/xml'})
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
@@ -286,14 +259,14 @@ export default class Collection extends Vue {
   @apply bg-gray-lightest shadow-none hover:bg-gray-light text-gray;
 }
 
-.collection_structure{
+.collection_structure {
   @apply grid;
   height: calc(100vh - 110px);
 
 }
 
 .collection_sounds {
-  @apply lg:overflow-y-scroll;
+  @apply lg:overflow-y-scroll pr-5;
 }
 
 
