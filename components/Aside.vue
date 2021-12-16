@@ -63,7 +63,7 @@ import CustomIcon from '~/components/Icon/index.vue'
 export default class Aside extends Vue {
 
 
-  @Watch('isDarkMode', { immediate: true })
+  @Watch('isDarkMode')
   changeBackgroundDonut() {
     let donutBackground : any = document.querySelector('.cdc-overlay');
     console.log(donutBackground)
