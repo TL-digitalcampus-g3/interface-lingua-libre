@@ -1,7 +1,7 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader/>
+      <Loader />
     </div>
     <div v-else>
       <button
@@ -12,15 +12,15 @@
           )
         "
       >
-        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause"/>
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
+        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
       </button>
       <div class="collection_sounds">
         <div v-for="(record, index) in records" :key="record.fileName">
           <AudioPlayer
             ref="players"
             :record="record"
-            @recordIsPlaying="handleRecordIsPlaying(record.fileName)"
+            @recordIsPlaying="handleRecordIsPlaying"
             @recordPlayed="handleRecordPlayed(index)"
           />
         </div>
@@ -37,15 +37,18 @@
         <p>
           Last record's index played :
           <strong>{{
-              $store.state.lastRecordIndexPlayed !== null ? $store.state.lastRecordIndexPlayed : 'none'
-            }}</strong>
+            $store.state.lastRecordIndexPlayed !== null
+              ? $store.state.lastRecordIndexPlayed
+              : 'none'
+          }}</strong>
         </p>
         <div v-if="isPlayingRecord">
           Current audio player :
-          <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
+          <strong>{{ activeAudioName }} / {{ recordsCount }}</strong>
         </div>
-        Audio(s) verified : <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
-        <hr/>
+        Audio(s) verified :
+        <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
+        <hr />
         {{ taggedRecords }}
       </div>
     </div>
@@ -53,17 +56,17 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
+import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import {RecordT, Tag, TagMap} from '~/models/Record'
-import {TagMutationPayload} from '~/store'
+import { RecordT, Tag, TagMap } from '~/models/Record'
+import { TagMutationPayload } from '~/store'
 
 @Component({
-  components: {Loader, AudioPlayer, CustomIcon, CheckBox},
-  async asyncData({$axios}): Promise<any> {
+  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
+  async asyncData({ $axios }): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
       .then((res) => res.records)
@@ -112,16 +115,12 @@ export default class Collection extends Vue {
     return this.checkedRecordsCount > 0
   }
 
-  get activeAudio(): RecordT['fileName'] | null {
-    return this.$store.state.activeAudio
-  }
-
-  set activeAudio(fileName: RecordT['fileName'] | null) {
-    this.$store.commit('SET_ACTIVE_AUDIO', fileName)
+  get activeAudioName(): RecordT['fileName'] | null {
+    return this.$store.state.activeAudioName ?? null
   }
 
   get isPlayingRecord(): boolean {
-    return Boolean(this.activeAudio)
+    return Boolean(this.activeAudioName)
   }
 
   async mounted() {
@@ -141,7 +140,10 @@ export default class Collection extends Vue {
   handleClickPlayAuto(startIndex: number = 0): void {
     if (!this.isPlayingRecord) {
       this.playRecord(startIndex)
-      this.$store.commit('UPDATE_AUTOPLAY_STARTED', !this.$store.state.isAutoplayStarted)
+      this.$store.commit(
+        'UPDATE_AUTOPLAY_STARTED',
+        !this.$store.state.isAutoplayStarted
+      )
     }
   }
 
@@ -165,9 +167,8 @@ export default class Collection extends Vue {
     this.$store.state.isAutoplayMode && this.playRecord(currentPlayerIndex + 1)
   }
 
-  handleRecordIsPlaying(fileName: RecordT['fileName']): void {
-    this.pauseOtherPlayers()
-    this.activeAudio = fileName
+  handleRecordIsPlaying(): void {
+    // this.pauseOtherPlayers()
   }
 
   handleClickTransfertResults(): void {
@@ -219,7 +220,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], {type: 'application/xml'})
+    const blob = new Blob([outputSerialized], { type: 'application/xml' })
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
@@ -247,7 +248,7 @@ export default class Collection extends Vue {
 
   pauseOtherPlayers(): void {
     for (const player of this.players) {
-      if (player.fileName !== this.activeAudio) {
+      if (player.fileName !== this.activeAudioName) {
         player.pause()
       }
     }

@@ -1,5 +1,6 @@
 import { MutationTree, GetterTree, ActionTree } from 'vuex'
 import { RecordT, Tag, TagMap } from '~/models/Record'
+import { AudioData } from '~/models/Audio'
 
 export interface TagMutationPayload {
   fileName: RecordT['fileName']
@@ -9,7 +10,7 @@ export interface TagMutationPayload {
 interface State {
   // tagMap should be a Map structure but Map are not reactive yet in Vue.js
   tagMap: TagMap
-  activeAudio: RecordT['fileName'] | null
+  activeAudio: AudioData | null
   isAutoplayMode: boolean
   isAutoplayStarted: boolean
   lastRecordIndexPlayed: number | null
@@ -26,6 +27,8 @@ export const state = (): State => ({
 export const getters: GetterTree<State, State> = {
   taggedRecords: (state: State): RecordT['fileName'][] =>
     Object.keys(state.tagMap),
+  activeAudioName: (state: State): RecordT['fileName'] | undefined =>
+    state.activeAudio?.fileName,
 }
 
 export const mutations: MutationTree<State> = {
@@ -40,8 +43,8 @@ export const mutations: MutationTree<State> = {
     const { fileName, tag } = payload
     state.tagMap[fileName] = tag
   },
-  SET_ACTIVE_AUDIO: (state: State, fileName: RecordT['fileName']) => {
-    state.activeAudio = fileName
+  SET_ACTIVE_AUDIO: (state: State, activeAudio: AudioData) => {
+    state.activeAudio = activeAudio
   },
   UPDATE_AUTOPLAY_MODE: (state, newValue: boolean) => {
     state.isAutoplayMode = newValue

@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Vue, Component, VModel } from 'nuxt-property-decorator'
 import DropDown, { DropdownOption } from '~/components/ui/DropDown.vue'
-import { SpeedRate } from './types'
+import { SpeedRate } from '~/models/Audio'
 
 @Component({ components: { DropDown } })
 export default class SpeedRateSelector extends Vue {
