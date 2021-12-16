@@ -182,12 +182,13 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark my-2 p-4 transition duration-500;
+  @apply flex items-center rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-4 transition duration-500;
 
   cursor: pointer;
-  display: flex;
-  align-items: center;
 
+  &:hover {
+    @apply shadow-lg;
+  }
   &__duration {
     @apply ml-4;
   }
