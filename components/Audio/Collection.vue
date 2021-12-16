@@ -1,10 +1,21 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader />
+      <Loader/>
     </div>
-    <div v-else>
-      <button
+    <div class="collection_structure" v-else>
+      
+      <div class="collection_sounds">
+        <AudioPlayer
+          v-for="(record, index) in records"
+          :key="record.fileName"
+          ref="players"
+          :record="record"
+          @recordPlayed="handleRecordPlayed(index)"
+        />
+      </div>
+      <div>
+        <button
         class="btn"
         @click="
           handleClickPlayAuto(
@@ -17,15 +28,6 @@
         <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
         <CustomIcon v-else name="play" />
       </button>
-      <div class="collection_sounds">
-        <AudioPlayer
-          v-for="(record, index) in records"
-          :key="record.fileName"
-          ref="players"
-          :record="record"
-          @recordPlayed="handleRecordPlayed(index)"
-        />
-      </div>
       <button
         class="btn-share"
         :class="[{ 'btn--disabled': !hasResultsToShare }]"
@@ -35,6 +37,7 @@
         {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }}
       </button>
     </div>
+  </div>
   </div>
 </template>
 
@@ -283,10 +286,15 @@ export default class Collection extends Vue {
   @apply bg-gray-lightest shadow-none hover:bg-gray-light text-gray;
 }
 
+.collection_structure{
+  @apply grid;
+  height: calc(100vh - 110px);
+
+}
+
 .collection_sounds {
   @apply lg:overflow-y-scroll;
-  @screen lg {
-    height: 400px;
-  }
 }
+
+
 </style>
