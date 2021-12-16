@@ -14,6 +14,7 @@ export enum PlayerState {
 
 export interface AudioData {
   fileName: RecordT['fileName']
+  word: RecordT['word']
   playerState: PlayerState
   duration: number
   currentTimeSecondes: number

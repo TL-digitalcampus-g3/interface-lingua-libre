@@ -154,6 +154,7 @@ export default class Collection extends Vue {
       const audioDatas: AudioData[] = records.map(
         (record): AudioData => ({
           fileName: record.fileName,
+          word: record.word,
           playerState: PlayerState.Pause,
           duration: 0,
           currentTimeSecondes: 0,
