@@ -77,7 +77,7 @@ export default class AudioPlayer extends Vue {
   }
 
   get activeAudio(): RecordT['fileName'] {
-    return this.$store.getters.activeAudio
+    return this.$store.state.activeAudio
   }
 
   get isActive(): boolean {
