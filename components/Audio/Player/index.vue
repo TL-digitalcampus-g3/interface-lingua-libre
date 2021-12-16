@@ -2,7 +2,7 @@
   <div
     class="player"
     :class="[
-      { 'player--played': isPlayed },
+      { 'player--played': isTagged },
       { 'player--active': isActive && isPlaying },
     ]"
     @click="setActive"
@@ -55,7 +55,6 @@ export default class AudioPlayer extends Vue {
 
   currentSeconds: number = 0
   isPlaying: boolean = false
-  isPlayed: boolean = false
   duration: number = 0
 
   get fileName(): RecordT['fileName'] {
@@ -74,6 +73,10 @@ export default class AudioPlayer extends Vue {
     return this.$store.getters.taggedRecords.includes(this.fileName)
       ? this.$store.state.tagMap[this.fileName]
       : null
+  }
+
+  get isTagged(): boolean {
+    return Boolean(this.tag)
   }
 
   get activeAudio(): RecordT['fileName'] {
@@ -107,7 +110,6 @@ export default class AudioPlayer extends Vue {
     }
     this.$emit('recordPlayed')
     this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
-    this.isPlayed = true
     this.isPlaying = false
   }
 
@@ -126,7 +128,6 @@ export default class AudioPlayer extends Vue {
       value: PlayerState.Play,
     }
     this.$store.dispatch('playAudio', stateMutationPayload)
-    this.isPlayed = false
   }
 
   pause(): void {
