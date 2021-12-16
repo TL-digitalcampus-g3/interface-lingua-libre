@@ -6,6 +6,7 @@
   "GLOBAL": {
     "HOME": "home",
     "LOADING" : "loading",
+    "SEND_TAGGED_RECORDS" : "share my results",
     "RECORD": "record | records"
   },
   "SHORTCUT": {

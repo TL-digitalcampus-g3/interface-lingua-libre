@@ -26,12 +26,12 @@
         </div>
       </div>
       <button
-        class="btn"
+        class="btn-share"
         :class="[{ 'btn--disabled': !hasResultsToShare }]"
         @click="handleClickTransfertResults"
         :disabled="!hasResultsToShare"
       >
-        Send validation
+        {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }}
       </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
         <p>
@@ -44,9 +44,8 @@
           Current audio player :
           <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
         </div>
-        Audio(s) verified : <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
+        Audio(s) verified : <strong>{{ taggedRecordsCount }} / {{ recordsCount }}</strong>
         <hr/>
-        {{ taggedRecords }}
       </div>
     </div>
   </div>
@@ -110,16 +109,16 @@ export default class Collection extends Vue {
     return this.$store.getters.taggedRecords
   }
 
+  get taggedRecordsCount(): number {
+    return this.$store.getters.taggedRecordsCount
+  }
+
   get isAutoPlayMode(): boolean {
     return this.$store.state.isAutoplayMode
   }
 
-  get checkedRecordsCount(): number {
-    return this.taggedRecords.length
-  }
-
   get hasResultsToShare(): boolean {
-    return this.checkedRecordsCount > 0
+    return this.taggedRecordsCount > 0
   }
 
   get activeAudio(): RecordT['fileName'] | null {
@@ -271,8 +270,8 @@ export default class Collection extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.btn {
-  @apply bg-blue-500 text-white p-3 rounded;
+.btn-share {
+  @apply bg-blue-500 text-white p-3 rounded mt-5 uppercase;
 }
 
 .btn--disabled {

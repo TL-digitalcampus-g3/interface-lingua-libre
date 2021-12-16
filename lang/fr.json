@@ -6,6 +6,7 @@
   "GLOBAL": {
     "HOME": "home",
     "LOADING": "chargement",
+    "SEND_TAGGED_RECORDS" : "transmettre mes résultats",
     "RECORD": "enregistrement | enregistrements"
   },
   "SHORTCUT": {

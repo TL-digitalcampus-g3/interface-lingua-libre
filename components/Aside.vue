@@ -5,7 +5,7 @@
         <vc-donut :sections="sections" background="white" foreground="var(--color-secondary)" :size="100" unit="px"
                   :thickness="20"
                   :total="100" :start-angle="0"/>
-        <p class="ml-4 text-sm"><span class="block font-bold text-lg">5/{{ $store.state.recordsCount }} </span>sons
+        <p class="ml-4 text-sm"><span class="block font-bold text-lg">{{ taggedRecordsCount }}/{{ $store.state.recordsCount }} </span>sons
           révisés</p>
       </div>
       <div class="information__text">
@@ -54,6 +54,10 @@ import CustomIcon from '~/components/Icon/index.vue'
 })
 export default class Aside extends Vue {
   sections: any[] = [{value: 25, color: 'var(--color-primary)'}]
+
+  get taggedRecordsCount(): number {
+    return this.$store.getters.taggedRecordsCount
+  }
 
   //     handleSectionClick(section, event) {
   //     console.log(`${section.label} clicked.`);

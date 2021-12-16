@@ -1,5 +1,5 @@
-import { MutationTree, GetterTree, ActionTree } from 'vuex'
-import { RecordT, Tag, TagMap } from '~/models/Record'
+import {MutationTree, GetterTree, ActionTree} from 'vuex'
+import {RecordT, Tag, TagMap} from '~/models/Record'
 
 export interface TagMutationPayload {
   fileName: RecordT['fileName']
@@ -28,18 +28,20 @@ export const state = (): State => ({
 export const getters: GetterTree<State, State> = {
   taggedRecords: (state: State): RecordT['fileName'][] =>
     Object.keys(state.tagMap),
+
+  taggedRecordsCount: (state: State): any => Object.keys(state.tagMap).length
 }
 
 export const mutations: MutationTree<State> = {
   ADD_TAG: (state: State, payload: TagMutationPayload): void => {
-    const { fileName, tag } = payload
+    const {fileName, tag} = payload
     state.tagMap = {
       ...state.tagMap,
       [fileName]: tag,
     }
   },
   UPDATE_TAG: (state: State, payload: TagMutationPayload): void => {
-    const { fileName, tag } = payload
+    const {fileName, tag} = payload
     state.tagMap[fileName] = tag
   },
   SET_ACTIVE_AUDIO: (state: State, fileName: RecordT['fileName']) => {
@@ -57,8 +59,8 @@ export const mutations: MutationTree<State> = {
 }
 
 export const actions: ActionTree<State, State> = {
-  setTag({ commit, getters }, payload: TagMutationPayload): void {
-    const { fileName } = payload
+  setTag({commit, getters}, payload: TagMutationPayload): void {
+    const {fileName} = payload
     const isNewFile: boolean = !getters.taggedRecords.includes(fileName)
 
     if (isNewFile) {
