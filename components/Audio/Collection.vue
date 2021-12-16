@@ -272,12 +272,15 @@ export default class Collection extends Vue {
 
 .collection_structure {
   @apply grid;
-  height: calc(100vh - 128px);
+
+  @screen lg{
+    height: calc(100vh - 128px);
+  } 
 
 }
 
 .collection_sounds {
-  @apply lg:overflow-y-scroll px-5 flex flex-col justify-start relative;
+  @apply lg:overflow-y-scroll px-5 flex flex-col justify-start relative pb-9;
 
   scroll-behavior: smooth;
   // padding-top: 30%;

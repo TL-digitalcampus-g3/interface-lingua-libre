@@ -2,7 +2,7 @@
     <div>
         <header>
             <nav class="nav">
-                <a href="#" class="nav__item"><img src="~/assets/logos/lingualibreLogo.svg" alt=""></a>
+                <a href="#" class="nav__item p-2"><img src="~/assets/logos/lingualibreLogo.svg" alt="Logo Lingua Libre"></a>
                 <a href="#" class="nav__item" @click.prevent.self @mouseover="idCollection = true"  @mouseleave="idCollection = false">
                     <CustomIcon name="collection" size="1.75"/>
                     <span class="nav__item__text">Importer les sons à révisier</span>

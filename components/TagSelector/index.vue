@@ -1,6 +1,6 @@
 <template>
   <div class="badges">
-    <button v-for="tag in tags" :key="tag" class="mx-1" @click="setTag(tag)">
+    <button v-for="tag in tags" :key="tag" class="m-1" @click="setTag(tag)">
       <TagBadge :tag="tag" :is-active="tag === currentTag" />
     </button>
   </div>
@@ -35,7 +35,6 @@ export default class TagSelector extends Vue {
 
 <style lang="scss" scoped>
 .badges {
-  display: flex;
-  justify-content: center;
+  @apply flex justify-center flex-wrap
 }
 </style>
