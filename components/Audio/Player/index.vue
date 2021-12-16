@@ -11,17 +11,15 @@
       @pause="pause"
       @ended="ended"
       @timeupdate="setTime"
-      @loadeddata="isLoaded = true"
+      @loadeddata="loadHandler"
     />
-    <button class="player__controls" @click="togglePlay">
-      <CustomIcon v-show="state === 'pause'" name="play" />
-      <CustomIcon v-show="state === 'play'" name="pause" />
-      <CustomIcon v-show="state === 'ended'" name="refresh" />
-    </button>
-    <div class="player__word">{{ word }}</div>
-    <div v-if="audioDuration" class="player__time">
-      {{ currentTime }} / {{ audioDuration }}
-    </div>
+    <MinimalPlayer
+      :title="title"
+      :duration="duration"
+      :current-time-in-seconds="currentSeconds"
+      :state="state"
+      @state-button-clicked="togglePlay"
+    />
     <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
     <TagBadge v-if="tag" class="player__tag" :tag="tag" />
   </div>
@@ -31,20 +29,11 @@
 import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
 import { SpeedRate, PlayerState } from './types'
 import SpeedRateSelector from './SpeedRateSelector.vue'
-import CustomIcon from '~/components/Icon/index.vue'
+import MinimalPlayer from './MinimalPlayer.vue'
 import TagBadge from '~/components/TagSelector/TagBadge.vue'
 import { RecordT, Tag } from '~/models/Record'
 
-function formatTimeToMMSS(timeInSeconds: number): string {
-  const minutes = Math.round(timeInSeconds / 60)
-  const seconds = Math.round(timeInSeconds - minutes * 60)
-  const minuteValue = minutes < 10 ? `0${minutes}` : minutes
-  const secondValue = seconds < 10 ? `0${seconds}` : seconds
-
-  return `${minuteValue}:${secondValue}`
-}
-
-@Component({ components: { CustomIcon, SpeedRateSelector, TagBadge } })
+@Component({ components: { MinimalPlayer, SpeedRateSelector, TagBadge } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
@@ -54,30 +43,18 @@ export default class AudioPlayer extends Vue {
   speedRateValue: SpeedRate = SpeedRate.Normal
   isPlayed: boolean = false
   isActive: boolean = false
-  isLoaded: boolean = false
+  duration: number = 0
 
   get fileName(): RecordT['fileName'] {
     return this.record.fileName
   }
 
-  get word(): RecordT['word'] {
+  get title(): RecordT['word'] {
     return this.record.word
   }
 
   get audioUrl(): string {
     return `/datas/Millars/${this.fileName}`
-  }
-
-  get currentTime(): string {
-    return formatTimeToMMSS(this.currentSeconds)
-  }
-
-  get audioDuration(): string | null {
-    if (this.isLoaded) {
-      return formatTimeToMMSS(this.audio.duration)
-    } else {
-      return null
-    }
   }
 
   get speedRate(): number {
@@ -128,6 +105,10 @@ export default class AudioPlayer extends Vue {
   setTime(): void {
     this.currentSeconds = this.audio.currentTime
   }
+
+  loadHandler(): void {
+    this.duration = this.audio.duration
+  }
 }
 </script>
 
@@ -137,14 +118,8 @@ export default class AudioPlayer extends Vue {
   display: flex;
   align-items: center;
 
-  &__word,
-  &__time,
   &__speed-rate {
     @apply ml-4;
-  }
-
-  &__word {
-    font-weight: bold;
   }
 
   &__tag {
