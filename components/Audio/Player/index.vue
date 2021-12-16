@@ -22,23 +22,23 @@
       :state="playerState"
       @state-button-clicked="togglePlay"
     />
-    <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
-    <TagBadge v-if="tag" class="player__tag" :tag="tag" />
+    <SpeedRateSelector class="player__speed-rate" v-model="speedRate"/>
+    <TagBadge v-if="tag" class="player__tag" :tag="tag"/>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
+import {Vue, Component, Prop, Ref, Watch} from 'nuxt-property-decorator'
 import SpeedRateSelector from './SpeedRateSelector.vue'
 import MinimalPlayer from './MinimalPlayer.vue'
-import { SpeedRate, PlayerState } from '~/models/Audio'
+import {SpeedRate, PlayerState} from '~/models/Audio'
 import TagBadge from '~/components/TagSelector/TagBadge.vue'
-import { RecordT, Tag } from '~/models/Record'
-import { AudioDataStateMutation } from '~/store'
+import {RecordT, Tag} from '~/models/Record'
+import {AudioDataStateMutation} from '~/store'
 
-@Component({ components: { MinimalPlayer, SpeedRateSelector, TagBadge } })
+@Component({components: {MinimalPlayer, SpeedRateSelector, TagBadge}})
 export default class AudioPlayer extends Vue {
-  @Prop({ required: true }) readonly record!: RecordT
+  @Prop({required: true}) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
 
   currentSeconds: number = 0

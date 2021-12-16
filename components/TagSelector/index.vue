@@ -9,12 +9,12 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component} from 'nuxt-property-decorator'
+import { Vue, Component } from 'nuxt-property-decorator'
 import TagBadge from './TagBadge.vue'
-import {Tag, RecordT} from '~/models/Record'
-import {TagMutationPayload} from '~/store'
+import { Tag, RecordT } from '~/models/Record'
+import { TagMutationPayload } from '~/store'
 
-@Component({components: {TagBadge}})
+@Component({ components: { TagBadge } })
 export default class TagSelector extends Vue {
   readonly tags: Tag[] = Object.values(Tag)
 
@@ -27,7 +27,7 @@ export default class TagSelector extends Vue {
   setTag(tag: Tag): void {
     this.currentTag = tag
     if (this.activeAudio) {
-      const payload: TagMutationPayload = {fileName: this.activeAudio, tag}
+      const payload: TagMutationPayload = { fileName: this.activeAudio, tag }
       this.$store.dispatch('setTag', payload)
     }
   }
