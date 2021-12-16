@@ -20,6 +20,11 @@
                     <span class="nav__item__text">Langues</span>
                     <DropDownMenu class="dropDownMenu" options="isLanguage" v-if="isLanguage"></DropDownMenu>
                 </a>
+                <a href="#" class="nav__item" @click.prevent.self @mouseover="isUser = true"  @mouseleave="isUser = false">
+                    <CustomIcon name="user" size="1.75"/>
+                    <span class="nav__item__text">Utilisateur</span>
+                    <DropDownMenu class="dropDownMenu" options="isUser" v-if="isUser"></DropDownMenu>
+                </a>
             </nav>
         </header>
     </div>
@@ -40,7 +45,8 @@ import DropDownMenu from '~/components/ui/DropDownMenu.vue'
             idCollection:   false,
             isLight:   false,
             isInformation: false,
-            isLanguage:  false
+            isLanguage:  false,
+            isUser:  false
         }
     }
     

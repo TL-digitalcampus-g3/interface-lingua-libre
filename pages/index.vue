@@ -47,7 +47,7 @@ export default class HomePage extends Vue {
 }
 
 .pageMain {
-  @apply grid p-6 overflow-y-scroll lg:overflow-hidden max-w-6xl;
+  @apply grid p-6 overflow-y-scroll lg:overflow-hidden max-w-7xl w-full justify-self-center;
   grid-template-columns: auto 280px;
   gap: 20px;
   height: calc(100vh - 80px);
