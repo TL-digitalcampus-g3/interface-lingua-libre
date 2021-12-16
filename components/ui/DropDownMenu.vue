@@ -21,7 +21,12 @@
     </div>
     <div class="dropdownMenu__user" v-if="options==='isUser'">
       <p class="font-bold">WorkshopM2TLGPE3 (Q710559)</p>
-      <p>Masculin - Français - Locuteur natif</p>
+      <div class="m-2">
+        <p class="contents">Masculin - </p>
+        <country-flag country='fr' size='small'/>
+        <p class="contents">Français</p>
+      </div>
+      <p>Locuteur natifx</p>
       <p class="underline">Déconnexion</p>
 
 
@@ -31,8 +36,13 @@
 
 <script lang="ts">
 import {Vue, Component, Prop} from 'nuxt-property-decorator'
+import CountryFlag from 'vue-country-flag'
 
-@Component
+@Component({
+  components: {
+    CountryFlag
+  },
+})
 export default class DropDownMenu extends Vue {
   @Prop({required: true}) readonly options!: string
 

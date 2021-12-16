@@ -22,6 +22,7 @@
       </div>
       <div class="information__text">
         <CustomIcon name="collection" :size="1.5" />
+        <country-flag country='fr' size='small'/>
         <p>Français - Masculin</p>
       </div>
     </div>
@@ -67,10 +68,12 @@
 <script lang='ts'>
 import { Vue, Component } from 'nuxt-property-decorator'
 import CustomIcon from '~/components/Icon/index.vue'
+import CountryFlag from 'vue-country-flag'
 
 @Component({
   components: {
     CustomIcon,
+    CountryFlag
   },
 })
 export default class Aside extends Vue {
@@ -125,11 +128,9 @@ export default class Aside extends Vue {
 }
 
 .information__text {
-  @apply flex items-center;
+  @apply flex items-center gap-2;
 
-  p {
-    @apply ml-2;
-  }
+
 }
 
 .cdc-container {
