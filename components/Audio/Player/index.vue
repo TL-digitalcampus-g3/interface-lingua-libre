@@ -1,13 +1,15 @@
 <template>
   <div
     class="player"
-    :class="[{ 'player--played': isPlayed }, { 'player--active': isActive && isPlaying }]"
+    :class="[
+      { 'player--played': isPlayed },
+      { 'player--active': isActive && isPlaying },
+    ]"
     @dblclick="play"
   >
     <audio
       ref="audio"
       :src="audioUrl"
-      @play="play"
       @pause="pause"
       @ended="ended"
       @timeupdate="setTime"
@@ -17,7 +19,7 @@
       :title="title"
       :duration="duration"
       :current-time-in-seconds="currentSeconds"
-      :state="state"
+      :state="playerState"
       @state-button-clicked="togglePlay"
     />
     <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
@@ -26,19 +28,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
-import { SpeedRate, PlayerState, AudioData } from '~/models/Audio'
+import { Vue, Component, Prop, Ref, Watch } from 'nuxt-property-decorator'
 import SpeedRateSelector from './SpeedRateSelector.vue'
 import MinimalPlayer from './MinimalPlayer.vue'
+import { SpeedRate, PlayerState } from '~/models/Audio'
 import TagBadge from '~/components/TagSelector/TagBadge.vue'
 import { RecordT, Tag } from '~/models/Record'
+import { AudioDataStateMutation } from '~/store'
 
 @Component({ components: { MinimalPlayer, SpeedRateSelector, TagBadge } })
 export default class AudioPlayer extends Vue {
   @Prop({ required: true }) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
 
-  state: PlayerState = PlayerState.Pause
   currentSeconds: number = 0
   speedRateValue: SpeedRate = SpeedRate.Normal
   isPlaying: boolean = false
@@ -72,47 +74,53 @@ export default class AudioPlayer extends Vue {
       : null
   }
 
-  get audioData(): AudioData {
-    return {
-      ...this.record,
-      playerState: this.state,
-      duration: this.duration,
-      currentTimeSecondes: this.currentSeconds,
-    }
-  }
-
-  get activeAudioName(): RecordT['fileName'] {
-    return this.$store.getters.activeAudioName
+  get activeAudio(): RecordT['fileName'] {
+    return this.$store.getters.activeAudio
   }
 
   get isActive(): boolean {
-    return this.activeAudioName === this.record.fileName
+    return this.activeAudio === this.fileName
+  }
+
+  get playerState(): PlayerState {
+    return this.$store.state.audioDataMap[this.fileName].playerState
   }
 
   ended(): void {
+    const stateMutationPayload: AudioDataStateMutation = {
+      fileName: this.record.fileName,
+      value: PlayerState.Ended,
+    }
     this.$emit('recordPlayed')
-    this.state = PlayerState.Ended
+    this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
     this.isPlayed = true
     this.isPlaying = false
   }
 
   play(): void {
-    if (this.activeAudioName !== this.record.fileName) {
-      this.$store.commit('SET_ACTIVE_AUDIO', this.audioData)
+    if (this.activeAudio !== this.record.fileName) {
+      this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
     }
     this.isPlaying = true
     this.$emit('recordIsPlaying')
-    this.state = PlayerState.Play
-    this.audio.play()
+
+    const stateMutationPayload: AudioDataStateMutation = {
+      fileName: this.record.fileName,
+      value: PlayerState.Play,
+    }
+    this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
     this.isPlayed = false
   }
 
   pause(): void {
-    if (this.state === PlayerState.Play) {
-      this.state = PlayerState.Pause
+    if (this.playerState === PlayerState.Play) {
+      const stateMutationPayload: AudioDataStateMutation = {
+        fileName: this.record.fileName,
+        value: PlayerState.Pause,
+      }
+
+      this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
     }
-    this.isPlaying = false
-    this.audio.pause()
   }
 
   togglePlay(): void {
@@ -129,6 +137,18 @@ export default class AudioPlayer extends Vue {
 
   loadHandler(): void {
     this.duration = this.audio.duration
+  }
+
+  @Watch('playerState')
+  onPlayerStateChange(): void {
+    switch (this.playerState) {
+      case PlayerState.Play:
+        this.audio.play()
+        break
+      case PlayerState.Pause:
+        this.audio.pause()
+        break
+    }
   }
 }
 </script>

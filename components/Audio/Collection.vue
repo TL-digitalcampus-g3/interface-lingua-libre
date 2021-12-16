@@ -12,8 +12,8 @@
           )
         "
       >
-        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause"/>
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
+        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
       </button>
       <div class="collection_sounds">
         <div v-for="(record, index) in records" :key="record.fileName">
@@ -44,7 +44,7 @@
         </p>
         <div v-if="isPlayingRecord">
           Current audio player :
-          <strong>{{ activeAudioName }} / {{ recordsCount }}</strong>
+          <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
         </div>
         Audio(s) verified :
         <strong>{{ taggedRecordsCount }} / {{ recordsCount }}</strong>
@@ -62,6 +62,7 @@ import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
 import { RecordT, Tag, TagMap } from '~/models/Record'
 import { TagMutationPayload } from '~/store'
+import { AudioData, PlayerState } from '~/models/Audio'
 
 enum KeycodeList {
   SPACE = 32,
@@ -69,27 +70,11 @@ enum KeycodeList {
   ARROW_LEFT = 37,
   ARROW_UP = 38,
   ARROW_RIGHT = 39,
-  ARROW_DOWN = 40
+  ARROW_DOWN = 40,
 }
 
 @Component({
-  components: {Loader, AudioPlayer, CustomIcon, CheckBox},
-  async asyncData({$axios}): Promise<any> {
-    const records = await $axios
-      .$get(`datas/millars.json`)
-      .then((res) => res.records)
-      .catch((error) => {
-        if (this.$axios.isCancel(error)) {
-          console.log('Request canceled', error)
-        } else {
-          console.log(error)
-        }
-      })
-
-    return {
-      records,
-    }
-  },
+  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
 })
 export default class Collection extends Vue {
   @Ref() readonly players!: AudioPlayer[]
@@ -133,12 +118,12 @@ export default class Collection extends Vue {
     return this.taggedRecordsCount > 0
   }
 
-  get activeAudioName(): RecordT['fileName'] | null {
-    return this.$store.state.activeAudioName ?? null
+  get activeAudio(): RecordT['fileName'] | null {
+    return this.$store.state.activeAudio ?? null
   }
 
   get isPlayingRecord(): boolean {
-    return Boolean(this.activeAudioName)
+    return Boolean(this.activeAudio)
   }
 
   mounted(): void {
@@ -166,8 +151,22 @@ export default class Collection extends Vue {
 
   async fetchContent() {
     try {
-      const res = await this.$axios.$get(`datas/millars.json`)
-      this.records = res.records
+      const res = await this.$axios.get<{ records: RecordT[] }>(
+        `datas/millars.json`
+      )
+      const records: RecordT[] = res.data.records
+      const audioDatas: AudioData[] = records.map(
+        (record): AudioData => ({
+          fileName: record.fileName,
+          word: record.word,
+          playerState: PlayerState.Pause,
+          duration: 0,
+          currentTimeSecondes: 0,
+        })
+      )
+
+      this.records = records
+      this.$store.commit('SET_AUDIO_MAP', audioDatas)
     } finally {
       this.isLoading = false
     }
@@ -267,7 +266,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], {type: 'application/xml'})
+    const blob = new Blob([outputSerialized], { type: 'application/xml' })
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
@@ -295,7 +294,7 @@ export default class Collection extends Vue {
 
   pauseOtherPlayers(): void {
     for (const player of this.players) {
-      if (player.fileName !== this.activeAudioName) {
+      if (player.fileName !== this.activeAudio) {
         player.pause()
       }
     }
@@ -314,8 +313,8 @@ export default class Collection extends Vue {
 
 .collection_sounds {
   @apply lg:overflow-y-scroll;
-  @screen lg{
+  @screen lg {
     height: 400px;
-    }
+  }
 }
 </style>

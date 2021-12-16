@@ -1,16 +1,25 @@
 import { MutationTree, GetterTree, ActionTree } from 'vuex'
 import { RecordT, Tag, TagMap } from '~/models/Record'
-import { AudioData } from '~/models/Audio'
+import { AudioData, AudioDataMap, PlayerState } from '~/models/Audio'
 
 export interface TagMutationPayload {
   fileName: RecordT['fileName']
   tag: Tag
 }
 
+interface AudioDataMutationPayloadBase {
+  fileName: RecordT['fileName']
+}
+
+export interface AudioDataStateMutation extends AudioDataMutationPayloadBase {
+  value: PlayerState
+}
+
 interface State {
   // tagMap should be a Map structure but Map are not reactive yet in Vue.js
   tagMap: TagMap
-  activeAudio: AudioData | null
+  audioDataMap: AudioDataMap
+  activeAudio: AudioData['fileName'] | null
   isAutoplayMode: boolean
   isAutoplayStarted: boolean
   lastRecordIndexPlayed: number | null
@@ -20,23 +29,21 @@ interface State {
 
 export const state = (): State => ({
   tagMap: {},
+  audioDataMap: {},
   activeAudio: null,
   isAutoplayMode: false,
   isAutoplayStarted: false,
   lastRecordIndexPlayed: null,
   recordsCount: 0,
-  isDarkMode: false
+  isDarkMode: false,
 })
 
 export const getters: GetterTree<State, State> = {
   taggedRecords: (state: State): RecordT['fileName'][] =>
     Object.keys(state.tagMap),
-  activeAudioName: (state: State): RecordT['fileName'] | undefined =>
-    state.activeAudio?.fileName,
   taggedRecordsCount: (state: State): number =>
     Object.keys(state.tagMap).length,
-  isDarkMode: (state: State): boolean =>
-    state.isDarkMode
+  isDarkMode: (state: State): boolean => state.isDarkMode,
 }
 
 export const mutations: MutationTree<State> = {
@@ -51,7 +58,7 @@ export const mutations: MutationTree<State> = {
     const { fileName, tag } = payload
     state.tagMap[fileName] = tag
   },
-  SET_ACTIVE_AUDIO: (state: State, activeAudio: AudioData) => {
+  SET_ACTIVE_AUDIO: (state: State, activeAudio: AudioData['fileName']) => {
     state.activeAudio = activeAudio
   },
   SET_LATEST_AUDIO_INDEX_PLAYED: (state: State, index: number) => {
@@ -65,6 +72,20 @@ export const mutations: MutationTree<State> = {
   },
   UPDATE_RECORDS_COUNT: (state, updatedCount: number) => {
     state.recordsCount = updatedCount
+  },
+  SET_AUDIO_MAP: (state: State, audioDatas: AudioData[]) => {
+    const audioMap: AudioDataMap = {}
+
+    for (const audioData of audioDatas) {
+      audioMap[audioData.fileName] = audioData
+    }
+
+    state.audioDataMap = audioMap
+  },
+  UPDATE_AUDIO_DATA_STATE: (state: State, payload: AudioDataStateMutation) => {
+    const { fileName, value } = payload
+
+    state.audioDataMap[fileName].playerState = value
   },
   UPDATE_DARK_MODE: (state, updatedDarkMode: boolean) => {
     state.isDarkMode = updatedDarkMode
