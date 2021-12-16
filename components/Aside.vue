@@ -65,7 +65,7 @@
 </template>
 
 <script lang='ts'>
-import { Vue, Component, Watch } from 'nuxt-property-decorator'
+import { Vue, Component } from 'nuxt-property-decorator'
 import CustomIcon from '~/components/Icon/index.vue'
 
 @Component({
