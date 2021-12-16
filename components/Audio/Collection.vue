@@ -1,7 +1,7 @@
 <template>
   <div id="collection">
     <div v-if="isLoading">
-      <Loader />
+      <Loader/>
     </div>
     <div v-else>
       <button
@@ -12,12 +12,11 @@
           )
         "
       >
-        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
-        <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
+        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause"/>
+        <CustomIcon v-else name="play" @click="pauseOtherPlayers"/>
       </button>
       <div class="collection_sounds">
         <div v-for="(record, index) in records" :key="record.fileName">
-          {{ record }}
           <AudioPlayer
             ref="players"
             :record="record"
@@ -39,7 +38,7 @@
           Last record's index played :
           <strong>{{
               $store.state.lastRecordIndexPlayed !== null ? $store.state.lastRecordIndexPlayed : 'none'
-          }}</strong>
+            }}</strong>
         </p>
         <div v-if="isPlayingRecord">
           Current audio player :
@@ -54,17 +53,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref } from 'nuxt-property-decorator'
+import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import { RecordT, Tag, TagMap } from '~/models/Record'
-import { TagMutationPayload } from '~/store'
+import {RecordT, Tag, TagMap} from '~/models/Record'
+import {TagMutationPayload} from '~/store'
 
 @Component({
-  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
-  async asyncData({ $axios }): Promise<any> {
+  components: {Loader, AudioPlayer, CustomIcon, CheckBox},
+  async asyncData({$axios}): Promise<any> {
     const records = await $axios
       .$get(`datas/millars.json`)
       .then((res) => res.records)
@@ -101,6 +100,10 @@ export default class Collection extends Vue {
     return this.$store.getters.taggedRecords
   }
 
+  get isAutoPlayMode(): boolean {
+    return this.$store.state.isAutoplayMode
+  }
+
   get checkedRecordsCount(): number {
     return this.taggedRecords.length
   }
@@ -128,6 +131,11 @@ export default class Collection extends Vue {
     } finally {
       this.isLoading = false
     }
+  }
+
+  @Watch('isAutoPlayMode')
+  changeAutoPlayMode() {
+    console.log('autoplay mode changed', this.isAutoPlayMode)
   }
 
   handleClickPlayAuto(startIndex: number = 0): void {
@@ -211,7 +219,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], { type: 'application/xml' })
+    const blob = new Blob([outputSerialized], {type: 'application/xml'})
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
@@ -260,9 +268,4 @@ export default class Collection extends Vue {
   @apply overflow-y-scroll;
   height: 400px;
 }
-
-.player{
-  @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark
-}
-
 </style>

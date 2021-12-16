@@ -3,8 +3,8 @@
     <div class="actionBar__control">
       <button class="btn"
               @click="handleClickPlayAuto(($store.state.lastRecordIndexPlayed !== null) ? ($store.state.lastRecordIndexPlayed + 1) : 0)">
-        <CustomIcon v-if="$store.state.isAutoplayMode" name="pause"/>
-        <CustomIcon v-else name="play"/>
+        <CustomIcon v-if="$store.state.isAutoplayMode" name="pause" color="white"/>
+        <CustomIcon v-else name="play" color="white"/>
       </button>
     </div>
     <div class="actionBar__tagSelector">

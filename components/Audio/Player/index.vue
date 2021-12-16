@@ -107,6 +107,7 @@ export default class AudioPlayer extends Vue {
     this.state = PlayerState.Play
     this.audio.play()
     this.isActive = true
+    this.isPlayed = false
   }
 
   pause(): void {
@@ -133,7 +134,7 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply rounded-md bg-white my-2 p-4;
+  @apply rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark my-2 p-4;
   display: flex;
   align-items: center;
 
