@@ -1,9 +1,5 @@
 <template>
   <div class="dropdown">
-    <div class="title">
-      {{ selectedValueText }}
-      <CustomIcon class="ml-2" name="chevronDown" :size="1" color="inherit" />
-    </div>
     <div class="body-wrapper">
       <div class="body">
         <div
@@ -20,6 +16,10 @@
           {{ option.text }}
         </div>
       </div>
+    </div>
+    <div class="title">
+      {{ selectedValueText }}
+      <CustomIcon class="ml-2" name="chevronDown" :size="1" color="inherit" />
     </div>
   </div>
 </template>
@@ -84,9 +84,10 @@ export default class DropDown extends Vue {
     background: white;
     color: black;
     text-align: center;
-    border-radius: 0 0 5px 5px;
+    border-radius: 5px;
     left: 50%;
     transform: translateX(-50%);
+    bottom: 0;
 
     .option {
       cursor: pointer;
