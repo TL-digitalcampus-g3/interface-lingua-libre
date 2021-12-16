@@ -16,14 +16,14 @@
         <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
       </button>
       <div class="collection_sounds">
-        <div v-for="(record, index) in records" :key="record.fileName">
-          <AudioPlayer
-            ref="players"
-            :record="record"
-            @recordIsPlaying="handleRecordIsPlaying"
-            @recordPlayed="handleRecordPlayed(index)"
-          />
-        </div>
+        <AudioPlayer
+          v-for="(record, index) in records"
+          :key="record.fileName"
+          ref="players"
+          :record="record"
+          @recordIsPlaying="handleRecordIsPlaying"
+          @recordPlayed="handleRecordPlayed(index)"
+        />
       </div>
       <button
         class="btn-share"
@@ -129,22 +129,22 @@ export default class Collection extends Vue {
   mounted(): void {
     this.fetchContent()
     document.onkeydown = function (event) {
-      const key = window.event.keyCode;
+      const key = window.event.keyCode
       if (key === 65 && event.ctrlKey) {
         console.log('crtl + a')
-        window.event.preventDefault();
+        window.event.preventDefault()
       } else if (key === KeycodeList.ESCAPE) {
-        console.log('escape key pressed');
-        window.event.preventDefault();
+        console.log('escape key pressed')
+        window.event.preventDefault()
       } else if (key === KeycodeList.SPACE) {
         console.log('space key pressed')
-        window.event.preventDefault();
+        window.event.preventDefault()
       } else if (key === KeycodeList.ARROW_LEFT) {
         console.log('arrow left key pressed')
-        window.event.preventDefault();
+        window.event.preventDefault()
       } else if (key === KeycodeList.ARROW_RIGHT) {
         console.log('arrow right key pressed')
-        window.event.preventDefault();
+        window.event.preventDefault()
       }
     }
   }
