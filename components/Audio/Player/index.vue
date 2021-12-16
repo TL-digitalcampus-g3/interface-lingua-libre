@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Ref } from 'nuxt-property-decorator'
-import { SpeedRate, PlayerState } from './types'
+import { SpeedRate, PlayerState, AudioData } from '~/models/Audio'
 import SpeedRateSelector from './SpeedRateSelector.vue'
 import MinimalPlayer from './MinimalPlayer.vue'
 import TagBadge from '~/components/TagSelector/TagBadge.vue'
@@ -42,7 +42,6 @@ export default class AudioPlayer extends Vue {
   currentSeconds: number = 0
   speedRateValue: SpeedRate = SpeedRate.Normal
   isPlayed: boolean = false
-  isActive: boolean = false
   duration: number = 0
 
   get fileName(): RecordT['fileName'] {
@@ -61,29 +60,48 @@ export default class AudioPlayer extends Vue {
     return this.speedRateValue
   }
 
+  set speedRate(speedRate: SpeedRate) {
+    this.speedRateValue = speedRate
+    this.audio.playbackRate = speedRate
+  }
+
   get tag(): Tag | null {
     return this.$store.getters.taggedRecords.includes(this.fileName)
       ? this.$store.state.tagMap[this.fileName]
       : null
   }
 
-  set speedRate(speedRate: SpeedRate) {
-    this.speedRateValue = speedRate
-    this.audio.playbackRate = speedRate
+  get audioData(): AudioData {
+    return {
+      ...this.record,
+      playerState: this.state,
+      duration: this.duration,
+      currentTimeSecondes: this.currentSeconds,
+    }
+  }
+
+  get activeAudioName(): RecordT['fileName'] {
+    return this.$store.getters.activeAudioName
+  }
+
+  get isActive(): boolean {
+    return this.activeAudioName === this.record.fileName
   }
 
   ended(): void {
-    this.$emit('recordPlayed')
+    // this.$emit('recordPlayed')
     this.state = PlayerState.Ended
     this.isPlayed = true
-    this.isActive = false
   }
 
   play(): void {
+    if (this.activeAudioName !== this.record.fileName) {
+      this.$store.commit('SET_ACTIVE_AUDIO', this.audioData)
+    }
+
     this.$emit('recordIsPlaying')
     this.state = PlayerState.Play
     this.audio.play()
-    this.isActive = true
     this.isPlayed = false
   }
 
