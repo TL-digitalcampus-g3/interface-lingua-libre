@@ -40,7 +40,11 @@ export default class ActionBar extends Vue {
 }
 
 .actionBar__control {
-  @apply flex flex-wrap items-center gap-3 lg:mx-0 mx-auto;
+  @apply flex flex-wrap items-center lg:mx-0 mx-auto;
+
+  .global-player{
+    @apply mr-4
+  }
 }
 
 .actionBar__tagSelector {
