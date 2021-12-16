@@ -21,7 +21,7 @@
     </div>
     <div class="dropdownMenu__user" v-if="options==='isUser'">
         <p class="font-bold">WorkshopM2TLGPE3 (Q710559)</p>
-        <p>Masculin - français - locuteur natif</p>
+        <p>Masculin - Français - Locuteur natif</p>
         <p class="underline">Déconnexion</p>
         
 

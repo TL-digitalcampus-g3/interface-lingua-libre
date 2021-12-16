@@ -3,7 +3,7 @@
     <div class="aside__block__information">
       <div class="flex items-end mb-5">
         <vc-donut :sections="[{value: taggedRecordsCount, color: 'var(--color-primary)'}]"
-                  background="var(--color-primary-lighten)" foreground="var(--color-secondary)" :size="100" unit="px"
+                   foreground="var(--color-secondary)" :size="100" unit="px"
                   :thickness="20"
                   :total="$store.state.recordsCount" :start-angle="0"/>
         <p class="ml-4 text-sm"><span class="block font-bold text-lg">{{
@@ -49,9 +49,11 @@
 <script lang='ts'>
 import {
   Vue,
-  Component
+  Component,Watch
 } from 'nuxt-property-decorator'
 import CustomIcon from '~/components/Icon/index.vue'
+
+
 
 @Component({
   components: {
@@ -59,6 +61,26 @@ import CustomIcon from '~/components/Icon/index.vue'
   }
 })
 export default class Aside extends Vue {
+
+
+  @Watch('isDarkMode', { immediate: true })
+  changeBackgroundDonut() {
+    let donutBackground : any = document.querySelector('.cdc-overlay');
+    console.log(donutBackground)
+
+    if (this.isDarkMode) {
+      donutBackground.style.backgroundColor = 'var(--color-bg-backgroundBlock-dark)'
+    } else {
+      donutBackground.style.backgroundColor = 'var(--color-bg-backgroundBlock-light)'
+    }
+  }
+
+
+
+
+  get isDarkMode(): boolean {
+    return this.$store.getters.isDarkMode
+  }
 
   // sections: any[] = [{value: 0, color: 'var(--color-primary)'}]
 
@@ -116,9 +138,9 @@ export default class Aside extends Vue {
   @apply inline-block;
 }
 
-.cdc-overlay {
-  @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark;
-}
+// .cdc-overlay {
+//   @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark;
+// }
 
 
 .keyword_shortcut {
@@ -130,14 +152,16 @@ export default class Aside extends Vue {
 }
 
 .cdc-filler {
-  @apply duration-150 ease-out
-
+  // @apply duration-150 ease-out
 }
+
 
 .debug {
   @apply bg-red-900 bg-opacity-30 p-5 mt-5;
   font-family: "Courier New";
   font-size: 12px;
 }
+
+
 
 </style>
