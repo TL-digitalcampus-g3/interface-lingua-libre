@@ -1,21 +1,25 @@
 import { MutationTree, GetterTree, ActionTree } from 'vuex'
 import { RecordT, Tag, TagMap } from '~/models/Record'
-import { AudioData, PlayerState } from '~/models/Audio'
+import { AudioData, AudioDataMap, PlayerState } from '~/models/Audio'
 
 export interface TagMutationPayload {
   fileName: RecordT['fileName']
   tag: Tag
 }
 
-export interface AudioPlayerStateMutationPayload {
-  playerState: PlayerState
+interface AudioDataMutationPayloadBase {
   fileName: RecordT['fileName']
+}
+
+export interface AudioDataStateMutation extends AudioDataMutationPayloadBase {
+  value: PlayerState
 }
 
 interface State {
   // tagMap should be a Map structure but Map are not reactive yet in Vue.js
   tagMap: TagMap
-  activeAudio: AudioData | null
+  audioDataMap: AudioDataMap
+  activeAudio: AudioData['fileName'] | null
   isAutoplayMode: boolean
   isAutoplayStarted: boolean
   lastRecordIndexPlayed: number | null
@@ -24,6 +28,7 @@ interface State {
 
 export const state = (): State => ({
   tagMap: {},
+  audioDataMap: {},
   activeAudio: null,
   isAutoplayMode: false,
   isAutoplayStarted: false,
@@ -34,8 +39,6 @@ export const state = (): State => ({
 export const getters: GetterTree<State, State> = {
   taggedRecords: (state: State): RecordT['fileName'][] =>
     Object.keys(state.tagMap),
-  activeAudioName: (state: State): RecordT['fileName'] | undefined =>
-    state.activeAudio?.fileName,
   taggedRecordsCount: (state: State): number =>
     Object.keys(state.tagMap).length,
 }
@@ -52,7 +55,7 @@ export const mutations: MutationTree<State> = {
     const { fileName, tag } = payload
     state.tagMap[fileName] = tag
   },
-  SET_ACTIVE_AUDIO: (state: State, activeAudio: AudioData) => {
+  SET_ACTIVE_AUDIO: (state: State, activeAudio: AudioData['fileName']) => {
     state.activeAudio = activeAudio
   },
   UPDATE_AUTOPLAY_MODE: (state, newValue: boolean) => {
@@ -64,12 +67,19 @@ export const mutations: MutationTree<State> = {
   UPDATE_RECORDS_COUNT: (state, updatedCount: number) => {
     state.recordsCount = updatedCount
   },
-  SET_ACTIVE_AUDIO_STATE: (state, payload: AudioPlayerStateMutationPayload) => {
-    const { fileName, playerState } = payload
+  SET_AUDIO_MAP: (state: State, audioDatas: AudioData[]) => {
+    const audioMap: AudioDataMap = {}
 
-    if (state.activeAudio && state.activeAudio.fileName === fileName) {
-      state.activeAudio.playerState = playerState
+    for (const audioData of audioDatas) {
+      audioMap[audioData.fileName] = audioData
     }
+
+    state.audioDataMap = audioMap
+  },
+  UPDATE_AUDIO_DATA_STATE: (state: State, payload: AudioDataStateMutation) => {
+    const { fileName, value } = payload
+
+    state.audioDataMap[fileName].playerState = value
   },
 }
 

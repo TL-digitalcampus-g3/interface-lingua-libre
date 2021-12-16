@@ -12,8 +12,11 @@ export enum PlayerState {
   Ended = 'ended',
 }
 
-export interface AudioData extends RecordT {
+export interface AudioData {
+  fileName: RecordT['fileName']
   playerState: PlayerState
   duration: number
   currentTimeSecondes: number
 }
+
+export type AudioDataMap = Record<AudioData['fileName'], AudioData>

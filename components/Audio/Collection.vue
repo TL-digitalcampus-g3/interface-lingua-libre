@@ -44,7 +44,7 @@
         </p>
         <div v-if="isPlayingRecord">
           Current audio player :
-          <strong>{{ activeAudioName }} / {{ recordsCount }}</strong>
+          <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
         </div>
         Audio(s) verified :
         <strong>{{ taggedRecordsCount }} / {{ recordsCount }}</strong>
@@ -62,6 +62,7 @@ import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
 import { RecordT, Tag, TagMap } from '~/models/Record'
 import { TagMutationPayload } from '~/store'
+import { AudioData, PlayerState } from '~/models/Audio'
 
 @Component({
   components: { Loader, AudioPlayer, CustomIcon, CheckBox },
@@ -108,18 +109,31 @@ export default class Collection extends Vue {
     return this.taggedRecordsCount > 0
   }
 
-  get activeAudioName(): RecordT['fileName'] | null {
-    return this.$store.state.activeAudioName ?? null
+  get activeAudio(): RecordT['fileName'] | null {
+    return this.$store.state.activeAudio ?? null
   }
 
   get isPlayingRecord(): boolean {
-    return Boolean(this.activeAudioName)
+    return Boolean(this.activeAudio)
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     try {
-      const res = await this.$axios.$get(`datas/millars.json`)
-      this.records = res.records
+      const res = await this.$axios.get<{ records: RecordT[] }>(
+        `datas/millars.json`
+      )
+      const records: RecordT[] = res.data.records
+      const audioDatas: AudioData[] = records.map(
+        (record): AudioData => ({
+          fileName: record.fileName,
+          playerState: PlayerState.Pause,
+          duration: 0,
+          currentTimeSecondes: 0,
+        })
+      )
+
+      this.records = records
+      this.$store.commit('SET_AUDIO_MAP', audioDatas)
     } finally {
       this.isLoading = false
     }
@@ -246,7 +260,7 @@ export default class Collection extends Vue {
 
   pauseOtherPlayers(): void {
     for (const player of this.players) {
-      if (player.fileName !== this.activeAudioName) {
+      if (player.fileName !== this.activeAudio) {
         player.pause()
       }
     }
