@@ -1,9 +1,10 @@
 <template>
   <div
+    ref="audio-player"
     class="player"
     :class="[
       { 'player--played': isPlayed },
-      { 'player--active': isActive && isPlaying },
+      { 'player--active': isActive },
     ]"
     @click="setActive"
     @dblclick="play"
@@ -19,6 +20,9 @@
     <MinimalPlayer
       :title="title"
       :state="playerState"
+      :class="[
+        { 'is--active': isActive },
+      ]"
       @state-button-clicked="togglePlay"
     />
     <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
@@ -57,6 +61,12 @@ export default class AudioPlayer extends Vue {
   isPlaying: boolean = false
   isPlayed: boolean = false
   duration: number = 0
+
+  @Watch('isActive')
+  updateIsActive(){
+    const topPos = this.$refs['audio-player'].offsetTop - 32;
+    this.$emit('scrollTo', topPos)
+  }
 
   get fileName(): RecordT['fileName'] {
     return this.record.fileName
@@ -179,7 +189,7 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply flex items-center rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-4 transition duration-500;
+  @apply flex flex-wrap items-center rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-4 transition duration-300;
 
   cursor: pointer;
 
@@ -197,7 +207,7 @@ export default class AudioPlayer extends Vue {
 }
 
 .player--active {
-  @apply shadow-xl transition duration-500;
+  @apply shadow-xl;
 }
 
 .player--played {
