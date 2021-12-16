@@ -26,12 +26,12 @@
         </div>
       </div>
       <button
-        class="btn"
+        class="btn-share"
         :class="[{ 'btn--disabled': !hasResultsToShare }]"
         @click="handleClickTransfertResults"
         :disabled="!hasResultsToShare"
       >
-        Send validation
+        {{ $t('GLOBAL.SEND_TAGGED_RECORDS') }}
       </button>
       <div class="bg-blue-800 bg-opacity-20 p-10 m-10">
         <p>
@@ -47,9 +47,8 @@
           <strong>{{ activeAudioName }} / {{ recordsCount }}</strong>
         </div>
         Audio(s) verified :
-        <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
+        <strong>{{ taggedRecordsCount }} / {{ recordsCount }}</strong>
         <hr />
-        {{ taggedRecords }}
       </div>
     </div>
   </div>
@@ -92,27 +91,37 @@ export default class Collection extends Vue {
   delayBetweenAutoplay: number = 3000 // in ms
 
   get recordsCount(): number {
-    return this.records.length
+    return this.$store.state.recordsCount
   }
 
   get tagMap(): TagMap {
     return this.$store.state.tagMap
   }
 
+  get recordsMapIndex(): Record<RecordT['fileName'], number> {
+    const recordsMap: Record<RecordT['fileName'], number> = {}
+
+    this.records.forEach((record, index) => {
+      recordsMap[record.fileName] = index
+    })
+
+    return recordsMap
+  }
+
   get taggedRecords(): RecordT['fileName'][] {
     return this.$store.getters.taggedRecords
+  }
+
+  get taggedRecordsCount(): number {
+    return this.$store.getters.taggedRecordsCount
   }
 
   get isAutoPlayMode(): boolean {
     return this.$store.state.isAutoplayMode
   }
 
-  get checkedRecordsCount(): number {
-    return this.taggedRecords.length
-  }
-
   get hasResultsToShare(): boolean {
-    return this.checkedRecordsCount > 0
+    return this.taggedRecordsCount > 0
   }
 
   get activeAudioName(): RecordT['fileName'] | null {
@@ -135,6 +144,11 @@ export default class Collection extends Vue {
   @Watch('isAutoPlayMode')
   changeAutoPlayMode() {
     console.log('autoplay mode changed', this.isAutoPlayMode)
+  }
+
+  @Watch('records')
+  updateRecords() {
+    this.$store.commit('UPDATE_RECORDS_COUNT', this.records.length)
   }
 
   handleClickPlayAuto(startIndex: number = 0): void {
@@ -257,8 +271,8 @@ export default class Collection extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.btn {
-  @apply bg-blue-500 text-white p-3 rounded;
+.btn-share {
+  @apply bg-blue-500 text-white p-3 rounded mt-5 uppercase;
 }
 
 .btn--disabled {

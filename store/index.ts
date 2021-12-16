@@ -14,6 +14,7 @@ interface State {
   isAutoplayMode: boolean
   isAutoplayStarted: boolean
   lastRecordIndexPlayed: number | null
+  recordsCount: number
 }
 
 export const state = (): State => ({
@@ -22,6 +23,7 @@ export const state = (): State => ({
   isAutoplayMode: false,
   isAutoplayStarted: false,
   lastRecordIndexPlayed: null,
+  recordsCount: 0,
 })
 
 export const getters: GetterTree<State, State> = {
@@ -29,6 +31,8 @@ export const getters: GetterTree<State, State> = {
     Object.keys(state.tagMap),
   activeAudioName: (state: State): RecordT['fileName'] | undefined =>
     state.activeAudio?.fileName,
+  taggedRecordsCount: (state: State): number =>
+    Object.keys(state.tagMap).length,
 }
 
 export const mutations: MutationTree<State> = {
@@ -51,6 +55,9 @@ export const mutations: MutationTree<State> = {
   },
   UPDATE_AUTOPLAY_STARTED: (state, newValue: boolean) => {
     state.isAutoplayStarted = newValue
+  },
+  UPDATE_RECORDS_COUNT: (state, updatedCount: number) => {
+    state.recordsCount = updatedCount
   },
 }
 

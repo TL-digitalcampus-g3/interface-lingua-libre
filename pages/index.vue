@@ -41,9 +41,8 @@ export default class Demo extends Vue {}
 // }
 
 .pageMain{
-  @apply grid p-6 overflow-y-scroll justify-self-center max-w-7xl;
+  @apply grid p-6 overflow-y-scroll max-w-6xl;
   grid-template-columns: auto 280px;
-  grid-template-rows: auto 5rem;
   gap: 20px;
   height: calc(100vh - 80px);
 }
