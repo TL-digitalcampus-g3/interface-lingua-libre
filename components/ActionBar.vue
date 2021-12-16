@@ -11,7 +11,11 @@
       <TagSelector/>
     </div>
     <div class="actionBar__toggleAutoPlay">
-      <CheckBox label="Lecture automatique"/>
+      <CheckBox
+        :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
+        :isChecked="$store.state.isAutoplayMode"
+        @click="handleClickCheckboxAutoplay"
+      />
     </div>
   </div>
 </template>
@@ -26,13 +30,13 @@ import TagSelector from '~/components/TagSelector.vue'
   components: {CheckBox, TagSelector, CustomIcon},
 })
 export default class ActionBar extends Vue {
-  handleClickPlayAuto(startIndex: number = 0): void {
+  handleClickPlayAuto(): void {
+    console.log('handleClickPlayAuto')
+    this.$store.commit('HANDLE_PLAY_RECORDS', {'autoplay': true, 'startIndex': 0})
+  }
+
+  handleClickCheckboxAutoplay(): void {
     this.$store.commit('UPDATE_AUTOPLAY_MODE', !this.$store.state.isAutoplayMode)
-    if (!this.$store.state.isPlayingRecord) {
-      // this.playRecord(startIndex)
-      this.$store.commit('NEED_TO_PLAY_RECORD', startIndex)
-      this.$store.commit('UPDATE_AUTOPLAY_STARDED', !this.$store.state.isAutoplayStarted)
-    }
   }
 }
 </script>

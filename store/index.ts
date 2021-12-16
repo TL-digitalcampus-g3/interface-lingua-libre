@@ -46,14 +46,8 @@ export const mutations: MutationTree<State> = {
   UPDATE_AUTOPLAY_MODE: (state, newValue: boolean) => {
     state.isAutoplayMode = newValue
   },
-  UPDATE_AUTOPLAY_STARDED: (state, newValue: boolean) => {
+  UPDATE_AUTOPLAY_STARTED: (state, newValue: boolean) => {
     state.isAutoplayStarted = newValue
-  },
-  UPDATE_LAST_RECORD_INDEX_PLAYED: (state, newRecordIndex: number) => {
-    state.lastRecordIndexPlayed = newRecordIndex
-  },
-  NEED_TO_PLAY_RECORD: (state, recordIndex: number) => {
-    state.lastRecordIndexPlayed = recordIndex
   },
 }
 

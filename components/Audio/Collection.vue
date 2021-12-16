@@ -12,18 +12,9 @@
           )
         "
       >
-        <CustomIcon v-if="isAutoplayMode" name="pause" />
+        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
         <CustomIcon v-else name="play" @click="pauseOtherPlayers" />
       </button>
-      <div>
-        <input id="autoplay" type="checkbox" :checked="$store.state.isAutoplayMode"/>
-        {{ $t('PLAYBACK_OPTION.PLAYER_AUTO') }}
-
-        <CheckBox
-          :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
-          :isChecked="$store.state.isAutoplayMode"
-        />
-      </div>
       <div class="collection_sounds">
         <div v-for="(record, index) in records" :key="record.fileName">
           {{ record }}
@@ -54,9 +45,9 @@
           Current audio player :
           <strong>{{ activeAudio }} / {{ recordsCount }}</strong>
         </div>
-        Audio(s) verified : <strong>{{ checkedRecords }} / {{ recordsCount }}</strong>
+        Audio(s) verified : <strong>{{ checkedRecordsCount }} / {{ recordsCount }}</strong>
         <hr/>
-        {{ recordsPlayed }}
+        {{ taggedRecords }}
       </div>
     </div>
   </div>
@@ -95,9 +86,7 @@ export default class Collection extends Vue {
 
   records: RecordT[] = []
   isLoading: boolean = true
-  isAutoplayMode: boolean = false
   lastRecordIndexPlayed: number | null = null
-  isAutoplayStarted: boolean = false
   delayBetweenAutoplay: number = 3000 // in ms
 
   get recordsCount(): number {
@@ -142,10 +131,9 @@ export default class Collection extends Vue {
   }
 
   handleClickPlayAuto(startIndex: number = 0): void {
-    this.isAutoplayMode = !this.isAutoplayMode
     if (!this.isPlayingRecord) {
       this.playRecord(startIndex)
-      this.isAutoplayStarted = !this.isAutoplayStarted
+      this.$store.commit('UPDATE_AUTOPLAY_STARTED', !this.$store.state.isAutoplayStarted)
     }
   }
 
@@ -244,7 +232,7 @@ export default class Collection extends Vue {
         () => {
           this.players[playerIndex].play()
         },
-        this.isAutoplayStarted ? this.delayBetweenAutoplay : 0
+        this.$store.state.isAutoplayStarted ? this.delayBetweenAutoplay : 0
       )
     }
   }
