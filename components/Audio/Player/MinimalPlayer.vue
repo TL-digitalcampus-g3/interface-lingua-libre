@@ -1,9 +1,9 @@
 <template>
   <div class="minimal-player">
     <button class="state-button" @click="$emit('state-button-clicked')">
-      <CustomIcon v-show="state === 'pause'" name="play" />
-      <CustomIcon v-show="state === 'play'" name="pause" />
-      <CustomIcon v-show="state === 'ended'" name="refresh" />
+      <CustomIcon v-show="state === 'pause'" name="play" :color="color" />
+      <CustomIcon v-show="state === 'play'" name="pause" :color="color" />
+      <CustomIcon v-show="state === 'ended'" name="refresh" :color="color" />
     </button>
     <div class="title">{{ title }}</div>
     <div class="duration">{{ currentTime }} / {{ audioDuration }}</div>
@@ -30,6 +30,7 @@ export default class MinimalPlayer extends Vue {
   @Prop({ default: 0 }) readonly duration!: number
   @Prop({ default: 0 }) readonly currentTimeInSeconds!: number
   @Prop({ required: true }) readonly state!: PlayerState
+  @Prop({ default: 'var(--color-primary)' }) readonly color!: string
 
   get currentTime(): string {
     return formatTimeToMMSS(this.currentTimeInSeconds)
