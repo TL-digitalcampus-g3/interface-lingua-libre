@@ -1,7 +1,7 @@
 <template>
   <div class="actionBar">
     <div class="actionBar__control">
-      <GlobalPlayer />
+      <GlobalPlayer/>
       <CheckBox
         :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
         :isChecked="$store.state.isAutoplayMode"

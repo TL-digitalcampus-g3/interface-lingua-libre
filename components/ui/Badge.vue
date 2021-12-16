@@ -20,11 +20,11 @@ export default class Badge extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.badge {
-  color: black;
-  border-radius: 7px;
-  display: inline-block;
-  padding: 0.1rem 0.4rem;
-  font-size: 0.9rem;
-}
+  .badge {
+    color: black;
+    border-radius: 7px;
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.9rem;
+  }
 </style>
