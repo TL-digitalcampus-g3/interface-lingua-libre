@@ -11,9 +11,11 @@
             $store.state.lastRecordIndexPlayed !== null
               ? $store.state.lastRecordIndexPlayed + 1
               : 0
-          )">
-        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause"/>
-        <CustomIcon v-else name="play"/>
+          )
+        "
+      >
+        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause" />
+        <CustomIcon v-else name="play" />
       </button>
       <div class="collection_sounds">
         <AudioPlayer
@@ -37,14 +39,14 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Ref, Watch} from 'nuxt-property-decorator'
+import { Vue, Component, Ref, Watch } from 'nuxt-property-decorator'
 import Loader from '~/components/Loader.vue'
 import CustomIcon from '@/components/Icon/index.vue'
 import AudioPlayer from '~/components/Audio/Player/index.vue'
 import CheckBox from '~/components/ui/CheckBox.vue'
-import {RecordT, Tag, TagMap} from '~/models/Record'
-import {TagMutationPayload} from '~/store'
-import {AudioData, PlayerState} from '~/models/Audio'
+import { RecordT, Tag, TagMap } from '~/models/Record'
+import { TagMutationPayload } from '~/store'
+import { AudioData, PlayerState } from '~/models/Audio'
 
 enum KeycodeList {
   SPACE = 32,
@@ -56,7 +58,7 @@ enum KeycodeList {
 }
 
 @Component({
-  components: {Loader, AudioPlayer, CustomIcon, CheckBox},
+  components: { Loader, AudioPlayer, CustomIcon, CheckBox },
 })
 export default class Collection extends Vue {
   @Ref() readonly players!: AudioPlayer[]
@@ -147,6 +149,7 @@ export default class Collection extends Vue {
 
       this.records = records
       this.$store.commit('SET_AUDIO_MAP', audioDatas)
+      this.$store.commit('SET_ACTIVE_AUDIO', records[0].fileName)
     } finally {
       this.isLoading = false
     }
@@ -243,7 +246,7 @@ export default class Collection extends Vue {
     // Serialize the XML file
     const outputSerialized = new XMLSerializer().serializeToString(content)
     // Create a blob element to wrap serialized xml file
-    const blob = new Blob([outputSerialized], {type: 'application/xml'})
+    const blob = new Blob([outputSerialized], { type: 'application/xml' })
     const objectUrl = URL.createObjectURL(blob)
     const element = document.createElement('a')
 
