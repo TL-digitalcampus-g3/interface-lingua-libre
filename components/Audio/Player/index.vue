@@ -5,6 +5,7 @@
       { 'player--played': isPlayed },
       { 'player--active': isActive && isPlaying },
     ]"
+    @click="setActive"
     @dblclick="play"
   >
     <audio
@@ -21,7 +22,7 @@
       @state-button-clicked="togglePlay"
     />
     <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
-    <TagBadge v-if="tag" class="player__tag" :tag="tag" />
+    <TagBadge v-if="tag" class="player__tag" :tag="tag"/>
   </div>
 </template>
 
@@ -105,9 +106,13 @@ export default class AudioPlayer extends Vue {
     this.isPlaying = false
   }
 
+  setActive(): void {
+    this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
+  }
+
   play(): void {
     if (this.activeAudio !== this.record.fileName) {
-      this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
+      this.setActive()
     }
     this.isPlaying = true
 
@@ -170,6 +175,8 @@ export default class AudioPlayer extends Vue {
 <style lang="scss" scoped>
 .player {
   @apply rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark my-2 p-4 transition duration-500;
+
+  cursor: pointer;
   display: flex;
   align-items: center;
 

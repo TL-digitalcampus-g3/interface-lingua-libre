@@ -4,17 +4,6 @@
       <Loader />
     </div>
     <div v-else>
-      <button
-        class="btn"
-        @click="
-          handleClickPlayAuto(
-            $store.state.lastRecordIndexPlayed !== null
-              ? $store.state.lastRecordIndexPlayed + 1
-              : 0
-          )">
-        <CustomIcon v-if="this.$store.state.isAutoplayMode" name="pause"/>
-        <CustomIcon v-else name="play"/>
-      </button>
       <div class="collection_sounds">
         <AudioPlayer
           v-for="(record, index) in records"
@@ -160,17 +149,6 @@ export default class Collection extends Vue {
   @Watch('records')
   updateRecords() {
     this.$store.commit('UPDATE_RECORDS_COUNT', this.records.length)
-  }
-
-  handleClickPlayAuto(startIndex: number = 0): void {
-    if (!this.isPlayingRecord) {
-      console.log('handleClickPlayAuto')
-      this.playRecord(startIndex)
-      this.$store.commit(
-        'UPDATE_AUTOPLAY_STARTED',
-        !this.$store.state.isAutoplayStarted
-      )
-    }
   }
 
   handleRecordPlayed(currentPlayerIndex: number): void {

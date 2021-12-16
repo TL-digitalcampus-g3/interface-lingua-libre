@@ -7,20 +7,31 @@
       color="white"
       @state-button-clicked="updatePlayerState"
     />
-    <SpeedRateSelector v-model="speedRate" class="ml-4" />
+    <div v-else>
+      <button
+        class="btn"
+        @click="handleDefaultPlay($store.state.lastRecordIndexPlayed !== null
+              ? $store.state.lastRecordIndexPlayed + 1
+              : 0)">
+        <CustomIcon v-if="$store.state.isAutoplayStarted" color="white" name="pause"/>
+        <CustomIcon v-else name="play" color="white"/>
+      </button>
+    </div>
+    <SpeedRateSelector v-model="speedRate" class="ml-4"/>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import {Vue, Component} from 'vue-property-decorator'
 import MinimalPlayer from '~/components/Audio/Player/MinimalPlayer.vue'
 import SpeedRateSelector from '~/components/Audio/Player/SpeedRateSelector.vue'
-import { AudioData, PlayerState, SpeedRate } from '~/models/Audio'
-import { RecordT } from '~/models/Record'
-import { AudioDataStateMutation } from '~/store'
+import {AudioData, PlayerState, SpeedRate} from '~/models/Audio'
+import {RecordT} from '~/models/Record'
+import {AudioDataStateMutation} from '~/store'
+import CustomIcon from '~/components/Icon/index.vue'
 
 @Component({
-  components: { MinimalPlayer, SpeedRateSelector },
+  components: {MinimalPlayer, SpeedRateSelector, CustomIcon},
 })
 export default class GlobalPlayer extends Vue {
   get activeAudioData(): AudioData | null {
@@ -44,6 +55,20 @@ export default class GlobalPlayer extends Vue {
 
   set speedRate(speedRate: SpeedRate) {
     this.$store.commit('SET_SPEED_RATE', speedRate)
+  }
+
+  handleDefaultPlay(startIndex: number = 0): void {
+    // this.playRecord(startIndex)
+    /*
+    if (!this.isPlayingRecord) {
+      console.log('handleClickPlayAuto')
+      this.playRecord(startIndex)
+      this.$store.commit(
+        'UPDATE_AUTOPLAY_STARTED',
+        !this.$store.state.isAutoplayStarted
+      )
+    }
+     */
   }
 
   updatePlayerState(): void {
