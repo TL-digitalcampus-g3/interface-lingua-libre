@@ -7,7 +7,7 @@ export interface TagMutationPayload {
 }
 
 interface State {
-  // tagMap should be a Map structure but Map ar not reactive yet in Vue.js
+  // tagMap should be a Map structure but Map are not reactive yet in Vue.js
   tagMap: TagMap
   activeAudio: RecordT['fileName'] | null
   isAutoplayMode: boolean
@@ -20,7 +20,7 @@ export const state = (): State => ({
   activeAudio: null,
   isAutoplayMode: false,
   isAutoplayStarted: false,
-  lastRecordIndexPlayed: null
+  lastRecordIndexPlayed: null,
 })
 
 export const getters: GetterTree<State, State> = {
