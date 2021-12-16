@@ -3,8 +3,6 @@
     v-if="activeAudioData"
     :title="activeAudioData.word"
     :state="activeAudioData.playerState"
-    :duration="activeAudioData.duration"
-    :current-time-in-seconds="activeAudioData.currentTimeInSeconds"
     color="white"
     @state-button-clicked="updatePlayerState"
   />

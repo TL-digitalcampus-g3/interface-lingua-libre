@@ -160,8 +160,6 @@ export default class Collection extends Vue {
           fileName: record.fileName,
           word: record.word,
           playerState: PlayerState.Pause,
-          duration: 0,
-          currentTimeSecondes: 0,
         })
       )
 

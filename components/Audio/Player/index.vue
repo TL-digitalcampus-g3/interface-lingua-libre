@@ -17,11 +17,10 @@
     />
     <MinimalPlayer
       :title="title"
-      :duration="duration"
-      :current-time-in-seconds="currentSeconds"
       :state="playerState"
       @state-button-clicked="togglePlay"
     />
+    <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
     <SpeedRateSelector class="player__speed-rate" v-model="speedRate" />
     <TagBadge v-if="tag" class="player__tag" :tag="tag" />
   </div>
@@ -35,6 +34,15 @@ import { SpeedRate, PlayerState } from '~/models/Audio'
 import TagBadge from '~/components/TagSelector/TagBadge.vue'
 import { RecordT, Tag } from '~/models/Record'
 import { AudioDataStateMutation } from '~/store'
+
+function formatTimeToMMSS(timeInSeconds: number): string {
+  const minutes = Math.round(timeInSeconds / 60)
+  const seconds = Math.round(timeInSeconds - minutes * 60)
+  const minuteValue = minutes < 10 ? `0${minutes}` : minutes
+  const secondValue = seconds < 10 ? `0${seconds}` : seconds
+
+  return `${minuteValue}:${secondValue}`
+}
 
 @Component({ components: { MinimalPlayer, SpeedRateSelector, TagBadge } })
 export default class AudioPlayer extends Vue {
@@ -84,6 +92,14 @@ export default class AudioPlayer extends Vue {
 
   get playerState(): PlayerState {
     return this.$store.state.audioDataMap[this.fileName].playerState
+  }
+
+  get currentTime(): string {
+    return formatTimeToMMSS(this.currentSeconds)
+  }
+
+  get audioDuration(): string | null {
+    return formatTimeToMMSS(this.duration)
   }
 
   ended(): void {
@@ -159,7 +175,8 @@ export default class AudioPlayer extends Vue {
   display: flex;
   align-items: center;
 
-  &__speed-rate {
+  &__speed-rate,
+  &__duration {
     @apply ml-4;
   }
 
