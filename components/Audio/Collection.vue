@@ -272,15 +272,23 @@ export default class Collection extends Vue {
 }
 
 .collection_sounds {
-  @apply lg:overflow-y-scroll px-5 flex flex-col justify-start;
+  @apply lg:overflow-y-scroll px-5 flex flex-col justify-start relative;
 
   scroll-behavior: smooth;
   // padding-top: 30%;
 }
 
-.collection_btn{
-  @apply text-center
-}
+.collection_btn {
+  @apply text-center relative;
 
+  &::before{
+    @apply bg-gradient-to-t from-backgroundApp-light dark:from-backgroundApp-dark block absolute w-full top-0 left-0;
+    content: '';
+
+    $shadowHeight: 5rem;
+    height: $shadowHeight;
+    transform: translateY(-$shadowHeight);
+  }
+}
 
 </style>
