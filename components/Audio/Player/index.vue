@@ -25,8 +25,11 @@
       ]"
       @state-button-clicked="togglePlay"
     />
-    <div class="player__duration">{{ currentTime }} / {{ audioDuration }}</div>
+    <div class="player__language">
+      <country-flag country="es-ca" size="normal"/>
+    </div>
     <div class="player__gender">({{ $t(`GENDER.${record.gender}`) }})</div>
+    <div class="player__duration">&nbsp;-&nbsp;{{ currentTime }} / {{ audioDuration }}</div>
     <PlayerTagSelector
       v-if="tag"
       :active-tag="tag"
@@ -38,6 +41,7 @@
 
 <script lang="ts">
 import {Vue, Component, Prop, Ref, Watch} from 'nuxt-property-decorator'
+import CountryFlag from 'vue-country-flag'
 import MinimalPlayer from './MinimalPlayer.vue'
 import PlayerTagSelector from '~/components/TagSelector/PlayerTagSelector.vue'
 import {RecordT, Tag} from '~/models/Record'
@@ -53,7 +57,7 @@ function formatTimeToMMSS(timeInSeconds: number): string {
   return `${minuteValue}:${secondValue}`
 }
 
-@Component({components: {MinimalPlayer, PlayerTagSelector}})
+@Component({components: {MinimalPlayer, PlayerTagSelector, CountryFlag}})
 export default class AudioPlayer extends Vue {
   @Prop({required: true}) readonly record!: RecordT
   @Ref() readonly audio!: HTMLAudioElement
@@ -209,9 +213,14 @@ export default class AudioPlayer extends Vue {
     @apply shadow-xl;
   }
 
+  &__language {
+    @apply mx-4
+  }
+
   &__duration,
+  &__language,
   &__gender {
-    @apply ml-4 text-xs;
+    @apply text-xs;
   }
 
   &__tag {
