@@ -75,7 +75,7 @@ export default class AudioPlayer extends Vue {
   }
 
   get audioUrl(): string {
-    return `/datas/Millars/${this.fileName}`
+    return `datas/Millars/${this.fileName}`
   }
 
   get tag(): Tag | null {
