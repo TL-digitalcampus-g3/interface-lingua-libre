@@ -62,17 +62,6 @@
           </div>
         </li>
       </ul>
-      <div class="debug">
-        Last record index :
-        {{
-          $store.state.lastRecordIndexPlayed
-            ? $store.state.lastRecordIndexPlayed
-            : 'null'
-        }}
-        <button class="bg-red-900 p-3 text-white" @click="clearPersistantDatas">
-          Clear persistant datas
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -121,22 +110,6 @@ export default class Aside extends Vue {
   handleChangeDelayAutoplay(delay: number): void {
     this.$store.commit('UPDATE_DELAY_BETWEEN_AUTOPLAY', delay)
   }
-
-  clearPersistantDatas() {
-    // Clear localStorage
-    localStorage.clear()
-
-    // Clear cookies
-    const cookies = document.cookie.split(';')
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i]
-      const eqPos = cookie.indexOf('=')
-      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
-      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
-    }
-    // Refresh page
-    location.reload()
-  }
 }
 </script>
 
@@ -182,15 +155,5 @@ export default class Aside extends Vue {
   &.is--active {
     @apply bg-primary text-white border-primary;
   }
-}
-
-.cdc-filler {
-  // @apply duration-150 ease-out
-}
-
-.debug {
-  @apply bg-red-900 bg-opacity-30 p-5 mt-5;
-  font-family: 'Courier New';
-  font-size: 12px;
 }
 </style>

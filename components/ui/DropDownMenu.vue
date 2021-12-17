@@ -30,7 +30,7 @@
         <p class="contents">{{ $t('LANGS.FR') }}</p>
       </div>
       <p>{{ $t('LOCUTOR.NATIVE') }}</p>
-      <p class="underline">{{ $t('GLOBAL.LOGGOUT') }}</p>
+      <p class="underline" @click="clearPersistantDatas">{{ $t('GLOBAL.LOGGOUT') }}</p>
     </div>
   </div>
 </template>
@@ -55,6 +55,22 @@ export default class DropDownMenu extends Vue {
     } else {
       this.$store.commit('UPDATE_DARK_MODE', window.matchMedia('(prefers-color-scheme: dark)').matches)
     }
+  }
+
+  clearPersistantDatas() {
+    // Clear localStorage
+    localStorage.clear()
+
+    // Clear cookies
+    const cookies = document.cookie.split(';')
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i]
+      const eqPos = cookie.indexOf('=')
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
+      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+    }
+    // Refresh page
+    location.reload()
   }
 }
 </script>
