@@ -43,9 +43,6 @@
       <h3>{{ $t('PLAYBACK_OPTION.PLAYBACK_OPTION') }}</h3>
       <ul>
         <li>
-          <p>{{ $t('PLAYBACK_OPTION.JUMP_TIME') }}</p>
-        </li>
-        <li>
           <CheckBox
             id="toogle-secondary"
             :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
@@ -53,8 +50,18 @@
             @click="handleClickCheckboxAutoplay"
           />
         </li>
+        <li class="flex-col items-start">
+          <p>{{ $t('PLAYBACK_OPTION.JUMP_TIME') }} :</p>
+          <div class="keyword__shortcuts">
+            <kbd class="keyword_shortcut" :class="[{'is--active': delayBetweenAutoplay === 1000}]"
+                 @click="handleChangeDelayAutoplay(1000)">1s</kbd>
+            <kbd class="keyword_shortcut" :class="[{'is--active': delayBetweenAutoplay === 2000}]"
+                 @click="handleChangeDelayAutoplay(2000)">2s</kbd>
+            <kbd class="keyword_shortcut" :class="[{'is--active': delayBetweenAutoplay === 3000}]"
+                 @click="handleChangeDelayAutoplay(3000)">3s</kbd>
+          </div>
+        </li>
       </ul>
-      <hr/>
       <div class="debug">
         Last record index :
         {{
@@ -100,11 +107,19 @@ export default class Aside extends Vue {
     return this.$store.getters.taggedRecordsCount
   }
 
+  get delayBetweenAutoplay(): number {
+    return this.$store.state.delayBetweenAutoplay
+  }
+
   handleClickCheckboxAutoplay(): void {
     this.$store.commit(
       'UPDATE_AUTOPLAY_MODE',
       !this.$store.state.isAutoplayMode
     )
+  }
+
+  handleChangeDelayAutoplay(delay: number): void {
+    this.$store.commit('UPDATE_DELAY_BETWEEN_AUTOPLAY', delay)
   }
 
   clearPersistantDatas() {
@@ -143,8 +158,6 @@ export default class Aside extends Vue {
 
 .information__text {
   @apply flex items-center gap-2;
-
-
 }
 
 .cdc-container {
@@ -155,10 +168,20 @@ export default class Aside extends Vue {
 //   @apply bg-backgroundBlock-light dark:bg-backgroundBlock-dark;
 // }
 
+.keyword__shortcuts {
+  .keyword_shortcut {
+    cursor: pointer;
+  }
+}
+
 .keyword_shortcut {
   @apply inline-block text-xs border-4 px-2 py-1 m-1 rounded bg-backgroundApp-light dark:bg-backgroundApp-dark shadow-sm;
 
   border: 1px solid rgb(204, 204, 204);
+
+  &.is--active {
+    @apply bg-primary text-white border-primary;
+  }
 }
 
 .cdc-filler {

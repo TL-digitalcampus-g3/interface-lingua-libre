@@ -35,6 +35,10 @@ export default class TagSelector extends Vue {
 
 <style lang="scss" scoped>
 .badges {
-  @apply flex justify-center flex-wrap
+  @apply flex justify-center flex-wrap;
+
+  @screen md {
+    @apply justify-end;
+  }
 }
 </style>

@@ -50,7 +50,10 @@ export default class Collection extends Vue {
   records: RecordT[] = []
   isLoading: boolean = true
   lastRecordIndexPlayed: number | null = null
-  delayBetweenAutoplay: number = 3000 // in ms
+
+  get delayBetweenAutoplay(): number {
+    return this.$store.state.delayBetweenAutoplay
+  }
 
   get recordsCount(): number {
     return this.$store.state.recordsCount
@@ -257,7 +260,7 @@ export default class Collection extends Vue {
         () => {
           this.players[playerIndex].play()
         },
-        this.$store.state.isAutoplayStarted ? this.delayBetweenAutoplay : 0
+        this.$store.state.isAutoplayMode && this.delayBetweenAutoplay
       )
     }
   }
@@ -276,7 +279,7 @@ export default class Collection extends Vue {
 .collection_structure {
   @apply grid;
 
-  @screen lg{
+  @screen lg {
     height: calc(100vh - 128px);
   }
 

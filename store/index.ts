@@ -23,6 +23,7 @@ interface State {
   lastRecordIndexPlayed: number | null
   recordsCount: number
   isDarkMode: boolean
+  delayBetweenAutoplay: number
 }
 
 export const state = (): State => ({
@@ -35,6 +36,7 @@ export const state = (): State => ({
   lastRecordIndexPlayed: null,
   recordsCount: 0,
   isDarkMode: false,
+  delayBetweenAutoplay: 2000,
 })
 
 export const getters: GetterTree<State, State> = {
@@ -48,14 +50,14 @@ export const getters: GetterTree<State, State> = {
 
 export const mutations: MutationTree<State> = {
   ADD_TAG: (state: State, payload: TagMutationPayload): void => {
-    const { fileName, tag } = payload
+    const {fileName, tag} = payload
     state.tagMap = {
       ...state.tagMap,
       [fileName]: tag,
     }
   },
   UPDATE_TAG: (state: State, payload: TagMutationPayload): void => {
-    const { fileName, tag } = payload
+    const {fileName, tag} = payload
     state.tagMap[fileName] = tag
   },
   SET_ACTIVE_AUDIO: (state: State, activeAudio: AudioData['fileName']) => {
@@ -86,18 +88,21 @@ export const mutations: MutationTree<State> = {
     state.audioDataMap = audioMap
   },
   UPDATE_AUDIO_DATA_STATE: (state: State, payload: AudioDataStateMutation) => {
-    const { fileName, value } = payload
+    const {fileName, value} = payload
 
     state.audioDataMap[fileName].playerState = value
   },
   UPDATE_DARK_MODE: (state, updatedDarkMode: boolean) => {
     state.isDarkMode = updatedDarkMode
   },
+  UPDATE_DELAY_BETWEEN_AUTOPLAY: (state, newDelay: number) => {
+    state.delayBetweenAutoplay = newDelay
+  },
 }
 
 export const actions: ActionTree<State, State> = {
-  setTag({ commit, getters }, payload: TagMutationPayload): void {
-    const { fileName } = payload
+  setTag({commit, getters}, payload: TagMutationPayload): void {
+    const {fileName} = payload
     const isNewFile: boolean = !getters.taggedRecords.includes(fileName)
 
     if (isNewFile) {
@@ -106,8 +111,8 @@ export const actions: ActionTree<State, State> = {
       commit('UPDATE_TAG', payload)
     }
   },
-  playAudio({ commit, state }, payload: AudioDataStateMutation): void {
-    const { value } = payload
+  playAudio({commit, state}, payload: AudioDataStateMutation): void {
+    const {value} = payload
 
     if (value === PlayerState.Play) {
       for (const name in state.audioDataMap) {
