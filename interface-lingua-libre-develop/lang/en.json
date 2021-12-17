@@ -1,0 +1,48 @@
+{
+  "LANGS": {
+    "FR": "french",
+    "EN": "english"
+  },
+  "GLOBAL": {
+    "AUTO": "auto",
+    "DARK": "dark",
+    "HOME": "home",
+    "LIGHT": "light",
+    "LOADING": "loading",
+    "LOGGOUT": "loggout",
+    "PRESENTATION": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores vero veritatis ipsam quidem, ad adipisci\n        cupiditate praesentium eum corporis commodi minima unde quasi officiis sunt placeat in labore soluta officia!",
+    "SEND_TAGGED_RECORDS": "share my results",
+    "RECORD": "record | records",
+    "SOUNDS_CHECKED": "sounds checked",
+    "WEBPAGE_TITLE": "Control interface"
+  },
+  "SHORTCUT": {
+    "KEYBOARD_SHORTCUT": "shortcuts",
+    "PLAY": "play",
+    "PAUSE": "pause",
+    "REPEAT": "repeat"
+  },
+  "PLAYBACK_OPTION": {
+    "PLAYBACK_OPTION": "playback options",
+    "JUMP_TIME": "time between sound",
+    "PLAYER_AUTO": "autoplay"
+  },
+  "TAGS": {
+    "CUTWORD": "cut word",
+    "NOMATCHLANGUAGE": "wrong language",
+    "NOMATCHSPELLING": "wrong spelling",
+    "NOSOUND": "no sound",
+    "PARASITE": "parasit",
+    "VALID": "valid",
+    "VANDALISM": "vandalism"
+  },
+  "GENDER": {
+    "M": "male",
+    "F": "female",
+    "MASCULINE": "masculine",
+    "FEMININE": "feminine"
+  },
+  "LOCUTOR": {
+    "NATIVE": "native locutor"
+  }
+}
