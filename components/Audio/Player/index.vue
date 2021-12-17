@@ -7,7 +7,7 @@
       { 'player--active': isActive },
     ]"
     @click="setActive"
-    @dblclick="play"
+    @dblclick="handleForcePlayAuto"
   >
     <audio
       ref="audio"
@@ -115,6 +115,11 @@ export default class AudioPlayer extends Vue {
   setActive(): void {
     this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
     this.$emit('playerActive')
+  }
+
+  handleForcePlayAuto(): void {
+    this.$store.commit('UPDATE_AUTOPLAY_MODE', true)
+    this.play()
   }
 
   ended(): void {
