@@ -8,7 +8,7 @@
           :key="record.fileName"
           ref="players"
           :record="record"
-          @scrollTo="handleScrollTo"
+          @playerClicked="handleScrollTo"
           @recordPlayed="handleRecordPlayed(index)"
         />
       </div>
@@ -40,9 +40,7 @@ enum KeycodeList {
   SPACE = 32,
   ESCAPE = 27,
   ARROW_LEFT = 37,
-  ARROW_UP = 38,
   ARROW_RIGHT = 39,
-  ARROW_DOWN = 40,
 }
 
 @Component({
@@ -94,6 +92,10 @@ export default class Collection extends Vue {
     return this.$store.state.activeAudio ?? null
   }
 
+  get currentActiveAudio(): RecordT['fileName'] | null {
+    return this.$store.getters.currentActiveAudio
+  }
+
   get isPlayingRecord(): boolean {
     return Boolean(this.activeAudio)
   }
@@ -109,6 +111,7 @@ export default class Collection extends Vue {
           window.event.preventDefault()
         } else if (key === KeycodeList.ESCAPE) {
           console.log('escape key pressed')
+          this.$nuxt.$emit('espaceKeyPressed')
           window.event.preventDefault()
         } else if (key === KeycodeList.SPACE) {
           console.log('space key pressed')
@@ -156,10 +159,19 @@ export default class Collection extends Vue {
     this.$store.commit('UPDATE_RECORDS_COUNT', this.records.length)
   }
 
-  handleScrollTo(pxValue: number): void {
+  handleScrollTo(): void {
     if (this.$refs.collectionWrapper) {
       // @ts-ignore
-      this.$refs.collectionWrapper.scrollTop = pxValue
+
+      setTimeout(() => {
+        const activePlayer = this.$refs.collectionWrapper.querySelector('.player--active')
+        if (activePlayer !== null) {
+          // const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+          // const marginTop = (vh * 40) / 100
+          const marginTop = 0
+          this.$refs.collectionWrapper.scrollTop = activePlayer.offsetTop - marginTop
+        }
+      }, 200)
     }
   }
 
@@ -267,7 +279,7 @@ export default class Collection extends Vue {
 }
 
 .btn--disabled {
-  @apply bg-gray-lightest shadow-none hover:bg-gray-light text-gray;
+  @apply bg-gray-light shadow-none text-gray;
 }
 
 .collection_structure {
@@ -275,7 +287,7 @@ export default class Collection extends Vue {
 
   @screen lg{
     height: calc(100vh - 128px);
-  } 
+  }
 
 }
 
@@ -283,7 +295,22 @@ export default class Collection extends Vue {
   @apply lg:overflow-y-scroll px-5 flex flex-col justify-start relative pb-9;
 
   scroll-behavior: smooth;
-  // padding-top: 30%;
+
+  .player {
+    &:first-child {
+      // margin-top: 40vh;
+    }
+
+    &:last-child {
+      // margin-bottom: 40vh;
+    }
+  }
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .collection_btn {

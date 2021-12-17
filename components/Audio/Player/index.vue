@@ -62,15 +62,6 @@ export default class AudioPlayer extends Vue {
   isPlaying: boolean = false
   duration: number = 0
 
-  @Watch('isActive')
-  updateIsActive() {
-    if (this.$refs['audio-player']) {
-      // @ts-ignore
-      const topPos = this.$refs['audio-player'].offsetTop - 32;
-      this.$emit('scrollTo', topPos)
-    }
-  }
-
   get fileName(): RecordT['fileName'] {
     return this.record.fileName
   }
@@ -129,6 +120,7 @@ export default class AudioPlayer extends Vue {
 
   setActive(): void {
     this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
+    this.$emit('playerClicked')
   }
 
   play(): void {
@@ -194,7 +186,7 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply flex flex-wrap items-center rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-4 transition duration-300;
+  @apply flex flex-wrap items-center rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-4 transition-all duration-100 ease-linear;
 
   cursor: pointer;
 
@@ -213,8 +205,7 @@ export default class AudioPlayer extends Vue {
 }
 
 .player--active {
-  @apply shadow-xl;
-  background: white !important;
+  @apply shadow-xl py-8;
 }
 
 .player--played {
