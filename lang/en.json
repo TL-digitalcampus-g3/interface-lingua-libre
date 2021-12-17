@@ -1,7 +1,8 @@
 {
   "LANGS": {
     "FR": "french",
-    "EN": "english"
+    "EN": "english",
+    "ES-CA": "catalan"
   },
   "GLOBAL": {
     "AUTO": "auto",
