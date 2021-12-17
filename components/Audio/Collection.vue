@@ -8,7 +8,7 @@
           :key="record.fileName"
           ref="players"
           :record="record"
-          @playerClicked="handleScrollTo"
+          @playerActive="handleScrollTo"
           @recordPlayed="handleRecordPlayed(index)"
         />
       </div>
@@ -38,9 +38,7 @@ import {AudioData, PlayerState} from '~/models/Audio'
 
 enum KeycodeList {
   SPACE = 32,
-  ESCAPE = 27,
   ARROW_LEFT = 37,
-  ARROW_RIGHT = 39,
 }
 
 @Component({
@@ -109,18 +107,11 @@ export default class Collection extends Vue {
         if (key === 65 && event.ctrlKey) {
           console.log('crtl + a')
           window.event.preventDefault()
-        } else if (key === KeycodeList.ESCAPE) {
-          console.log('escape key pressed')
-          this.$nuxt.$emit('espaceKeyPressed')
-          window.event.preventDefault()
         } else if (key === KeycodeList.SPACE) {
-          console.log('space key pressed')
+          $nuxt.$emit('spaceKeyPressed')
           window.event.preventDefault()
         } else if (key === KeycodeList.ARROW_LEFT) {
-          console.log('arrow left key pressed')
-          window.event.preventDefault()
-        } else if (key === KeycodeList.ARROW_RIGHT) {
-          console.log('arrow right key pressed')
+          $nuxt.$emit('arrowLeftKeyPressed')
           window.event.preventDefault()
         }
       }

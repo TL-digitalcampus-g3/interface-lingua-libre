@@ -7,16 +7,6 @@
       color="white"
       @state-button-clicked="updatePlayerState"
     />
-    <div v-else>
-      <button
-        class="btn"
-        @click="handleDefaultPlay($store.state.lastRecordIndexPlayed !== null
-              ? $store.state.lastRecordIndexPlayed + 1
-              : 0)">
-        <CustomIcon v-if="$store.state.isAutoplayStarted" color="white" name="pause"/>
-        <CustomIcon v-else name="play" color="white"/>
-      </button>
-    </div>
     <SpeedRateSelector v-model="speedRate" class="ml-4"/>
   </div>
 </template>
@@ -57,35 +47,31 @@ export default class GlobalPlayer extends Vue {
     this.$store.commit('SET_SPEED_RATE', speedRate)
   }
 
-  handleDefaultPlay(startIndex: number = 0): void {
-    // this.playRecord(startIndex)
-    /*
-    if (!this.isPlayingRecord) {
-      console.log('handleClickPlayAuto')
-      this.playRecord(startIndex)
-      this.$store.commit(
-        'UPDATE_AUTOPLAY_STARTED',
-        !this.$store.state.isAutoplayStarted
-      )
-    }
-     */
+  mounted(): void {
+    this.$nuxt.$on('spaceKeyPressed', () => {
+      console.log('spaceKeyPressed')
+      this.updatePlayerState()
+    })
   }
 
-  updatePlayerState(): void {
+  updatePlayerState(state?: PlayerState): void {
     if (!this.activeAudioData) return
 
     const payload: Partial<AudioDataStateMutation> = {
       fileName: this.activeAudioData.fileName,
     }
-
-    switch (this.playerState) {
-      case PlayerState.Play:
-        payload.value = PlayerState.Pause
-        break
-      case PlayerState.Pause:
-      case PlayerState.Ended:
-        payload.value = PlayerState.Play
-        break
+    if (state) {
+      payload.value = state
+    } else {
+      switch (this.playerState) {
+        case PlayerState.Play:
+          payload.value = PlayerState.Pause
+          break
+        case PlayerState.Pause:
+        case PlayerState.Ended:
+          payload.value = PlayerState.Play
+          break
+      }
     }
 
     this.$store.commit('UPDATE_AUDIO_DATA_STATE', payload)

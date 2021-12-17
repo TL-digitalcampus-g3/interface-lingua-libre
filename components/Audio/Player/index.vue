@@ -108,6 +108,11 @@ export default class AudioPlayer extends Vue {
     return this.$store.state.audioSpeedRate
   }
 
+  setActive(): void {
+    this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
+    this.$emit('playerActive')
+  }
+
   ended(): void {
     const stateMutationPayload: AudioDataStateMutation = {
       fileName: this.record.fileName,
@@ -116,11 +121,6 @@ export default class AudioPlayer extends Vue {
     this.$emit('recordPlayed')
     this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
     this.isPlaying = false
-  }
-
-  setActive(): void {
-    this.$store.commit('SET_ACTIVE_AUDIO', this.fileName)
-    this.$emit('playerClicked')
   }
 
   play(): void {
@@ -144,6 +144,13 @@ export default class AudioPlayer extends Vue {
       }
 
       this.$store.commit('UPDATE_AUDIO_DATA_STATE', stateMutationPayload)
+    }
+  }
+
+  replay(): void {
+    if (this.$refs.audio) {
+      this.$refs.audio.currentTime = 0
+      this.play()
     }
   }
 
@@ -181,12 +188,20 @@ export default class AudioPlayer extends Vue {
       this.audio.playbackRate = this.speedRate
     }
   }
+
+  mounted() {
+    this.$nuxt.$on('arrowLeftKeyPressed', () => {
+      if (this.isActive) {
+        this.replay()
+      }
+    })
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .player {
-  @apply flex flex-wrap items-center rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-4 transition-all duration-100 ease-linear;
+  @apply flex flex-wrap items-center rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-4 transition-all duration-75 ease-linear;
 
   cursor: pointer;
 
