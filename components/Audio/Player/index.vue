@@ -235,7 +235,7 @@ export default class AudioPlayer extends Vue {
 
 .player--played {
   &:not(.player--active) {
-    @apply bg-gray-300;
+    @apply bg-gray-300 dark:bg-gray-800;
   }
 }
 
