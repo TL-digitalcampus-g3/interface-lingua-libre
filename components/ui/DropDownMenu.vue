@@ -1,5 +1,43 @@
 <template>
   <div id="dropdown-menu">
+    <div class="dropdownMenu__search" v-if="options==='idCollection'">
+      <div class="max-w-md w-full mx-auto space-y-8">
+          <div align="center"> <b>NOTRE PATROUILLE</b> </div>
+          <div > Vous pouvez filtrer la liste de son que vous souhaitez réviser. </div>
+          <form class="mt-8 space-y-6" action="#" method="POST">
+          <div>👤 LOCUTEUR 
+              <select class="w-full border bg-backgroundApp-light dark:bg-backgroundApp-dark rounded px-3 py-2 outline-none">
+              <option class="py-1">Sélectionneur ou écrire </option>
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>                                                   
+                </select>
+          </div>
+              <div>♀️ ♂️ GENRE 
+              <select class="w-full border bg-backgroundApp-light dark:bg-backgroundApp-dark rounded px-3 py-2 outline-none" >
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>                                                       
+                </select>
+                </div>
+              <div >🏳️ LANGUE
+            <select class="w-full border bg-backgroundApp-light dark:bg-backgroundApp-dark rounded px-3 py-2 outline-none" >
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>                                                       
+                </select></div>
+              <div >🥇 NIVEAU DE COMPÉTENCE
+              <select class="w-full border bg-backgroundApp-light dark:bg-backgroundApp-dark rounded px-3 py-2 outline-none" >
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>
+                <option class="py-1">Sélectionneur ou écrire<input type="text"> </option>                                                       
+                </select></div>
+            <div style="text-align:center "> <button class="btn btn-blue transition duration-300 ease-in-out mr-1 mb-1 py-2 px-4 rounded font-normal focus:outline-none focus:shadow-outline " name="réviser " type="submit" >Réviser</button></div>
+          </form>
+      </div>
+  </div>
+  <div>
+
+    </div>
     <div class="dropdownMenu__light" v-if="options==='isLight'">
       <button class="btn btn-blue" @click="handleDarkMode('dark')">{{ $t('GLOBAL.DARK') }}</button>
       <button class="btn btn-blue" @click="handleDarkMode('light')">{{ $t('GLOBAL.LIGHT') }}</button>
