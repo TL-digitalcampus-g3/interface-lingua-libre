@@ -17,13 +17,13 @@
         <p class="ml-4 text-sm">
           <span class="block font-bold text-lg"
             >{{ taggedRecordsCount }}/{{ $store.state.recordsCount }} </span
-          >sons révisés
+          >{{ $t('GLOBAL.SOUNDS_CHECKED') }}
         </p>
       </div>
       <div class="information__text">
         <CustomIcon name="collection" :size="1.5" />
         <country-flag country='fr' size='small'/>
-        <p>Français - Masculin</p>
+        <p>{{ $t('LANGS.FR') }} - {{ $t('GENDER.MASCULINE') }}</p>
       </div>
     </div>
     <div class="aside__block__option">
