@@ -212,7 +212,7 @@ export default class Collection extends Vue {
       file.setAttribute('name', `${record.fileName}`)
 
       const commonsURL = docWrapper.createElement('commonsURL')
-      commonsURL.innerHTML = 'https://'
+      commonsURL.innerHTML = 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(record.fileName)
 
       const locutor = docWrapper.createElement('locutor')
       locutor.innerHTML = 'Guilhelma'
