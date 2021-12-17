@@ -16,12 +16,12 @@
         />
         <p class="ml-4 text-sm">
           <span class="block font-bold text-lg"
-            >{{ taggedRecordsCount }}/{{ $store.state.recordsCount }} </span
+          >{{ taggedRecordsCount }}/{{ $store.state.recordsCount }} </span
           >{{ $t('GLOBAL.SOUNDS_CHECKED') }}
         </p>
       </div>
       <div class="information__text">
-        <CustomIcon name="collection" :size="1.5" />
+        <CustomIcon name="collection" :size="1.5"/>
         <country-flag country='fr' size='small'/>
         <p>{{ $t('LANGS.FR') }} - {{ $t('GENDER.MASCULINE') }}</p>
       </div>
@@ -46,10 +46,15 @@
           <p>{{ $t('PLAYBACK_OPTION.JUMP_TIME') }}</p>
         </li>
         <li>
-          <p>{{ $t('PLAYBACK_OPTION.PLAYER_AUTO') }}</p>
+          <CheckBox
+            id="toogle-secondary"
+            :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
+            :isChecked="$store.state.isAutoplayMode"
+            @click="handleClickCheckboxAutoplay"
+          />
         </li>
       </ul>
-      <hr />
+      <hr/>
       <div class="debug">
         Last record index :
         {{
@@ -66,14 +71,16 @@
 </template>
 
 <script lang='ts'>
-import { Vue, Component } from 'nuxt-property-decorator'
-import CustomIcon from '~/components/Icon/index.vue'
+import {Vue, Component} from 'nuxt-property-decorator'
 import CountryFlag from 'vue-country-flag'
+import CustomIcon from '~/components/Icon/index.vue'
+import CheckBox from '~/components/ui/CheckBox.vue'
 
 @Component({
   components: {
     CustomIcon,
-    CountryFlag
+    CountryFlag,
+    CheckBox
   },
 })
 export default class Aside extends Vue {
@@ -91,6 +98,13 @@ export default class Aside extends Vue {
 
   get taggedRecordsCount(): any {
     return this.$store.getters.taggedRecordsCount
+  }
+
+  handleClickCheckboxAutoplay(): void {
+    this.$store.commit(
+      'UPDATE_AUTOPLAY_MODE',
+      !this.$store.state.isAutoplayMode
+    )
   }
 
   clearPersistantDatas() {

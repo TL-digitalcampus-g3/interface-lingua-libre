@@ -3,6 +3,7 @@
     <div class="actionBar__control">
       <GlobalPlayer />
       <CheckBox
+        id="toogle"
         :label="$t('PLAYBACK_OPTION.PLAYER_AUTO')"
         :isChecked="$store.state.isAutoplayMode"
         @click="handleClickCheckboxAutoplay"

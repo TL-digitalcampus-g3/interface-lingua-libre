@@ -205,7 +205,7 @@ export default class AudioPlayer extends Vue {
 
 <style lang="scss" scoped>
 .player {
-  @apply flex flex-wrap items-center rounded-md bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-4 transition-all duration-75 ease-linear;
+  @apply flex flex-wrap items-center rounded-lg bg-backgroundBlock-light dark:bg-backgroundBlock-dark mb-5 p-8 transition-all duration-200 ease-linear;
 
   cursor: pointer;
 
@@ -229,11 +229,13 @@ export default class AudioPlayer extends Vue {
 }
 
 .player--active {
-  @apply shadow-xl py-8;
+  @apply shadow-xl py-14;
 }
 
 .player--played {
-  @apply bg-gray-300;
+  &:not(.player--active) {
+    @apply bg-gray-300;
+  }
 }
 
 .player__word,

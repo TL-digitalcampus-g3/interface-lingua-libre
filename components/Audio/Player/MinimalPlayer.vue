@@ -55,5 +55,14 @@ export default class MinimalPlayer extends Vue {
       font-size: 2rem;
     }
   }
+
+  .state-button {
+    transform: scale(1);
+    transition: transform 300ms ease-in;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
 }
 </style>

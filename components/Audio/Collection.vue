@@ -266,7 +266,7 @@ export default class Collection extends Vue {
 
 <style lang="scss" scoped>
 .btn-share {
-  @apply bg-primary text-white p-3 rounded mt-5 mb-2 px-5 uppercase text-sm;
+  @apply bg-primary text-white p-3 rounded-lg mt-5 mb-2 px-8 uppercase text-sm;
 }
 
 .btn--disabled {

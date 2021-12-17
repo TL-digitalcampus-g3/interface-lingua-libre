@@ -49,7 +49,6 @@ export default class GlobalPlayer extends Vue {
 
   mounted(): void {
     this.$nuxt.$on('spaceKeyPressed', () => {
-      console.log('spaceKeyPressed')
       this.updatePlayerState()
     })
   }
