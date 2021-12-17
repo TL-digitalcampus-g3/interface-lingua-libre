@@ -111,9 +111,11 @@ export default class Collection extends Vue {
           console.log('crtl + a')
           window.event.preventDefault()
         } else if (key === KeycodeList.SPACE) {
+          // @ts-ignore
           $nuxt.$emit('spaceKeyPressed')
           window.event.preventDefault()
         } else if (key === KeycodeList.ARROW_LEFT) {
+          // @ts-ignore
           $nuxt.$emit('arrowLeftKeyPressed')
           window.event.preventDefault()
         }
@@ -158,11 +160,13 @@ export default class Collection extends Vue {
       // @ts-ignore
 
       setTimeout(() => {
+        // @ts-ignore
         const activePlayer = this.$refs.collectionWrapper.querySelector('.player--active')
         if (activePlayer !== null) {
           // const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
           // const marginTop = (vh * 40) / 100
           const marginTop = 0
+          // @ts-ignore
           this.$refs.collectionWrapper.scrollTop = activePlayer.offsetTop - marginTop
         }
       }, 200)

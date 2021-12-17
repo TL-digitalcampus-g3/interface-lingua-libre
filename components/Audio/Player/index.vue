@@ -153,6 +153,7 @@ export default class AudioPlayer extends Vue {
 
   replay(): void {
     if (this.$refs.audio) {
+      // @ts-ignore
       this.$refs.audio.currentTime = 0
       this.play()
     }
