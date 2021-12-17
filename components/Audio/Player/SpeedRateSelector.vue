@@ -14,13 +14,14 @@ export default class SpeedRateSelector extends Vue {
   get options(): DropdownOption[] {
     return [
       {
-        text: `x${SpeedRate.Normal}`,
-        value: SpeedRate.Normal,
-      },
-      {
         text: `x${SpeedRate.Slow}`,
         value: SpeedRate.Slow,
       },
+      {
+        text: `x${SpeedRate.Normal}`,
+        value: SpeedRate.Normal,
+      },
+      
       {
         text: `x${SpeedRate.Fast}`,
         value: SpeedRate.Fast,

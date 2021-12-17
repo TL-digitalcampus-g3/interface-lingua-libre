@@ -22,8 +22,8 @@
       </div>
       <div class="information__text">
         <CustomIcon name="collection" :size="1.5"/>
-        <country-flag country='fr' size='small'/>
-        <p>{{ $t('LANGS.FR') }} - {{ $t('GENDER.MASCULINE') }}</p>
+        <country-flag country="es-ca" size="small"/>
+        <p>{{ $t('LANGS.ES-CA') }} - {{ $t('GENDER.MASCULINE') }}</p>
       </div>
     </div>
     <div class="aside__block__option">
@@ -130,7 +130,7 @@ export default class Aside extends Vue {
 }
 
 .information__text {
-  @apply flex items-center gap-2;
+  @apply flex items-center gap-2 capitalize;
 }
 
 .cdc-container {
