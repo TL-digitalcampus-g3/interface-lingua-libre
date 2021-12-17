@@ -1,35 +1,36 @@
 <template>
   <div id="dropdown-menu">
-    <!-- <div class="dropdownMenu__collection" v-if="options==='isCollection'"></div>-->
     <div class="dropdownMenu__light" v-if="options==='isLight'">
-      <button class="btn btn-blue" @click="handleDarkMode('dark')">Dark</button>
-      <button class="btn btn-blue" @click="handleDarkMode('light')">Light</button>
-      <button class="btn btn-blue" @click="handleDarkMode('auto')">System</button>
+      <button class="btn btn-blue" @click="handleDarkMode('dark')">{{ $t('GLOBAL.DARK') }}</button>
+      <button class="btn btn-blue" @click="handleDarkMode('light')">{{ $t('GLOBAL.LIGHT') }}</button>
+      <button class="btn btn-blue" @click="handleDarkMode('auto')">{{ $t('GLOBAL.AUTO') }}</button>
     </div>
     <div class="dropdownMenu__information" v-if="options==='isInformation'">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores vero veritatis ipsam quidem, ad adipisci
-        cupiditate praesentium eum corporis commodi minima unde quasi officiis sunt placeat in labore soluta
-        officia!</p>
+      <p>{{ $t('GLOBAL.PRESENTATION') }}</p>
     </div>
     <div class="dropdownMenu__language" v-if="options==='isLanguage'">
       <NuxtLink :to="switchLocalePath('en')">
-        <button class="btn btn-blue">{{ $t('LANGS.EN') }}</button>
+        <button class="btn btn-blue">
+          <country-flag country="gb" size="small"/>
+          {{ $t('LANGS.EN') }}
+        </button>
       </NuxtLink>
       <NuxtLink :to="switchLocalePath('fr')">
-        <button class="btn btn-blue">{{ $t('LANGS.FR') }}</button>
+        <button class="btn btn-blue">
+          <country-flag country="fr" size="small"/>
+          {{ $t('LANGS.FR') }}
+        </button>
       </NuxtLink>
     </div>
     <div class="dropdownMenu__user" v-if="options==='isUser'">
       <p class="font-bold">WorkshopM2TLGPE3 (Q710559)</p>
       <div class="m-2">
-        <p class="contents">Masculin - </p>
-        <country-flag country='fr' size='small'/>
-        <p class="contents">Français</p>
+        <p class="contents">{{ $t('GENDER.MASCULINE') }} - </p>
+        <country-flag country="fr" size="small"/>
+        <p class="contents">{{ $t('LANGS.FR') }}</p>
       </div>
-      <p>Locuteur natifx</p>
-      <p class="underline">Déconnexion</p>
-
-
+      <p>{{ $t('LOCUTOR.NATIVE') }}</p>
+      <p class="underline">{{ $t('GLOBAL.LOGGOUT') }}</p>
     </div>
   </div>
 </template>

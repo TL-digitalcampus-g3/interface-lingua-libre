@@ -1,13 +1,19 @@
 {
   "LANGS": {
     "FR": "français",
-    "EN": "english"
+    "EN": "anglais"
   },
   "GLOBAL": {
+    "AUTO": "auto",
+    "DARK": "sombre",
     "HOME": "home",
+    "LIGHT": "clair",
     "LOADING": "chargement",
+    "LOGGOUT": "déconnexion",
+    "PRESENTATION": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores vero veritatis ipsam quidem, ad adipisci\n        cupiditate praesentium eum corporis commodi minima unde quasi officiis sunt placeat in labore soluta officia!",
     "SEND_TAGGED_RECORDS": "transmettre mes résultats",
     "RECORD": "enregistrement | enregistrements",
+    "SOUND_CHECKED": "sons révisés",
     "WEBPAGE_TITLE": "Interface de contrôle"
   },
   "SHORTCUT": {
@@ -32,6 +38,11 @@
   },
   "GENDER": {
     "M": "homme",
-    "F": "femme"
+    "F": "femme",
+    "MASCULINE": "masculin",
+    "FEMININE": "féminin"
+  },
+  "LOCUTOR": {
+    "NATIVE": "locuteur natif"
   }
 }
