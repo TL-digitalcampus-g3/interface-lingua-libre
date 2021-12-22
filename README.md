@@ -38,7 +38,7 @@ Tested in the following browsers/versions:
 ## Live demo 
 
 - Serve static on Plateform As A Service at root `/`
-  - [See the demo online](https://interface-lingua-libre.vercel.app)
+  - [See the demo online](https://interface-lingua-libre-dusky.vercel.app/)
 - Serve static on hosted Apache in subdirectory `/lingua-libre/`
   - [See the demo online](http://projet.tekmedias.com/lingua-libre/)
   
